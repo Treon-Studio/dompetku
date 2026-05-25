@@ -32,7 +32,8 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 
 		return json({ ...data, isPremium, isPremiumPlanEnded }, { status: 200 });
 	} catch (error) {
-		return json({ error, message: 'Request failed' }, { status: 500 });
+		console.error('Request failed:', error);
+		return json({ message: 'Request failed' }, { status: 500 });
 	}
 }
 
@@ -45,24 +46,28 @@ export async function action({ request, context }: ActionFunctionArgs) {
 		const { currency, locale } = await request.json();
 		try {
 			await db.users.update({ data: { currency, locale }, where: { id: user.id } });
-			return json('Updated');
+			return json({ message: 'Updated' });
 		} catch (error) {
-			return json({ error, message: 'Request failed' }, { status: 500 });
+			console.error('Request failed:', error);
+			return json({ message: 'Request failed' }, { status: 500 });
 		}
 	}
 
 	if (method === 'DELETE') {
 		try {
-			await db.sessions.deleteMany({ where: { user_id: user.id } });
-			await db.feedbacks.deleteMany({ where: { user_id: user.id } });
-			await db.expenses.deleteMany({ where: { user_id: user.id } });
-			await db.income.deleteMany({ where: { user_id: user.id } });
-			await db.investments.deleteMany({ where: { user_id: user.id } });
-			await db.subscriptions.deleteMany({ where: { user_id: user.id } });
-			await db.users.delete({ where: { id: user.id } });
-			return json('Deleted');
+			await db.$transaction([
+				db.sessions.deleteMany({ where: { user_id: user.id } }),
+				db.feedbacks.deleteMany({ where: { user_id: user.id } }),
+				db.expenses.deleteMany({ where: { user_id: user.id } }),
+				db.income.deleteMany({ where: { user_id: user.id } }),
+				db.investments.deleteMany({ where: { user_id: user.id } }),
+				db.subscriptions.deleteMany({ where: { user_id: user.id } }),
+				db.users.delete({ where: { id: user.id } }),
+			]);
+			return json({ message: 'Deleted' });
 		} catch (error) {
-			return json({ error, message: 'Request failed' }, { status: 500 });
+			console.error('Request failed:', error);
+			return json({ message: 'Request failed' }, { status: 500 });
 		}
 	}
 

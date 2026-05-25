@@ -45,6 +45,11 @@ export default function ResetPassword() {
       return;
     }
 
+    if (password.length > 128) {
+      setError('Password must be at most 128 characters');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -111,6 +116,8 @@ export default function ResetPassword() {
                 type="password"
                 placeholder="********"
                 required
+                minLength={6}
+                maxLength={128}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -122,6 +129,8 @@ export default function ResetPassword() {
                 type="password"
                 placeholder="********"
                 required
+                minLength={6}
+                maxLength={128}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { CheckCircle2, MessageSquarePlus } from 'lucide-react';
 import { toast } from 'sonner';
@@ -14,6 +14,15 @@ import messages, { emails } from '~/constants/messages';
 
 export default function Feedback({ className, showDatePicker }: { className?: string; showDatePicker: boolean }) {
 	const [state, setState] = useState({ show: false, loading: false, message: '', sent: false });
+
+	useEffect(() => {
+		if (state.sent) {
+			const timer = setTimeout(() => {
+				setState((prev) => ({ ...prev, sent: false, show: false }));
+			}, 5000);
+			return () => clearTimeout(timer);
+		}
+	}, [state.sent]);
 
 	const onSubmit = async () => {
 		setState({ ...state, loading: true });
@@ -31,10 +40,6 @@ export default function Feedback({ className, showDatePicker }: { className?: st
 			}
 
 			setState((prev) => ({ ...prev, sent: true, loading: false, message: '' }));
-
-			setTimeout(() => {
-				setState((prev) => ({ ...prev, sent: false, show: false }));
-			}, 5000);
 		} catch (error: any) {
 			setState((prev) => ({ ...prev, loading: false }));
 			toast.error(emails.feedback.failed);

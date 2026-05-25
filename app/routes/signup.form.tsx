@@ -7,6 +7,7 @@ import { Button } from '~/components/ui/button';
 import { apiUrls } from '~/lib/apiUrls';
 
 import url from '~/constants/url';
+import { isEmail, isPhone } from '~/constants/validation';
 import { useTranslation } from '@i18n/client';
 
 const initialState = { loading: false, identity: '', password: '', confirmPassword: '', success: false, error: '' };
@@ -27,8 +28,17 @@ export default function Form() {
 			return;
 		}
 
+		const identity = state.identity.trim();
+		if (!isEmail(identity) && !isPhone(identity)) {
+			setState((prev) => ({ ...prev, error: 'Please enter a valid email or phone number', loading: false }));
+			return;
+		}
 		if (state.password.length < 6) {
 			setState((prev) => ({ ...prev, error: 'Password must be at least 6 characters', loading: false }));
+			return;
+		}
+		if (state.password.length > 128) {
+			setState((prev) => ({ ...prev, error: 'Password must be at most 128 characters', loading: false }));
 			return;
 		}
 
@@ -87,6 +97,7 @@ export default function Form() {
 					placeholder="********"
 					required
 					minLength={6}
+					maxLength={128}
 					value={state.password}
 					onChange={(event) => {
 						setState({ ...state, password: event.target.value });
@@ -101,6 +112,7 @@ export default function Form() {
 					placeholder="********"
 					required
 					minLength={6}
+					maxLength={128}
 					value={state.confirmPassword}
 					onChange={(event) => {
 						setState({ ...state, confirmPassword: event.target.value });

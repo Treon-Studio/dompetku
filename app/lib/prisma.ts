@@ -8,7 +8,7 @@ export function createPrismaClient(env: CloudflareEnv) {
   let url = cfUrl || process.env.TURSO_DATABASE_URL;
   const authToken = cfToken || process.env.TURSO_AUTH_TOKEN;
 
-  if (!url) throw new Error('TURSO_DATABASE_URL is not set. env keys: ' + Object.keys(env || {}).join(', '));
+  if (!url) throw new Error('TURSO_DATABASE_URL is not set');
   if (!authToken) throw new Error('TURSO_AUTH_TOKEN is not set');
 
   if (url.startsWith('libsql://')) {

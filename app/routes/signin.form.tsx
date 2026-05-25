@@ -7,6 +7,7 @@ import { Button } from '~/components/ui/button';
 import { apiUrls } from '~/lib/apiUrls';
 
 import url from '~/constants/url';
+import { isEmail, isPhone } from '~/constants/validation';
 import { useTranslation } from '@i18n/client';
 
 const initialState = { loading: false, identity: '', password: '', success: false, error: '' };
@@ -22,6 +23,12 @@ export default function Form() {
 	}, []);
 
 	const handleSignIn = async () => {
+		const identity = state.identity.trim();
+		if (!isEmail(identity) && !isPhone(identity)) {
+			setState((prev) => ({ ...prev, error: 'Please enter a valid email or phone number', loading: false }));
+			return;
+		}
+
 		setState((prev) => ({ ...prev, loading: true, error: '', success: false }));
 
 		try {
@@ -76,6 +83,7 @@ export default function Form() {
 					type="password"
 					placeholder="********"
 					required
+					maxLength={128}
 					value={state.password}
 					onChange={(event) => {
 						setState({ ...state, password: event.target.value });

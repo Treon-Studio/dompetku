@@ -1,3 +1,5 @@
+import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from '~/constants/app';
+
 export interface Env {
   TURSO_DATABASE_URL: string;
   TURSO_AUTH_TOKEN: string;
@@ -21,7 +23,7 @@ export const env: Env = {
     return typeof process !== 'undefined' ? process.env.TURSO_AUTH_TOKEN ?? '' : '';
   },
   get SESSION_SECRET() {
-    return typeof process !== 'undefined' ? process.env.SESSION_SECRET ?? 'default-secret-change-me' : 'default-secret-change-me';
+    return typeof process !== 'undefined' ? process.env.SESSION_SECRET ?? '' : '';
   },
   get GA4_ANALYTICS_ID() {
     return typeof process !== 'undefined' ? process.env.GA4_ANALYTICS_ID : undefined;

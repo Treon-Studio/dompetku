@@ -1,0 +1,15 @@
+export const APP_NAME = 'Dompetku';
+export const APP_TAGLINE = 'Track your expenses with ease';
+export const APP_DESCRIPTION = 'Effortlessly Track and Manage Expenses.';
+export const SUPPORT_EMAIL = 'hello@dompetku';
+export const SESSION_COOKIE_NAME = 'expense_session';
+export const BCRYPT_SALT_ROUNDS = 10;
+export const SESSION_DURATION_DAYS = 30;
+export const SESSION_DURATION_MS = SESSION_DURATION_DAYS * 24 * 60 * 60 * 1000;
+export const RESET_TOKEN_EXPIRY_HOURS = 1;
+export const RESET_TOKEN_EXPIRY_MS = RESET_TOKEN_EXPIRY_HOURS * 60 * 60 * 1000;
+export const PREMIUM_PLAN_DURATION_YEARS = 1;
+export const THEME_COLOR = '#09090b';
+export const DEFAULT_CURRENCY = 'IDR';
+export const DEFAULT_LOCALE = 'id';
+export const DB_QUERY_LIMIT = 5000;

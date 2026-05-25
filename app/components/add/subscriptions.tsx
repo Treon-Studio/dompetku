@@ -159,7 +159,7 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 							type="url"
 							inputMode="url"
 							pattern="https://.*|http://.*"
-							maxLength={30}
+							maxLength={2000}
 							placeholder="https://netflix.com"
 							required
 							onChange={(event) => setState({ ...state, url: event.target.value })}
@@ -182,6 +182,7 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 								placeholder="699"
 								required
 								min="0"
+								max="1000000000000"
 								step="any"
 								onChange={(event) => setState({ ...state, price: event.target.value })}
 								value={state.price}

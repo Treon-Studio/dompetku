@@ -4,6 +4,7 @@ import { json } from '@remix-run/cloudflare';
 import { createPrismaClient } from '~/lib/prisma';
 import { hashPassword } from '~/lib/auth.server';
 import { getCloudflareEnv } from '~/env';
+import { validateResetToken, validatePasswordField } from '~/lib/validate';
 
 export async function action({ request, context }: ActionFunctionArgs) {
   try {
@@ -13,13 +14,11 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const token = body.token;
     const password = body.password;
 
-    if (!token || !password) {
-      return json({ message: 'Token and new password are required' }, { status: 400 });
-    }
+    const tokenError = validateResetToken(body.token);
+    if (tokenError) return json({ message: tokenError }, { status: 400 });
 
-    if (password.length < 6) {
-      return json({ message: 'Password must be at least 6 characters' }, { status: 400 });
-    }
+    const passwordError = validatePasswordField(body.password);
+    if (passwordError) return json({ message: passwordError }, { status: 400 });
 
     const resetRecord = await db.password_resets.findUnique({ where: { token } });
 
@@ -47,6 +46,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
     return json({ message: 'Password reset successfully. You can now sign in with your new password.' }, { status: 200 });
   } catch (error: any) {
     console.error('Reset password error:', error);
-    return json({ message: error.message || 'An error occurred' }, { status: 500 });
+    return json({ message: 'An error occurred' }, { status: 500 });
   }
 }

@@ -145,6 +145,7 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 								required
 								step="any"
 								min="0"
+								max="1000000000000"
 								onChange={(event) => setState({ ...state, price: event.target.value })}
 								value={state.price}
 							/>
@@ -159,6 +160,7 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 								placeholder="10"
 								required
 								min="0"
+								max="1000000000000"
 								step="any"
 								onChange={(event) => setState({ ...state, units: event.target.value })}
 								value={state.units}

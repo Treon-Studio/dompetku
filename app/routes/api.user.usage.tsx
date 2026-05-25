@@ -10,7 +10,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
 	try {
 		await db.users.update({ data: { usage: { increment: 1 } }, where: { id: user.id } });
 		return json('Done');
-	} catch (error: any) {
-		return json({ message: String(error) || 'Error' }, { status: 500 });
+	} catch (error) {
+		console.error('Request failed:', error);
+		return json({ message: 'An error occurred' }, { status: 500 });
 	}
 }

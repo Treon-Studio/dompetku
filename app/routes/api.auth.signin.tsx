@@ -1,8 +1,9 @@
 import type { ActionFunctionArgs } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 
-import { login, createSession } from '~/lib/auth.server';
+import { login, createSession, isPhone } from '~/lib/auth.server';
 import { createPrismaClient } from '~/lib/prisma';
+import { validateIdentityField, validatePasswordField } from '~/lib/validate';
 
 export async function action({ request, context }: ActionFunctionArgs) {
   try {
@@ -11,9 +12,11 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const identity = body.identity;
     const password = body.password;
 
-    if (!identity || !password) {
-      return json({ message: 'Email/phone and password are required' }, { status: 400 });
-    }
+    const identityError = validateIdentityField(body.identity, isPhone);
+    if (identityError) return json({ message: identityError }, { status: 400 });
+
+    const passwordError = validatePasswordField(body.password);
+    if (passwordError) return json({ message: passwordError }, { status: 400 });
 
     const user = await login(identity, password, db);
     if (!user) {
@@ -23,6 +26,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
     return createSession(user.id, '/dashboard', db, context);
   } catch (error: any) {
     console.error('Signin error:', error);
-    return json({ message: error.message || 'An error occurred during sign in' }, { status: 500 });
+    return json({ message: 'An error occurred during sign in' }, { status: 500 });
   }
 }

@@ -1,8 +1,10 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 
+import { DB_QUERY_LIMIT } from '~/constants/app';
 import { requireUser } from '~/lib/auth.server';
 import { createPrismaClient } from '~/lib/prisma';
+import { validateRecordFields } from '~/lib/validate';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
 	const db = createPrismaClient(context.cloudflare.env);
@@ -27,6 +29,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 		const data = await db.income.findMany({
 			where,
 			orderBy: { updated_at: 'desc' },
+			take: DB_QUERY_LIMIT,
 			select: {
 				notes: true,
 				name: true,
@@ -40,7 +43,8 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 		});
 		return json(data.sort((a: any, b: any) => Date.parse(b.date) - Date.parse(a.date)));
 	} catch (error) {
-		return json({ error, message: 'Request failed' }, { status: 500 });
+		console.error('Request failed:', error);
+		return json({ message: 'Request failed' }, { status: 500 });
 	}
 }
 
@@ -51,32 +55,39 @@ export async function action({ request, context }: ActionFunctionArgs) {
 	const method = request.method.toUpperCase();
 
 	if (method === 'DELETE') {
-		if (!id.length) {
-			return json('Invalid request', { status: 400 });
+		if (!Array.isArray(id) || id.length === 0) {
+			return json({ message: 'Invalid request' }, { status: 400 });
 		}
+		const record = await db.income.findUnique({ where: { id: id[0] } });
+		if (!record || record.user_id !== user.id) return json({ message: 'Not found' }, { status: 404 });
 		try {
 			await db.income.delete({
 				where: { id: id[0] },
 			});
-			return json('deleted', { status: 200 });
+			return json({ message: 'deleted' }, { status: 200 });
 		} catch (error) {
-			return json({ error, message: 'Request failed' }, { status: 500 });
+			console.error('Request failed:', error);
+			return json({ message: 'Request failed' }, { status: 500 });
 		}
 	}
 
 	if (method === 'PUT') {
-		const { notes, name, price, category, id, date } = await request.json();
-		if (!id) {
-			return json('Invalid request', { status: 400 });
-		}
+		const body = await request.json() as Record<string, unknown>;
+		const { id, notes, name, price, category, date } = body;
+		if (!id) return json({ message: 'Invalid request' }, { status: 400 });
+		const validationError = validateRecordFields(body);
+		if (validationError) return validationError;
+		const record = await db.income.findUnique({ where: { id } });
+		if (!record || record.user_id !== user.id) return json({ message: 'Not found' }, { status: 404 });
 		try {
 			await db.income.update({
 				data: { notes, name, price, date, category },
 				where: { id },
 			});
-			return json('updated', { status: 200 });
+			return json({ message: 'updated' }, { status: 200 });
 		} catch (error) {
-			return json({ error, message: 'Request failed' }, { status: 500 });
+			console.error('Request failed:', error);
+			return json({ message: 'Request failed' }, { status: 500 });
 		}
 	}
 

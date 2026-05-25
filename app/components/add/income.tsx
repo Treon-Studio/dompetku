@@ -144,6 +144,7 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 								placeholder="10000"
 								required
 								min="0"
+								max="1000000000000"
 								step="any"
 								onChange={(event) => setState({ ...state, price: event.target.value })}
 								value={state.price}

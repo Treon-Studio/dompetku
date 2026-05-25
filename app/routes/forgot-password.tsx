@@ -6,6 +6,7 @@ import CircleLoader from '~/components/loader/circle';
 import { Button } from '~/components/ui/button';
 import { apiUrls } from '~/lib/apiUrls';
 import url from '~/constants/url';
+import { isEmail, isPhone } from '~/constants/validation';
 import { type LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
@@ -27,6 +28,11 @@ export default function ForgotPassword() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const trimmed = identity.trim();
+    if (!isEmail(trimmed) && !isPhone(trimmed)) {
+      setError('Please enter a valid email or phone number');
+      return;
+    }
     setLoading(true);
     setError('');
     setMessage('');

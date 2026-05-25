@@ -154,6 +154,7 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 								placeholder="199"
 								required
 								min="0"
+								max="1000000000000"
 								inputMode="decimal"
 								step="any"
 								onChange={(event) => setState({ ...state, price: event.target.value })}

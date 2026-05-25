@@ -26,6 +26,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
 		});
 		return json({ message: emails.feedback.sent }, { status: 201 });
 	} catch (error: any) {
-		return json({ error: { message: emails.feedback.failed } }, { status: 500 });
+		return json({ message: emails.feedback.failed }, { status: 500 });
 	}
 }
