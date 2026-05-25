@@ -38,7 +38,7 @@ const features = [
 	},
 	{
 		name: 'Reports',
-		description: 'You can understand your spending habits by viewing detailed reports on the overview page. ',
+		description: 'You can understand your spending habits by viewing detailed reports on the overview page.',
 		Icon: () => (
 			<svg
 				className="ml-[-6px] mr-2 mt-px"

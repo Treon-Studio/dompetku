@@ -1,14 +1,15 @@
-import type { ActionFunctionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import type { ActionFunctionArgs } from '@remix-run/cloudflare';
+import { json } from '@remix-run/cloudflare';
 
 import { requireUser } from '~/lib/auth.server';
-import prisma from '~/lib/prisma';
+import { createPrismaClient } from '~/lib/prisma';
 
-export async function action({ request }: ActionFunctionArgs) {
-	const user = await requireUser(request);
+export async function action({ request, context }: ActionFunctionArgs) {
+	const db = createPrismaClient(context.cloudflare.env);
+	const user = await requireUser(request, db, context);
 	const { notes, name, price, category, date, paid_via } = await request.json();
 	try {
-		await prisma.expenses.create({
+		await db.expenses.create({
 			data: { notes, name, price, category, user_id: user.id, date, paid_via },
 		});
 		return json('added', { status: 201 });

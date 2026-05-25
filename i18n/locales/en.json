@@ -38,17 +38,25 @@
 		"subscriptions": "Subscriptions"
 	},
 	"auth": {
+		"identity": "Email or Phone",
 		"email": "Email",
+		"phone": "Phone Number",
 		"password": "Password",
 		"confirmPassword": "Confirm Password",
 		"signin": "Sign In",
 		"signup": "Sign Up",
 		"signout": "Sign Out",
 		"forgotPassword": "Forgot Password?",
+		"forgotPasswordDesc": "Enter your email or phone number and we'll send you a reset link.",
 		"noAccount": "Don't have an account?",
 		"hasAccount": "Already registered?",
 		"magicLinkSent": "We just sent an email with magic link, check your inbox.",
-		"invalidCredentials": "Invalid email or password."
+		"invalidCredentials": "Invalid email/phone or password.",
+		"sendResetLink": "Send Reset Link",
+		"resetPassword": "Reset Password",
+		"newPassword": "New Password",
+		"passwordMismatch": "Passwords do not match",
+		"backToSignin": "Back to Sign In"
 	},
 	"dashboard": {
 		"welcome": "Welcome back",

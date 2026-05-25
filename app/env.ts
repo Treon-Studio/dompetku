@@ -7,10 +7,10 @@ export interface Env {
   NODE_ENV: string;
 }
 
-export interface CloudflareEnv extends Env {
-  DB: D1Database;
-  AI: Ai;
-  CACHE: KVNamespace;
+export interface CloudflareEnv extends Env {}
+
+export function getCloudflareEnv(context: { cloudflare: { env: CloudflareEnv } }): CloudflareEnv {
+  return context.cloudflare.env;
 }
 
 export const env: Env = {

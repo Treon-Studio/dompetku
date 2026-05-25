@@ -9,7 +9,7 @@ import { apiUrls } from '~/lib/apiUrls';
 import url from '~/constants/url';
 import { useTranslation } from '@i18n/client';
 
-const initialState = { loading: false, email: '', password: '', confirmPassword: '', success: false, error: '' };
+const initialState = { loading: false, identity: '', password: '', confirmPassword: '', success: false, error: '' };
 
 export default function Form() {
   const { t } = useTranslation();
@@ -37,7 +37,7 @@ export default function Form() {
 		try {
 			const res = await fetch(apiUrls.auth.signup, {
 				method: 'POST',
-				body: JSON.stringify({ email: state.email, password: state.password }),
+				body: JSON.stringify({ identity: state.identity, password: state.password }),
 				headers: { 'Content-Type': 'application/json' },
 				redirect: 'manual',
 			});
@@ -63,18 +63,18 @@ export default function Form() {
 			}}
 		>
 			<label className="mb-1 block">
-				<span className="mb-2 block text-sm font-semibold leading-6">{t('auth.email')}</span>
+				<span className="mb-2 block text-sm font-semibold leading-6">{t('auth.identity')}</span>
 				<input
 					className="mt-2 block h-10 w-full appearance-none rounded-md bg-white px-3 text-sm text-black shadow-xs ring-1 ring-gray-300 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-gray-900"
 					autoFocus
-					type="email"
-					inputMode="email"
-					autoComplete="email"
-					placeholder="tim@apple.com"
+					type="text"
+					inputMode="text"
+					autoComplete="username"
+					placeholder="tim@apple.com / +62812345678"
 					required
-					value={state.email}
+					value={state.identity}
 					onChange={(event) => {
-						setState({ ...state, email: event.target.value });
+						setState({ ...state, identity: event.target.value });
 					}}
 					ref={inputElement}
 				/>
@@ -84,7 +84,7 @@ export default function Form() {
 				<input
 					className="mt-2 block h-10 w-full appearance-none rounded-md bg-white px-3 text-sm text-black shadow-xs ring-1 ring-gray-300 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-gray-900"
 					type="password"
-					placeholder="••••••••"
+					placeholder="********"
 					required
 					minLength={6}
 					value={state.password}
@@ -98,7 +98,7 @@ export default function Form() {
 				<input
 					className="mt-2 block h-10 w-full appearance-none rounded-md bg-white px-3 text-sm text-black shadow-xs ring-1 ring-gray-300 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-gray-900"
 					type="password"
-					placeholder="••••••••"
+					placeholder="********"
 					required
 					minLength={6}
 					value={state.confirmPassword}

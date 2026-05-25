@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
+import { json } from '@remix-run/cloudflare';
 import { useLoaderData } from '@remix-run/react';
 
 import { DatePickerProvider } from '~/components/context/datepicker-provider';
@@ -12,7 +12,7 @@ import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'Dompetku – Overview' }];
+  return [{ title: 'Dompetku - Overview' }];
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {

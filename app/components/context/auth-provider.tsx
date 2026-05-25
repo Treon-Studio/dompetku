@@ -7,7 +7,8 @@ interface User {
 	trial_start_date: string;
 	order_status: string | null;
 	usage: number;
-	email: string;
+	email: string | null;
+	phone: string | null;
 	plan_status: string;
 	new_signup_email: boolean;
 	basic_usage_limit_email: boolean;

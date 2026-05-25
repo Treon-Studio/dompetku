@@ -1,7 +1,7 @@
 import { Link, useLoaderData } from '@remix-run/react';
 
 import Footer from '~/components/footer';
-import { type LoaderFunctionArgs } from '@remix-run/node';
+import { type LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
 

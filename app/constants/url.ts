@@ -1,7 +1,7 @@
 import { getRangeDateForFilter } from './date';
 import { views } from './table';
 
-const isProduction = typeof process !== 'undefined' ? process.env.NODE_ENV === 'production' : false;
+const isProduction = typeof import.meta !== 'undefined' ? import.meta.env.PROD : false;
 
 const domain = 'dompetku';
 const local = 'localhost:3000';
@@ -15,6 +15,8 @@ const url = {
 	app: {
 		signin: `//app.${home}/signin`,
 		signup: `//app.${home}/signup`,
+		forgotPassword: `//app.${home}/forgot-password`,
+		resetPassword: `//app.${home}/reset-password`,
 		overview: `//app.${home}`,
 	},
 	twitter: 'https://twitter.com/gokul_i',

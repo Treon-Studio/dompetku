@@ -1,4 +1,4 @@
-import type { LinksFunction, MetaFunction } from '@remix-run/node';
+import type { LinksFunction, MetaFunction } from '@remix-run/cloudflare';
 import {
   Links,
   Meta,
@@ -13,7 +13,7 @@ import '../globals.css';
 import '../overwrites.css';
 
 export const meta: MetaFunction = () => [
-  { title: 'Dompetku – Track your expenses with ease' },
+  { title: 'Dompetku - Track your expenses with ease' },
   { name: 'description', content: 'Effortlessly Track and Manage Expenses.' },
 ];
 

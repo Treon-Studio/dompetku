@@ -7,6 +7,8 @@ export const apiUrls = {
 	auth: {
 		signup: '/api/auth/signup',
 		signin: '/api/auth/signin',
+		forgotPassword: '/api/auth/forgot-password',
+		resetPassword: '/api/auth/reset-password',
 	},
 	expenses: {
 		add: '/api/expenses/add',

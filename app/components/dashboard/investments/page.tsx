@@ -4,7 +4,7 @@ import LayoutHeader from '~/components/layout/header';
 import InvestmentsSummary from './summary';
 import DataTable from './table';
 
-const title = 'Dompetku – Investments';
+const title = 'Dompetku - Investments';
 const description = 'Effortlessly Track and Manage Expenses.';
 
 export const metadata = {

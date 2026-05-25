@@ -5,7 +5,7 @@ import { GA4_ANALYTICS_ID } from '~/env';
 import './globals.css';
 import './overwrites.css';
 
-const title = 'Dompetku – Track your expenses with ease';
+const title = 'Dompetku - Track your expenses with ease';
 const description = 'Effortlessly Track and Manage Expenses.';
 
 import { GA4_ANALYTICS_ID } from '~/env';

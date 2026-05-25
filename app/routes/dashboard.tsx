@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
+import { json } from '@remix-run/cloudflare';
 import { Outlet, useLoaderData } from '@remix-run/react';
 import { addYears } from 'date-fns';
 
@@ -9,22 +9,21 @@ import { ThemeProvider } from '~/components/context/theme-provider';
 import DashboardLayout from '~/components/layout';
 import Sidebar from '~/components/sidebar';
 import { Toaster } from '~/components/ui/sonner';
-import prisma from '~/lib/prisma';
+import { createPrismaClient } from '~/lib/prisma';
 import { requireUser } from '~/lib/auth.server';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
 
-import { GA4_ANALYTICS_ID } from '~/env';
-
 export const meta: MetaFunction = () => {
   return [
-    { title: 'Dompetku – Overview' },
+    { title: 'Dompetku - Overview' },
     { name: 'description', content: 'Effortlessly Track and Manage Expenses.' },
   ];
 };
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const user = await requireUser(request);
+export async function loader({ request, context }: LoaderFunctionArgs) {
+  const db = createPrismaClient(context.cloudflare.env);
+  const user = await requireUser(request, db, context);
 
   const isPremiumPlan = user.order_status === 'paid' && user.plan_status === 'premium';
   const isPremiumPlanEnded =

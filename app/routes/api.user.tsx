@@ -1,15 +1,16 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { json } from '@remix-run/cloudflare';
 import { addYears } from 'date-fns';
 
 import { requireUser } from '~/lib/auth.server';
-import prisma from '~/lib/prisma';
+import { createPrismaClient } from '~/lib/prisma';
 
-export async function loader({ request }: LoaderFunctionArgs) {
-	const user = await requireUser(request);
+export async function loader({ request, context }: LoaderFunctionArgs) {
+	const db = createPrismaClient(context.cloudflare.env);
+	const user = await requireUser(request, db, context);
 
 	try {
-		const data = await prisma.users.findUnique({
+		const data = await db.users.findUnique({
 			where: { id: user.id },
 			select: {
 				currency: true,
@@ -19,6 +20,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 				order_status: true,
 				usage: true,
 				email: true,
+				phone: true,
 				plan_status: true,
 				new_signup_email: true,
 			},
@@ -34,14 +36,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	}
 }
 
-export async function action({ request }: ActionFunctionArgs) {
-	const user = await requireUser(request);
+export async function action({ request, context }: ActionFunctionArgs) {
+	const db = createPrismaClient(context.cloudflare.env);
+	const user = await requireUser(request, db, context);
 	const method = request.method.toUpperCase();
 
 	if (method === 'PATCH') {
 		const { currency, locale } = await request.json();
 		try {
-			await prisma.users.update({ data: { currency, locale }, where: { id: user.id } });
+			await db.users.update({ data: { currency, locale }, where: { id: user.id } });
 			return json('Updated');
 		} catch (error) {
 			return json({ error, message: 'Request failed' }, { status: 500 });
@@ -50,13 +53,13 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	if (method === 'DELETE') {
 		try {
-			await prisma.sessions.deleteMany({ where: { user_id: user.id } });
-			await prisma.feedbacks.deleteMany({ where: { user_id: user.id } });
-			await prisma.expenses.deleteMany({ where: { user_id: user.id } });
-			await prisma.income.deleteMany({ where: { user_id: user.id } });
-			await prisma.investments.deleteMany({ where: { user_id: user.id } });
-			await prisma.subscriptions.deleteMany({ where: { user_id: user.id } });
-			await prisma.users.delete({ where: { id: user.id } });
+			await db.sessions.deleteMany({ where: { user_id: user.id } });
+			await db.feedbacks.deleteMany({ where: { user_id: user.id } });
+			await db.expenses.deleteMany({ where: { user_id: user.id } });
+			await db.income.deleteMany({ where: { user_id: user.id } });
+			await db.investments.deleteMany({ where: { user_id: user.id } });
+			await db.subscriptions.deleteMany({ where: { user_id: user.id } });
+			await db.users.delete({ where: { id: user.id } });
 			return json('Deleted');
 		} catch (error) {
 			return json({ error, message: 'Request failed' }, { status: 500 });

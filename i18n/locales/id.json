@@ -38,17 +38,25 @@
 		"subscriptions": "Langganan"
 	},
 	"auth": {
+		"identity": "Email atau Nomor Telepon",
 		"email": "Email",
+		"phone": "Nomor Telepon",
 		"password": "Kata Sandi",
 		"confirmPassword": "Konfirmasi Kata Sandi",
 		"signin": "Masuk",
 		"signup": "Daftar",
 		"signout": "Keluar",
 		"forgotPassword": "Lupa Kata Sandi?",
+		"forgotPasswordDesc": "Masukkan email atau nomor telepon Anda dan kami akan mengirimkan tautan reset.",
 		"noAccount": "Belum punya akun?",
 		"hasAccount": "Sudah terdaftar?",
 		"magicLinkSent": "Kami baru saja mengirim email dengan tautan masuk, periksa kotak masuk Anda.",
-		"invalidCredentials": "Email atau kata sandi tidak valid."
+		"invalidCredentials": "Email/nomor telepon atau kata sandi tidak valid.",
+		"sendResetLink": "Kirim Tautan Reset",
+		"resetPassword": "Reset Kata Sandi",
+		"newPassword": "Kata Sandi Baru",
+		"passwordMismatch": "Kata sandi tidak cocok",
+		"backToSignin": "Kembali ke Masuk"
 	},
 	"dashboard": {
 		"welcome": "Selamat datang",
@@ -139,5 +147,4 @@
 		"terms": "Ketentuan",
 		"contact": "Kontak"
 	}
-}
 }

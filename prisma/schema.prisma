@@ -69,31 +69,36 @@ model investments {
 }
 
 model users {
-  id                         String          @id @default(uuid())
-  email                      String          @unique
+  id                         String            @id @default(uuid())
+  email                      String?
+  phone                      String?
   password                   String
-  created_at                 DateTime        @default(now())
-  updated_at                 DateTime        @default(now()) @updatedAt
-  currency                   String          @default("INR")
-  locale                     String          @default("en")
+  created_at                 DateTime          @default(now())
+  updated_at                 DateTime          @default(now()) @updatedAt
+  currency                   String            @default("INR")
+  locale                     String            @default("en")
   order_identifier           String?
   order_store_id             String?
   order_number               String?
   order_status               String?
   billing_start_date         String?
-  plan_status                String          @default("basic")
-  trial_start_date           DateTime        @default(now())
-  usage                      Int             @default(0)
-  basic_usage_limit_email    Boolean         @default(false)
-  new_signup_email           Boolean         @default(false)
-  premium_plan_expired_email Boolean         @default(false)
-  premium_usage_limit_email  Boolean         @default(false)
-  monthly_email_report       Boolean         @default(false)
+  plan_status                String            @default("basic")
+  trial_start_date           DateTime          @default(now())
+  usage                      Int               @default(0)
+  basic_usage_limit_email    Boolean           @default(false)
+  new_signup_email           Boolean           @default(false)
+  premium_plan_expired_email Boolean           @default(false)
+  premium_usage_limit_email  Boolean           @default(false)
+  monthly_email_report       Boolean           @default(false)
   expenses                   expenses[]
   income                     income[]
   investments                investments[]
   subscriptions              subscriptions[]
   sessions                   sessions[]
+  password_resets            password_resets[]
+
+  @@unique([email])
+  @@unique([phone])
 }
 
 model feedbacks {
@@ -116,6 +121,16 @@ model sessions {
   user_id    String
   token      String   @unique
   expires_at DateTime
+  created_at DateTime @default(now())
+  user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model password_resets {
+  id         String   @id @default(uuid())
+  user_id    String
+  token      String   @unique
+  expires_at DateTime
+  used       Boolean  @default(false)
   created_at DateTime @default(now())
   user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }

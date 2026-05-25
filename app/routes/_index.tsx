@@ -4,15 +4,17 @@ import Footer from '~/components/footer';
 import Features from '~/components/home/features';
 
 import url from 'constants/url';
-import { redirect, type LoaderFunctionArgs } from '@remix-run/node';
+import { redirect, type LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { getUserFromSession } from '~/lib/auth.server';
+import { createPrismaClient } from '~/lib/prisma';
 import { premiumPlan } from 'constants/usage';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
 import { useTranslation } from '@i18n/client';
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const user = await getUserFromSession(request);
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  const db = createPrismaClient(context.cloudflare.env);
+  const user = await getUserFromSession(request, db, context);
   if (user) {
     return redirect('/dashboard');
   }
@@ -22,9 +24,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export const meta = () => [
-	{ title: 'Dompetku – Track your expenses with ease' },
+	{ title: 'Dompetku - Track your expenses with ease' },
 	{ name: 'description', content: 'Effortlessly Track and Manage Expenses.' },
-	{ property: 'og:title', content: 'Dompetku – Track your expenses with ease' },
+	{ property: 'og:title', content: 'Dompetku - Track your expenses with ease' },
 	{ property: 'og:description', content: 'Effortlessly Track and Manage Expenses.' },
 	{ property: 'og:type', content: 'website' },
 	{ name: 'twitter:card', content: 'summary_large_image' },

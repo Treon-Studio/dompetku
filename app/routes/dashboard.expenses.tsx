@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
+import { json } from '@remix-run/cloudflare';
 import { useLoaderData } from '@remix-run/react';
 
 import { DataContextProvider } from '~/components/context/data-provider';
@@ -11,7 +11,7 @@ import { I18nProvider } from '@i18n/provider';
 
 export const meta: MetaFunction = () => {
   return [
-    { title: 'Dompetku – Expenses' },
+    { title: 'Dompetku - Expenses' },
     { name: 'description', content: 'Effortlessly Track and Manage Expenses.' },
   ];
 };

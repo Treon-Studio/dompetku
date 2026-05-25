@@ -9,21 +9,22 @@ import {
   useRouteError,
   Link,
 } from '@remix-run/react';
-import type { LinksFunction, MetaFunction, LoaderFunctionArgs } from '@remix-run/node';
+import type { LinksFunction, MetaFunction, LoaderFunctionArgs } from '@remix-run/cloudflare';
 
-import { GA4_ANALYTICS_ID } from '~/env';
+import { getCloudflareEnv } from '~/env';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
 
 import './globals.css';
 import './overwrites.css';
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  const env = getCloudflareEnv(context);
   const locale = getLocaleFromRequest(request);
   const translations = await loadTranslations(locale);
   return {
     ENV: {
-      GA4_ANALYTICS_ID,
+      GA4_ANALYTICS_ID: env.GA4_ANALYTICS_ID,
     },
     locale,
     translations,
@@ -31,7 +32,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export const meta: MetaFunction = () => [
-  { title: 'Dompetku – Track your expenses with ease' },
+  { title: 'Dompetku - Track your expenses with ease' },
   { name: 'description', content: 'Effortlessly Track and Manage Expenses.' },
 ];
 
@@ -51,29 +52,32 @@ export default function App() {
   return (
     <I18nProvider locale={data.locale} translations={data.translations}>
     <html lang="en" suppressHydrationWarning>
-      <head>
+      <head suppressHydrationWarning>
+        <meta charSet="utf-8" />
         <Meta />
         <Links />
         <script
           dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${gaId}');
-            `,
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||((!t||t==='system')&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark');else document.documentElement.classList.add('light')}catch(e){}})()`,
           }}
         />
-        <script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
-        {process.env.NODE_ENV === 'development' && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.__vite_plugin_react_preamble_installed__ = true;`,
-            }}
-          />
+        {gaId && (
+          <>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${gaId}');
+                `,
+              }}
+            />
+            <script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+          </>
         )}
       </head>
-      <body className="flex h-full flex-col text-gray-600 antialiased">
+      <body className="flex h-full flex-col text-gray-600 antialiased" suppressHydrationWarning>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
@@ -103,19 +107,18 @@ export function ErrorBoundary() {
     <html lang="en">
       <head>
         <title>{heading} - Dompetku</title>
-        <Meta />
         <Links />
       </head>
       <body className="flex h-full flex-col text-gray-600 antialiased">
         <div className="flex min-h-screen flex-col items-center justify-center bg-sky-50 px-4 text-center">
           <h1 className="mb-4 text-6xl font-extrabold text-gray-900">{heading}</h1>
           <p className="mb-8 text-xl text-gray-600">{message}</p>
-          <Link
-            to="/"
+          <a
+            href="/"
             className="inline-flex h-12 items-center justify-center rounded-md bg-gray-900 px-8 text-sm font-medium text-white transition-colors hover:bg-gray-800"
           >
             Go back home
-          </Link>
+          </a>
         </div>
         <Scripts />
       </body>

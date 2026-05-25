@@ -14,7 +14,8 @@ if (!url) throw new Error('TURSO_DATABASE_URL is not set');
 
 const client = createClient({ url, authToken });
 
-const TEST_EMAIL = 'demo@expense.fyi';
+const TEST_EMAIL = 'demo@dompetku';
+const TEST_PHONE = '+6281234567890';
 const TEST_PASSWORD = 'password123';
 
 function uuid() {
@@ -22,17 +23,18 @@ function uuid() {
 }
 
 async function ensureTables() {
-  console.log('📐 Ensuring tables exist...');
+  console.log('Ensuring tables exist...');
 
   await client.executeMultiple(`
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
-      email TEXT UNIQUE NOT NULL,
+      email TEXT,
+      phone TEXT,
       password TEXT NOT NULL,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      currency TEXT DEFAULT 'INR',
-      locale TEXT DEFAULT 'en',
+      currency TEXT DEFAULT 'IDR',
+      locale TEXT DEFAULT 'id',
       order_identifier TEXT,
       order_store_id TEXT,
       order_number TEXT,
@@ -53,6 +55,16 @@ async function ensureTables() {
       user_id TEXT NOT NULL,
       token TEXT UNIQUE NOT NULL,
       expires_at DATETIME NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS password_resets (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      token TEXT UNIQUE NOT NULL,
+      expires_at DATETIME NOT NULL,
+      used INTEGER DEFAULT 0,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
@@ -135,31 +147,84 @@ async function ensureTables() {
     );
   `);
 
-  console.log('✅ Tables ready\n');
+  await client.executeMultiple(`
+    CREATE INDEX IF NOT EXISTS idx_expenses_user_id ON expenses(user_id);
+    CREATE INDEX IF NOT EXISTS idx_income_user_id ON income(user_id);
+    CREATE INDEX IF NOT EXISTS idx_investments_user_id ON investments(user_id);
+    CREATE INDEX IF NOT EXISTS idx_subscriptions_user_id ON subscriptions(user_id);
+    CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
+    CREATE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
+    CREATE INDEX IF NOT EXISTS idx_feedbacks_user_id ON feedbacks(user_id);
+  `);
+
+  console.log('Tables ready\n');
+}
+
+async function migrateColumns() {
+  console.log('Running migrations...');
+
+  try {
+    await client.execute(`ALTER TABLE users ADD COLUMN phone TEXT UNIQUE`);
+    console.log('Added phone column to users');
+  } catch {
+    console.log('phone column already exists, skipping');
+  }
+
+  try {
+    await client.execute(`CREATE TABLE IF NOT EXISTS password_resets (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      token TEXT UNIQUE NOT NULL,
+      expires_at DATETIME NOT NULL,
+      used INTEGER DEFAULT 0,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )`);
+    console.log('Created password_resets table');
+  } catch {
+    console.log('password_resets table already exists, skipping');
+  }
+
+  console.log('Migrations done\n');
 }
 
 async function main() {
-  console.log('🌱 Starting seed...\n');
+  console.log('Starting seed...\n');
 
   await ensureTables();
+  await migrateColumns();
 
-  // Delete existing demo user
+  // Delete existing demo users
   await client.execute({
     sql: 'DELETE FROM users WHERE email = ?',
     args: [TEST_EMAIL],
   });
-
-  // Create user
-  const passwordHash = await bcrypt.hash(TEST_PASSWORD, 10);
-  const userId = uuid();
   await client.execute({
-    sql: `INSERT INTO users (id, email, password, currency, locale, plan_status)
-          VALUES (?, ?, ?, 'IDR', 'id', 'premium')`,
-    args: [userId, TEST_EMAIL, passwordHash],
+    sql: 'DELETE FROM users WHERE phone = ?',
+    args: [TEST_PHONE],
   });
-  console.log(`✅ Created user: ${TEST_EMAIL}`);
 
-  // Expenses
+  const passwordHash = await bcrypt.hash(TEST_PASSWORD, 10);
+
+  // Create email user
+  const emailUserId = uuid();
+  await client.execute({
+    sql: `INSERT INTO users (id, email, phone, password, currency, locale, plan_status)
+          VALUES (?, ?, NULL, ?, 'IDR', 'id', 'premium')`,
+    args: [emailUserId, TEST_EMAIL, passwordHash],
+  });
+  console.log(`Created email user: ${TEST_EMAIL}`);
+
+  // Create phone user
+  const phoneUserId = uuid();
+  await client.execute({
+    sql: `INSERT INTO users (id, email, phone, password, currency, locale, plan_status)
+          VALUES (?, NULL, ?, ?, 'IDR', 'id', 'basic')`,
+    args: [phoneUserId, TEST_PHONE, passwordHash],
+  });
+  console.log(`Created phone user: ${TEST_PHONE}`);
+
+  // Seed expenses for email user
   const months = ['2025-01', '2025-02', '2025-03', '2025-04', '2025-05'];
   const expenseData = [
     { name: 'Belanja Bulanan', category: 'groceries', price: '850000', paid_via: 'qris' },
@@ -178,38 +243,38 @@ async function main() {
       const day = String(Math.floor(Math.random() * 28) + 1).padStart(2, '0');
       await client.execute({
         sql: `INSERT INTO expenses (id, name, category, price, paid_via, date, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        args: [uuid(), exp.name, exp.category, exp.price, exp.paid_via, `${month}-${day}`, userId],
+        args: [uuid(), exp.name, exp.category, exp.price, exp.paid_via, `${month}-${day}`, emailUserId],
       });
       expenseCount++;
     }
   }
-  console.log(`✅ Created ${expenseCount} expense records`);
+  console.log(`Created ${expenseCount} expense records`);
 
   // Income
   let incomeCount = 0;
   for (const month of months) {
     await client.execute({
       sql: `INSERT INTO income (id, name, category, price, date, user_id) VALUES (?, ?, ?, ?, ?, ?)`,
-      args: [uuid(), 'Gaji Bulanan', 'salary', '8500000', `${month}-01`, userId],
+      args: [uuid(), 'Gaji Bulanan', 'salary', '8500000', `${month}-01`, emailUserId],
     });
     incomeCount++;
 
     if (month === '2025-03' || month === '2025-05') {
       await client.execute({
         sql: `INSERT INTO income (id, name, category, price, date, user_id) VALUES (?, ?, ?, ?, ?, ?)`,
-        args: [uuid(), 'Freelance Project', 'freelance', '2000000', `${month}-20`, userId],
+        args: [uuid(), 'Freelance Project', 'freelance', '2000000', `${month}-20`, emailUserId],
       });
       incomeCount++;
     }
     if (month === '2025-04') {
       await client.execute({
         sql: `INSERT INTO income (id, name, category, price, date, user_id) VALUES (?, ?, ?, ?, ?, ?)`,
-        args: [uuid(), 'Bonus Kinerja', 'bonus', '1500000', `${month}-15`, userId],
+        args: [uuid(), 'Bonus Kinerja', 'bonus', '1500000', `${month}-15`, emailUserId],
       });
       incomeCount++;
     }
   }
-  console.log(`✅ Created ${incomeCount} income records`);
+  console.log(`Created ${incomeCount} income records`);
 
   // Investments
   const investmentData = [
@@ -224,12 +289,12 @@ async function main() {
       const day = String(Math.floor(Math.random() * 15) + 1).padStart(2, '0');
       await client.execute({
         sql: `INSERT INTO investments (id, name, category, price, units, date, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        args: [uuid(), inv.name, inv.category, inv.price, inv.units, `${month}-${day}`, userId],
+        args: [uuid(), inv.name, inv.category, inv.price, inv.units, `${month}-${day}`, emailUserId],
       });
       invCount++;
     }
   }
-  console.log(`✅ Created ${invCount} investment records`);
+  console.log(`Created ${invCount} investment records`);
 
   // Subscriptions
   const subsData = [
@@ -243,21 +308,22 @@ async function main() {
   for (const sub of subsData) {
     await client.execute({
       sql: `INSERT INTO subscriptions (id, name, url, price, paid, date, active, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      args: [uuid(), sub.name, sub.url, sub.price, sub.paid, '2025-01-01', 1, userId],
+      args: [uuid(), sub.name, sub.url, sub.price, sub.paid, '2025-01-01', 1, emailUserId],
     });
   }
-  console.log(`✅ Created ${subsData.length} subscription records`);
+  console.log(`Created ${subsData.length} subscription records`);
 
-  console.log('\n🎉 Seed complete!\n');
+  console.log('\nSeed complete!\n');
   console.log('-----------------------------------');
-  console.log(`📧 Email    : ${TEST_EMAIL}`);
-  console.log(`🔑 Password : ${TEST_PASSWORD}`);
+  console.log(`Email    : ${TEST_EMAIL}`);
+  console.log(`Phone    : ${TEST_PHONE}`);
+  console.log(`Password : ${TEST_PASSWORD}`);
   console.log('-----------------------------------\n');
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Seed failed:', e);
+    console.error('Seed failed:', e);
     process.exit(1);
   })
   .finally(() => client.close());

@@ -1,11 +1,12 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { json } from '@remix-run/cloudflare';
 
 import { requireUser } from '~/lib/auth.server';
-import prisma from '~/lib/prisma';
+import { createPrismaClient } from '~/lib/prisma';
 
-export async function loader({ request }: LoaderFunctionArgs) {
-	const user = await requireUser(request);
+export async function loader({ request, context }: LoaderFunctionArgs) {
+	const db = createPrismaClient(context.cloudflare.env);
+	const user = await requireUser(request, db, context);
 	const { searchParams } = new URL(request.url);
 	const from = searchParams.get('from') || '';
 	const to = searchParams.get('to') || '';
@@ -23,7 +24,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 			delete where.date;
 		}
 
-		const data = await prisma.expenses.findMany({
+		const data = await db.expenses.findMany({
 			where,
 			orderBy: { updated_at: 'desc' },
 			select: {
@@ -44,8 +45,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	}
 }
 
-export async function action({ request }: ActionFunctionArgs) {
-	const user = await requireUser(request);
+export async function action({ request, context }: ActionFunctionArgs) {
+	const db = createPrismaClient(context.cloudflare.env);
+	const user = await requireUser(request, db, context);
 	const { id } = await request.json();
 	const method = request.method.toUpperCase();
 
@@ -54,7 +56,7 @@ export async function action({ request }: ActionFunctionArgs) {
 			return json('Invalid request', { status: 400 });
 		}
 		try {
-			await prisma.expenses.delete({
+			await db.expenses.delete({
 				where: { id: id[0] },
 			});
 			return json('deleted', { status: 200 });
@@ -69,7 +71,7 @@ export async function action({ request }: ActionFunctionArgs) {
 			return json('Invalid request', { status: 400 });
 		}
 		try {
-			await prisma.expenses.update({
+			await db.expenses.update({
 				data: { notes, name, price, date, paid_via, category },
 				where: { id },
 			});

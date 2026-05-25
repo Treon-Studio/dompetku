@@ -16,8 +16,10 @@ export default function DeleteModal({ show, onHide }: { show: boolean; onHide: (
 	const [loading, setLoading] = useState(false);
 	const [verify, setVerify] = useState('');
 
+	const identity = user.email || user.phone;
+
 	const onDelete = async () => {
-		if (verify === user.email) {
+		if (verify === identity) {
 			setLoading(true);
 			await fetch('/api/user', { method: 'DELETE' });
 			setLoading(false);
@@ -32,8 +34,8 @@ export default function DeleteModal({ show, onHide }: { show: boolean; onHide: (
 			</div>
 			<Input
 				className="mt-3"
-				placeholder={t('auth.email')}
-				type="email"
+				placeholder={identity}
+				type="text"
 				onChange={(event) => {
 					setVerify(event.target.value);
 				}}
@@ -41,7 +43,7 @@ export default function DeleteModal({ show, onHide }: { show: boolean; onHide: (
 			<Button
 				onClick={onDelete}
 				variant={'destructive'}
-				disabled={loading || verify !== user.email}
+				disabled={loading || verify !== identity}
 				className="user-select-none mt-4 w-full"
 			>
 				{loading ? <CircleLoader /> : t('common.delete')}

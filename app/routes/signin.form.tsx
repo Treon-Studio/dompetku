@@ -9,7 +9,7 @@ import { apiUrls } from '~/lib/apiUrls';
 import url from '~/constants/url';
 import { useTranslation } from '@i18n/client';
 
-const initialState = { loading: false, email: '', password: '', success: false, error: '' };
+const initialState = { loading: false, identity: '', password: '', success: false, error: '' };
 
 export default function Form() {
   const { t } = useTranslation();
@@ -27,14 +27,13 @@ export default function Form() {
 		try {
 			const res = await fetch(apiUrls.auth.signin, {
 				method: 'POST',
-				body: JSON.stringify({ email: state.email, password: state.password }),
+				body: JSON.stringify({ identity: state.identity, password: state.password }),
 				headers: { 'Content-Type': 'application/json' },
-				redirect: 'manual', // Don't auto-follow the 302 — let the browser handle Set-Cookie
+				redirect: 'manual',
 			});
 
-			// Status 0 = opaque redirect (success from server)
 			if (res.type === 'opaqueredirect' || res.ok) {
-				window.location.href = '/dashboard'; // Full page reload to pick up the session cookie
+				window.location.href = '/dashboard';
 				return;
 			}
 
@@ -54,18 +53,18 @@ export default function Form() {
 			}}
 		>
 			<label className="mb-1 block">
-				<span className="mb-2 block text-sm font-semibold leading-6">{t('auth.email')}</span>
+				<span className="mb-2 block text-sm font-semibold leading-6">{t('auth.identity')}</span>
 				<input
 					className="mt-2 block h-10 w-full appearance-none rounded-md bg-white px-3 text-sm text-black shadow-xs ring-1 ring-gray-300 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-gray-900"
 					autoFocus
-					type="email"
-					inputMode="email"
-					autoComplete="email"
-					placeholder="tim@apple.com"
+					type="text"
+					inputMode="text"
+					autoComplete="username"
+					placeholder="tim@apple.com / +62812345678"
 					required
-					value={state.email}
+					value={state.identity}
 					onChange={(event) => {
-						setState({ ...state, email: event.target.value });
+						setState({ ...state, identity: event.target.value });
 					}}
 					ref={inputElement}
 				/>
@@ -75,7 +74,7 @@ export default function Form() {
 				<input
 					className="mt-2 block h-10 w-full appearance-none rounded-md bg-white px-3 text-sm text-black shadow-xs ring-1 ring-gray-300 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-gray-900"
 					type="password"
-					placeholder="••••••••"
+					placeholder="********"
 					required
 					value={state.password}
 					onChange={(event) => {
@@ -83,6 +82,14 @@ export default function Form() {
 					}}
 				/>
 			</label>
+			<div className="flex items-center justify-end">
+				<Link
+					to={url.app.forgotPassword}
+					className="text-sm font-medium text-gray-600 hover:text-gray-900"
+				>
+					{t('auth.forgotPassword')}
+				</Link>
+			</div>
 			<Button size={'lg'} type="submit" disabled={state.loading}>
 				{state.loading ? <CircleLoader /> : t('auth.signin')}
 			</Button>

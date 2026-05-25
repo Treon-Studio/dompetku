@@ -1,6 +1,8 @@
-import type { ActionFunctionArgs } from '@remix-run/node';
+import type { ActionFunctionArgs } from '@remix-run/cloudflare';
 import { signOut } from '~/lib/auth.server';
+import { createPrismaClient } from '~/lib/prisma';
 
-export async function action({ request }: ActionFunctionArgs) {
-	return signOut(request);
+export async function action({ request, context }: ActionFunctionArgs) {
+	const db = createPrismaClient(context.cloudflare.env);
+	return signOut(request, db, context);
 }

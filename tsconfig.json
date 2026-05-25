@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"target": "ES2022",
 		"lib": ["DOM", "DOM.Iterable", "ES2022"],
-		"types": ["@remix-run/node", "vite/client"],
+		"types": ["@remix-run/cloudflare", "vite/client", "@cloudflare/workers-types"],
 		"allowJs": true,
 		"skipLibCheck": true,
 		"strict": true,
