@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model subscriptions {
+  id           String   @id @default(uuid())
+  name         String
+  notes        String?
+  url          String
+  price        String   @default("0")
+  paid         String
+  notify       Boolean  @default(false)
+  date         String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @default(now()) @updatedAt
+  user_id      String
+  active       Boolean? @default(true)
+  cancelled_at String?
+  nameHash     String?
+  user         users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model expenses {
+  id         String   @id @default(uuid())
+  name       String
+  notes      String?
+  price      String   @default("0")
+  paid_via   String   @default("")
+  category   String
+  date       String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+  user_id    String
+  nameHash   String?
+  user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model income {
+  id         String   @id @default(uuid())
+  name       String
+  notes      String?
+  price      String   @default("0")
+  category   String
+  date       String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+  user_id    String
+  nameHash   String?
+  user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model investments {
+  id         String   @id @default(uuid())
+  name       String
+  notes      String?
+  price      String   @default("0")
+  units      String   @default("0")
+  category   String
+  date       String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+  user_id    String
+  nameHash   String?
+  user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model users {
+  id                         String          @id @default(uuid())
+  email                      String          @unique
+  password                   String
+  created_at                 DateTime        @default(now())
+  updated_at                 DateTime        @default(now()) @updatedAt
+  currency                   String          @default("INR")
+  locale                     String          @default("en")
+  order_identifier           String?
+  order_store_id             String?
+  order_number               String?
+  order_status               String?
+  billing_start_date         String?
+  plan_status                String          @default("basic")
+  trial_start_date           DateTime        @default(now())
+  usage                      Int             @default(0)
+  basic_usage_limit_email    Boolean         @default(false)
+  new_signup_email           Boolean         @default(false)
+  premium_plan_expired_email Boolean         @default(false)
+  premium_usage_limit_email  Boolean         @default(false)
+  monthly_email_report       Boolean         @default(false)
+  expenses                   expenses[]
+  income                     income[]
+  investments                investments[]
+  subscriptions              subscriptions[]
+  sessions                   sessions[]
+}
+
+model feedbacks {
+  id         Int      @id @default(autoincrement())
+  message    String
+  created_at DateTime @default(now())
+  user_id    String
+}
+
+model contact {
+  id         Int      @id @default(autoincrement())
+  message    String
+  subject    String
+  email      String
+  created_at DateTime @default(now())
+}
+
+model sessions {
+  id         String   @id @default(uuid())
+  user_id    String
+  token      String   @unique
+  expires_at DateTime
+  created_at DateTime @default(now())
+  user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}

@@ -1,0 +1,64 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+react-email/node_modules/
+
+# testing
+/coverage
+
+# remix & vite
+/build
+/public/build
+/.cache
+
+# next.js (legacy from before migration)
+/.next/
+/out/
+.react-email
+
+# production
+/dist
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# vercel & cloudflare
+.vercel
+.wrangler
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# husky
+.husky/_
+
+# databases
+*.db
+*.db-journal
+/local.db
+/prisma/local.db
+/prisma/*.db
+/prisma/*.db-journal
+
+# tools output
+/scratch/
+/graphify-out/

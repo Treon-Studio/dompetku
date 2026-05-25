@@ -1,0 +1,143 @@
+{
+	"common": {
+		"loading": "Memuat...",
+		"error": "Terjadi kesalahan, silakan coba lagi.",
+		"success": "Berhasil ditambahkan!",
+		"updated": "Berhasil diperbarui!",
+		"deleted": "Berhasil dihapus!",
+		"save": "Simpan",
+		"cancel": "Batal",
+		"delete": "Hapus",
+		"edit": "Edit",
+		"add": "Tambah",
+		"close": "Tutup",
+		"confirm": "Konfirmasi",
+		"back": "Kembali",
+		"next": "Selanjutnya",
+		"submit": "Kirim",
+		"search": "Cari",
+		"filter": "Filter",
+		"export": "Ekspor",
+		"import": "Impor",
+		"settings": "Pengaturan",
+		"profile": "Profil",
+		"logout": "Keluar",
+		"signin": "Masuk",
+		"signup": "Daftar",
+		"update": "Perbarui",
+		"optional": "(opsional)",
+		"support": "Bantuan",
+		"summary": "Ringkasan"
+	},
+	"navigation": {
+		"dashboard": "Dasbor",
+		"overview": "Ringkasan",
+		"expenses": "Pengeluaran",
+		"income": "Pendapatan",
+		"investments": "Investasi",
+		"subscriptions": "Langganan"
+	},
+	"auth": {
+		"email": "Email",
+		"password": "Kata Sandi",
+		"confirmPassword": "Konfirmasi Kata Sandi",
+		"signin": "Masuk",
+		"signup": "Daftar",
+		"signout": "Keluar",
+		"forgotPassword": "Lupa Kata Sandi?",
+		"noAccount": "Belum punya akun?",
+		"hasAccount": "Sudah terdaftar?",
+		"magicLinkSent": "Kami baru saja mengirim email dengan tautan masuk, periksa kotak masuk Anda.",
+		"invalidCredentials": "Email atau kata sandi tidak valid."
+	},
+	"dashboard": {
+		"welcome": "Selamat datang",
+		"totalBalance": "Total Saldo",
+		"totalIncome": "Total Pendapatan",
+		"totalExpenses": "Total Pengeluaran",
+		"totalInvestments": "Total Investasi",
+		"totalSubscriptions": "Total Langganan",
+		"totalSpent": "Total Pengeluaran",
+		"totalAmount": "Total Jumlah",
+		"availableBalance": "Saldo Tersedia",
+		"totalInvestment": "Total Investasi",
+		"totalSubscription": "Total Langganan",
+		"activeCancelled": "Aktif - Dibatalkan",
+		"totalActiveMonthly": "Total Aktif - Bulanan",
+		"totalActiveYearly": "Total Aktif - Tahunan"
+	},
+	"expenses": {
+		"title": "Pengeluaran",
+		"addExpense": "Tambah Pengeluaran",
+		"editExpense": "Edit Pengeluaran",
+		"noExpenses": "Belum ada pengeluaran",
+		"category": "Kategori",
+		"amount": "Jumlah",
+		"date": "Tanggal",
+		"description": "Deskripsi",
+		"name": "Nama",
+		"price": "Harga",
+		"paidVia": "Dibayar Via",
+		"notes": "Catatan",
+		"spentDate": "Tanggal Pengeluaran"
+	},
+	"income": {
+		"title": "Pendapatan",
+		"addIncome": "Tambah Pendapatan",
+		"editIncome": "Edit Pendapatan",
+		"noIncome": "Belum ada pendapatan",
+		"source": "Sumber",
+		"amount": "Jumlah",
+		"date": "Tanggal",
+		"notes": "Catatan"
+	},
+	"investments": {
+		"title": "Investasi",
+		"addInvestment": "Tambah Investasi",
+		"editInvestment": "Edit Investasi",
+		"noInvestments": "Belum ada investasi",
+		"type": "Jenis",
+		"units": "Unit",
+		"price": "Harga",
+		"totalValue": "Total Nilai",
+		"date": "Tanggal",
+		"notes": "Catatan"
+	},
+	"subscriptions": {
+		"title": "Langganan",
+		"addSubscription": "Tambah Langganan",
+		"editSubscription": "Edit Langganan",
+		"noSubscriptions": "Belum ada langganan",
+		"renewalDate": "Tanggal Perpanjangan",
+		"startDate": "Tanggal Mulai",
+		"endDate": "Tanggal Berakhir",
+		"status": "Status",
+		"active": "Aktif",
+		"cancelled": "Dibatalkan",
+		"website": "Website",
+		"billingCycle": "Siklus Tagihan"
+	},
+	"errors": {
+		"serverError": "Kesalahan Server Internal",
+		"notFound": "Halaman tidak ditemukan",
+		"unauthorized": "Permintaan tidak sah",
+		"invalidRequest": "Permintaan tidak valid"
+	},
+	"messages": {
+		"paymentSuccess": "Pembayaran Anda berhasil, halaman akan dimuat ulang dalam 6 detik.",
+		"paymentCancelled": "Pembayaran dibatalkan, silakan coba lagi.",
+		"premiumUpgrade": "Upgrade untuk akses fitur premium.",
+		"exportStarted": "Ekspor akan segera dimulai.",
+		"totalSpentTooltip": "Total dari pengeluaran + investasi + langganan"
+	},
+	"modal": {
+		"deleteAccount": "Hapus Akun Anda",
+		"deleteAccountConfirm": "Apakah Anda yakin ingin menghapus akun? Tindakan ini tidak dapat dibatalkan."
+	},
+	"footer": {
+		"privacy": "Privasi",
+		"terms": "Ketentuan",
+		"contact": "Kontak"
+	}
+}
+}

@@ -1,0 +1,142 @@
+{
+	"common": {
+		"loading": "Loading...",
+		"error": "An error occurred, please try again.",
+		"success": "Successfully added!",
+		"updated": "Successfully updated!",
+		"deleted": "Successfully deleted!",
+		"save": "Save",
+		"cancel": "Cancel",
+		"delete": "Delete",
+		"edit": "Edit",
+		"add": "Add",
+		"close": "Close",
+		"confirm": "Confirm",
+		"back": "Back",
+		"next": "Next",
+		"submit": "Submit",
+		"search": "Search",
+		"filter": "Filter",
+		"export": "Export",
+		"import": "Import",
+		"settings": "Settings",
+		"profile": "Profile",
+		"logout": "Logout",
+		"signin": "Sign In",
+		"signup": "Sign Up",
+		"update": "Update",
+		"optional": "(optional)",
+		"support": "Support",
+		"summary": "Summary"
+	},
+	"navigation": {
+		"dashboard": "Dashboard",
+		"overview": "Overview",
+		"expenses": "Expenses",
+		"income": "Income",
+		"investments": "Investments",
+		"subscriptions": "Subscriptions"
+	},
+	"auth": {
+		"email": "Email",
+		"password": "Password",
+		"confirmPassword": "Confirm Password",
+		"signin": "Sign In",
+		"signup": "Sign Up",
+		"signout": "Sign Out",
+		"forgotPassword": "Forgot Password?",
+		"noAccount": "Don't have an account?",
+		"hasAccount": "Already registered?",
+		"magicLinkSent": "We just sent an email with magic link, check your inbox.",
+		"invalidCredentials": "Invalid email or password."
+	},
+	"dashboard": {
+		"welcome": "Welcome back",
+		"totalBalance": "Total Balance",
+		"totalIncome": "Total Income",
+		"totalExpenses": "Total Expenses",
+		"totalInvestments": "Total Investments",
+		"totalSubscriptions": "Total Subscriptions",
+		"totalSpent": "Total Spent",
+		"totalAmount": "Total Amount",
+		"availableBalance": "Available Balance",
+		"totalInvestment": "Total Investment",
+		"totalSubscription": "Total Subscriptions",
+		"activeCancelled": "Active - Cancelled",
+		"totalActiveMonthly": "Total Active - Monthly",
+		"totalActiveYearly": "Total Active - Yearly"
+	},
+	"expenses": {
+		"title": "Expenses",
+		"addExpense": "Add Expense",
+		"editExpense": "Edit Expense",
+		"noExpenses": "No expenses yet",
+		"category": "Category",
+		"amount": "Amount",
+		"date": "Date",
+		"description": "Description",
+		"name": "Name",
+		"price": "Price",
+		"paidVia": "Paid Via",
+		"notes": "Notes",
+		"spentDate": "Spent Date"
+	},
+	"income": {
+		"title": "Income",
+		"addIncome": "Add Income",
+		"editIncome": "Edit Income",
+		"noIncome": "No income yet",
+		"source": "Source",
+		"amount": "Amount",
+		"date": "Date",
+		"notes": "Notes"
+	},
+	"investments": {
+		"title": "Investments",
+		"addInvestment": "Add Investment",
+		"editInvestment": "Edit Investment",
+		"noInvestments": "No investments yet",
+		"type": "Type",
+		"units": "Units",
+		"price": "Price",
+		"totalValue": "Total Value",
+		"date": "Date",
+		"notes": "Notes"
+	},
+	"subscriptions": {
+		"title": "Subscriptions",
+		"addSubscription": "Add Subscription",
+		"editSubscription": "Edit Subscription",
+		"noSubscriptions": "No subscriptions yet",
+		"renewalDate": "Renewal Date",
+		"startDate": "Start Date",
+		"endDate": "End Date",
+		"status": "Status",
+		"active": "Active",
+		"cancelled": "Cancelled",
+		"website": "Website",
+		"billingCycle": "Billing Cycle"
+	},
+	"errors": {
+		"serverError": "Internal Server Error",
+		"notFound": "Page not found",
+		"unauthorized": "Unauthorized request",
+		"invalidRequest": "Invalid request"
+	},
+	"messages": {
+		"paymentSuccess": "Your payment is successful, page will reload in 6 seconds.",
+		"paymentCancelled": "Payment is cancelled, please try again.",
+		"premiumUpgrade": "Upgrade for access to premium features.",
+		"exportStarted": "Export will begin shortly.",
+		"totalSpentTooltip": "Total of expenses + investments + subscriptions"
+	},
+	"modal": {
+		"deleteAccount": "Delete Your Account",
+		"deleteAccountConfirm": "Are you sure you want to delete your account? This action cannot be undone."
+	},
+	"footer": {
+		"privacy": "Privacy",
+		"terms": "Terms",
+		"contact": "Contact"
+	}
+}
