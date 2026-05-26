@@ -138,6 +138,30 @@
 		"exportStarted": "Ekspor akan segera dimulai.",
 		"totalSpentTooltip": "Total dari pengeluaran + investasi + langganan"
 	},
+	"profile": {
+		"title": "Profil",
+		"accountInfo": "Informasi Akun",
+		"email": "Email",
+		"phone": "Nomor Telepon",
+		"noEmail": "Belum ada email",
+		"noPhone": "Belum ada nomor telepon",
+		"preferences": "Preferensi",
+		"currency": "Mata Uang",
+		"language": "Bahasa",
+		"changePassword": "Ubah Kata Sandi",
+		"currentPassword": "Kata Sandi Saat Ini",
+		"newPassword": "Kata Sandi Baru",
+		"confirmNewPassword": "Konfirmasi Kata Sandi Baru",
+		"passwordChanged": "Kata sandi berhasil diubah",
+		"passwordIncorrect": "Kata sandi saat ini salah",
+		"dangerZone": "Zona Berbahaya",
+		"deleteAccount": "Hapus Akun",
+		"deleteAccountDesc": "Setelah Anda menghapus akun, tidak ada cara untuk mengembalikannya. Semua data Anda akan dihapus secara permanen.",
+		"plan": "Paket",
+		"basic": "Basic",
+		"premium": "Premium",
+		"memberSince": "Bergabung sejak"
+	},
 	"modal": {
 		"deleteAccount": "Hapus Akun Anda",
 		"deleteAccountConfirm": "Apakah Anda yakin ingin menghapus akun? Tindakan ini tidak dapat dibatalkan."

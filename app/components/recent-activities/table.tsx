@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 
 import { useOverview } from '~/components/context/overview-provider';
 import { DataTable } from '~/components/recent-activities/data-table';
+import StateDisplay from '~/components/state-display';
 
 import { extractRecentData } from '~/lib/extractor';
 
@@ -35,7 +36,7 @@ export default function RecentActivitiesTable() {
 	}
 
 	if (!recentData.length) {
-		return <p className="flex h-64 items-center justify-center text-sm">No data</p>;
+		return <StateDisplay variant="empty" className="h-64" />;
 	}
 
 	return (

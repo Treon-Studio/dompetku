@@ -4,6 +4,7 @@ import { json } from '@remix-run/cloudflare';
 import { createUser, findUserByIdentity, createSession, isPhone, normalizePhone } from '~/lib/auth.server';
 import { createPrismaClient } from '~/lib/prisma';
 import { validateIdentityField, validatePasswordField } from '~/lib/validate';
+import { logger } from '~/lib/logger';
 
 export async function action({ request, context }: ActionFunctionArgs) {
   try {
@@ -34,7 +35,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const user = await createUser(identity, password, db);
     return createSession(user.id, '/', db, context);
   } catch (error: any) {
-    console.error('Signup error:', error);
+    logger.error('Signup error', { error: String(error) });
     return json({ message: 'An error occurred during sign up' }, { status: 500 });
   }
 }

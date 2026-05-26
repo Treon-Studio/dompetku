@@ -1,7 +1,7 @@
 'use client';
 
 import { ColumnDef, RowData } from '@tanstack/react-table';
-import { Pencil, Trash2 } from 'lucide-react';
+import { RiPencilLine, RiDeleteBinLine } from '@remixicon/react';
 
 import DataTableColumnHeader from '~/components/table/data-table-column-header';
 import { Button } from '~/components/ui/button';
@@ -102,7 +102,7 @@ export const columns: ColumnDef<Expenses>[] = [
 			return (
 				<div className="flex">
 					<Button className="mr-1 rounded-lg p-0 hover:bg-transparent hover:opacity-70" variant={'ghost'}>
-						<Pencil
+						<RiPencilLine
 							className="h-4 w-4"
 							onClick={() => {
 								meta?.onEdit(row.original);
@@ -110,7 +110,7 @@ export const columns: ColumnDef<Expenses>[] = [
 						/>
 					</Button>
 					<Button className="ml-2 rounded-lg p-0 hover:bg-transparent hover:opacity-70" variant={'ghost'}>
-						<Trash2
+						<RiDeleteBinLine
 							className="h-4 w-4"
 							onClick={() => {
 								meta?.onDelete(row.original?.id);

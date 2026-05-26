@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { ChevronUpIcon } from 'lucide-react';
+import { RiArrowUpSLine } from '@remixicon/react';
 
 const features = [
 	{
@@ -137,7 +137,7 @@ export default function Features() {
 											<h3 className="font-sans font-medium text-black">{feature.name}</h3>
 										</div>
 										{
-											<ChevronUpIcon
+											<RiArrowUpSLine
 												className={`${isSelected ? 'rotate-180 transform' : ''} h-5 w-5 text-orange-600`}
 											/>
 										}

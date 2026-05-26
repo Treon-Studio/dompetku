@@ -7,6 +7,7 @@ import {
 	RiCustomerService2Line,
 	RiLineChartLine,
 	RiLogoutBoxRLine,
+	RiUser3Line,
 } from '@remixicon/react';
 
 export const OverviewIcon = ({ className }: { className?: string }) => <RiDashboardLine className={className} />;
@@ -17,3 +18,4 @@ export const SettingsIcon = ({ className }: { className?: string }) => <RiSettin
 export const SupportIcon = ({ className }: { className?: string }) => <RiCustomerService2Line className={className} />;
 export const InvestmentIcon = ({ className }: { className?: string }) => <RiLineChartLine className={className} />;
 export const SignoutIcon = ({ className }: { className?: string }) => <RiLogoutBoxRLine className={className} />;
+export const ProfileIcon = ({ className }: { className?: string }) => <RiUser3Line className={className} />;

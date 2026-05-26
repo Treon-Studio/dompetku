@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { PlusIcon } from 'lucide-react';
+import { RiAddLine } from '@remixicon/react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip';
@@ -50,7 +50,7 @@ export default function Add({ mutate, type, selected = {}, onHide, onLookup }: A
 							setShow(!show);
 						}}
 					>
-						<PlusIcon className="h-12 w-12" />
+						<RiAddLine className="h-12 w-12" />
 					</button>
 				</TooltipTrigger>
 				<TooltipContent className="mb-1 mr-1" hideWhenDetached side="top">

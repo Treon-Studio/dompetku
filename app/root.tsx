@@ -7,13 +7,15 @@ import {
   useLoaderData,
   isRouteErrorResponse,
   useRouteError,
-  Link,
 } from '@remix-run/react';
 import type { LinksFunction, MetaFunction, LoaderFunctionArgs } from '@remix-run/cloudflare';
 
 import { getCloudflareEnv } from '~/env';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
+import StateDisplay from '~/components/state-display';
+import { logger } from '~/lib/logger';
+import { initFirebase, logException } from '~/lib/firebase.client';
 
 import './globals.css';
 import './overwrites.css';
@@ -22,9 +24,26 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const env = getCloudflareEnv(context);
   const locale = getLocaleFromRequest(request);
   const translations = await loadTranslations(locale);
+
+  if (env.FIREBASE_PROJECT_ID && env.FIREBASE_CLIENT_EMAIL && env.FIREBASE_PRIVATE_KEY) {
+    const { configureLogger } = await import('~/lib/logger');
+    configureLogger({
+      projectId: env.FIREBASE_PROJECT_ID,
+      clientEmail: env.FIREBASE_CLIENT_EMAIL,
+      privateKey: env.FIREBASE_PRIVATE_KEY,
+    });
+  }
+
   return {
     ENV: {
       GA4_ANALYTICS_ID: env.GA4_ANALYTICS_ID,
+      FIREBASE_API_KEY: env.FIREBASE_API_KEY,
+      FIREBASE_AUTH_DOMAIN: env.FIREBASE_AUTH_DOMAIN,
+      FIREBASE_PROJECT_ID: env.FIREBASE_PROJECT_ID,
+      FIREBASE_STORAGE_BUCKET: env.FIREBASE_STORAGE_BUCKET,
+      FIREBASE_MESSAGING_SENDER_ID: env.FIREBASE_MESSAGING_SENDER_ID,
+      FIREBASE_APP_ID: env.FIREBASE_APP_ID,
+      FIREBASE_MEASUREMENT_ID: env.FIREBASE_MEASUREMENT_ID,
     },
     locale,
     translations,
@@ -48,6 +67,23 @@ export const links: LinksFunction = () => [
 export default function App() {
   const data = useLoaderData<typeof loader>();
   const gaId = data?.ENV?.GA4_ANALYTICS_ID || '';
+
+  const fbConfig = data?.ENV;
+  if (fbConfig?.FIREBASE_API_KEY && fbConfig?.FIREBASE_PROJECT_ID) {
+    try {
+      initFirebase({
+        apiKey: fbConfig.FIREBASE_API_KEY!,
+        authDomain: fbConfig.FIREBASE_AUTH_DOMAIN!,
+        projectId: fbConfig.FIREBASE_PROJECT_ID!,
+        storageBucket: fbConfig.FIREBASE_STORAGE_BUCKET!,
+        messagingSenderId: fbConfig.FIREBASE_MESSAGING_SENDER_ID!,
+        appId: fbConfig.FIREBASE_APP_ID!,
+        measurementId: fbConfig.FIREBASE_MEASUREMENT_ID,
+      });
+    } catch {
+      // firebase init failed
+    }
+  }
 
   return (
     <I18nProvider locale={data.locale} translations={data.translations}>
@@ -101,7 +137,12 @@ export function ErrorBoundary() {
       heading = `${error.status} Error`;
       message = error.data || error.statusText;
     }
+    logger.error(`Route error: ${heading}`, { status: error.status, message: String(message) });
+  } else if (error instanceof Error) {
+    logger.error('Unhandled error', { error: error.message, stack: error.stack });
   }
+
+  logException(`${heading}: ${message}`, true);
 
   return (
     <html lang="en">
@@ -110,15 +151,20 @@ export function ErrorBoundary() {
         <Links />
       </head>
       <body className="flex h-full flex-col text-gray-600 antialiased">
-        <div className="flex min-h-screen flex-col items-center justify-center bg-sky-50 px-4 text-center">
-          <h1 className="mb-4 text-6xl font-extrabold text-gray-900">{heading}</h1>
-          <p className="mb-8 text-xl text-gray-600">{message}</p>
-          <a
-            href="/"
-            className="inline-flex h-12 items-center justify-center rounded-md bg-gray-900 px-8 text-sm font-medium text-white transition-colors hover:bg-gray-800"
-          >
-            Go back home
-          </a>
+        <div className="flex min-h-screen items-center justify-center px-4">
+          <StateDisplay
+            variant="error"
+            title={heading}
+            description={message}
+            action={
+              <a
+                href="/"
+                className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Go back home
+              </a>
+            }
+          />
         </div>
         <Scripts />
       </body>

@@ -3,7 +3,7 @@
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
 import { format } from 'date-fns';
-import { Download } from 'lucide-react';
+import { RiDownloadLine } from '@remixicon/react';
 import { toast } from 'sonner';
 
 import { Button } from '~/components/ui/button';
@@ -82,7 +82,7 @@ export default function DataTableToolbar<TData>(props: DataTableToolbarProps<TDa
 						size="sm"
 						className="h-8 max-sm:h-10 text-sm capitalize max-sm:px-1 lg:flex"
 					>
-						<Download className="mr-1.5 h-3.5 w-3.5 sm:inline-block" />
+						<RiDownloadLine className="mr-1.5 h-3.5 w-3.5 sm:inline-block" />
 						Export
 					</Button>
 				) : null}

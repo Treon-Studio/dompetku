@@ -5,6 +5,7 @@ import { createPrismaClient } from '~/lib/prisma';
 import { hashPassword } from '~/lib/auth.server';
 import { getCloudflareEnv } from '~/env';
 import { validateResetToken, validatePasswordField } from '~/lib/validate';
+import { logger } from '~/lib/logger';
 
 export async function action({ request, context }: ActionFunctionArgs) {
   try {
@@ -45,7 +46,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
     return json({ message: 'Password reset successfully. You can now sign in with your new password.' }, { status: 200 });
   } catch (error: any) {
-    console.error('Reset password error:', error);
+    logger.error('Reset password error', { error: String(error) });
     return json({ message: 'An error occurred' }, { status: 500 });
   }
 }

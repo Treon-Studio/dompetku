@@ -1,6 +1,6 @@
 'use client';
 
-import { Banknote, Briefcase, MoveDownRight, MoveUpRight, PiggyBank, PlayIcon, Wallet2 } from 'lucide-react';
+import { RiMoneyDollarCircleLine, RiBriefcaseLine, RiArrowRightDownLine, RiArrowRightUpLine, RiCoinLine, RiPlayCircleLine, RiWallet3Line } from '@remixicon/react';
 
 import { useUser } from '~/components/context/auth-provider';
 import { useOverview } from '~/components/context/overview-provider';
@@ -15,7 +15,7 @@ import SummaryCard from '../../components/card/summary-card';
 
 const Info = ({ value }: { value: number }) => {
 	const isUp = value > 0;
-	const Icon = isUp ? MoveUpRight : MoveDownRight;
+	const Icon = isUp ? RiArrowRightUpLine : RiArrowRightDownLine;
 	return (
 		<Badge
 			variant="secondary"
@@ -58,28 +58,28 @@ export default function Summary() {
 			) : (
 				<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5">
 					<SummaryCard
-						icon={Briefcase}
+						icon={RiBriefcaseLine}
 						title={t('dashboard.totalIncome')}
 						data={formatCurrency({ value: totalIncome, currency: user.currency, locale: user.locale })}
 					/>
 					<SummaryCard
-						icon={Wallet2}
+						icon={RiWallet3Line}
 						title={t('dashboard.availableBalance')}
 						data={formatCurrency({ value: totalBalance, currency: user.currency, locale: user.locale })}
 					/>
 					<SummaryCard
-						icon={Banknote}
+						icon={RiMoneyDollarCircleLine}
 						title={t('dashboard.totalSpent')}
 						tooltip={t('messages.totalSpentTooltip')}
 						data={formatCurrency({ value: totalSpent, currency: user.currency, locale: user.locale })}
 					/>
 					<SummaryCard
-						icon={PiggyBank}
+						icon={RiCoinLine}
 						title={t('dashboard.totalInvestment')}
 						data={formatCurrency({ value: totalInvesments, currency: user.currency, locale: user.locale })}
 					/>
 					<SummaryCard
-						icon={PlayIcon}
+						icon={RiPlayCircleLine}
 						title={t('dashboard.totalSubscription')}
 						data={formatCurrency({ value: totalSubscriptions, currency: user.currency, locale: user.locale })}
 					/>

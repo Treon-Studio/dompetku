@@ -9,6 +9,7 @@ import {
 	IncomeIcon,
 	InvestmentIcon,
 	OverviewIcon,
+	ProfileIcon,
 	SettingsIcon,
 	SignoutIcon,
 	SubscriptionsIcon,
@@ -42,6 +43,7 @@ const dashboardLinks = [
 ];
 
 const settingsLinks = [
+	{ href: '/dashboard/profile', name: 'Profile', Icon: ProfileIcon },
 	{ href: 'mailto:support@dompetku', name: 'Support', Icon: SupportIcon },
 ];
 
@@ -64,7 +66,6 @@ export default function Sidebar() {
 		{ key: 'investments', name: t('navigation.investments'), href: '/dashboard/investments', Icon: InvestmentIcon, shortcut: shortcuts.menu.investments.shortcut },
 		{ key: 'subscriptions', name: t('navigation.subscriptions'), href: '/dashboard/subscriptions', Icon: SubscriptionsIcon, shortcut: shortcuts.menu.subscriptions.shortcut },
 	];
-
 	useHotkeys(
 		menuShortcutList,
 		(_, handler) => {
@@ -74,6 +75,7 @@ export default function Sidebar() {
 			if (keys === shortcuts.menu.expenses.shortcut) router('/dashboard/expenses');
 			if (keys === shortcuts.menu.investments.shortcut) router('/dashboard/investments');
 			if (keys === shortcuts.menu.subscriptions.shortcut) router('/dashboard/subscriptions');
+			if (keys === shortcuts.menu.profile.shortcut) router('/dashboard/profile');
 		},
 		options
 	);

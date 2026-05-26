@@ -69,6 +69,7 @@
 		"debounce": "^2.0.0",
 		"encoding": "^0.1.13",
 		"eslint": "8.56.0",
+		"firebase": "^12.13.0",
 		"isbot": "^5.1.40",
 		"lucide-react": "^1.16.0",
 		"miniflare": "^4.20260521.0",

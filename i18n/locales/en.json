@@ -138,6 +138,30 @@
 		"exportStarted": "Export will begin shortly.",
 		"totalSpentTooltip": "Total of expenses + investments + subscriptions"
 	},
+	"profile": {
+		"title": "Profile",
+		"accountInfo": "Account Information",
+		"email": "Email",
+		"phone": "Phone Number",
+		"noEmail": "No email set",
+		"noPhone": "No phone set",
+		"preferences": "Preferences",
+		"currency": "Currency",
+		"language": "Language",
+		"changePassword": "Change Password",
+		"currentPassword": "Current Password",
+		"newPassword": "New Password",
+		"confirmNewPassword": "Confirm New Password",
+		"passwordChanged": "Password changed successfully",
+		"passwordIncorrect": "Current password is incorrect",
+		"dangerZone": "Danger Zone",
+		"deleteAccount": "Delete Account",
+		"deleteAccountDesc": "Once you delete your account, there is no going back. All your data will be permanently removed.",
+		"plan": "Plan",
+		"basic": "Basic",
+		"premium": "Premium",
+		"memberSince": "Member since"
+	},
 	"modal": {
 		"deleteAccount": "Delete Your Account",
 		"deleteAccountConfirm": "Are you sure you want to delete your account? This action cannot be undone."

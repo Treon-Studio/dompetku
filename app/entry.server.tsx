@@ -2,6 +2,7 @@ import type { AppLoadContext, EntryContext } from '@remix-run/cloudflare';
 import { RemixServer } from '@remix-run/react';
 import { isbot } from 'isbot';
 import { renderToReadableStream } from 'react-dom/server';
+import { logger } from '~/lib/logger';
 
 export default async function handleRequest(
   request: Request,
@@ -15,9 +16,9 @@ export default async function handleRequest(
     {
       signal: request.signal,
       onError(error: unknown) {
-        console.error(error);
-        responseStatusCode = 500;
-      },
+          logger.error('SSR render error', { error: String(error) });
+          responseStatusCode = 500;
+        },
     }
   );
 

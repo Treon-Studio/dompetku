@@ -4,6 +4,7 @@ import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack
 
 import { Skeleton } from '~/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table';
+import StateDisplay from '~/components/state-display';
 
 import { cn } from '~/lib/utils';
 
@@ -58,8 +59,8 @@ export function DataTable<TData, TValue>({ columns, data, className, loading = f
 						))
 					) : (
 						<TableRow>
-							<TableCell colSpan={columns.length} className="mt-6 h-24 text-center">
-								No data
+							<TableCell colSpan={columns.length}>
+								<StateDisplay variant="empty" className="h-24" />
 							</TableCell>
 						</TableRow>
 					)}

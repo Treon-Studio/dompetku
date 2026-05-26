@@ -7,6 +7,7 @@ import { BarList } from '@tremor/react';
 import { useUser } from '~/components/context/auth-provider';
 import { useOverview } from '~/components/context/overview-provider';
 import ChartLoader from '~/components/loader/chart';
+import StateDisplay from '~/components/state-display';
 
 import { extractTopExpenseCategories } from '~/lib/extractor';
 import { formatCurrency } from '~/lib/formatter';
@@ -21,7 +22,7 @@ export default function TopSpentExpenses() {
 	}
 
 	if (!chartData.length) {
-		return <p className="flex h-64 items-center justify-center text-sm">No data</p>;
+		return <StateDisplay variant="empty" className="h-64" />;
 	}
 
 	return (

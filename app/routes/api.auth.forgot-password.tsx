@@ -8,6 +8,7 @@ import { findUserByIdentity, isPhone } from '~/lib/auth.server';
 import { emails } from '~/constants/messages';
 import { RESET_TOKEN_EXPIRY_MS } from '~/constants/app';
 import { validateIdentityField } from '~/lib/validate';
+import { logger } from '~/lib/logger';
 
 import ResetPasswordEmail from 'emails/reset-password';
 
@@ -43,12 +44,12 @@ export async function action({ request, context }: ActionFunctionArgs) {
         react: ResetPasswordEmail({ action_link: resetUrl }),
       });
     } catch (error) {
-      console.error('Failed to send reset email:', error);
+      logger.error('Failed to send reset email', { error: String(error) });
     }
 
     return json({ message: 'If an account with that email exists, we sent a reset link.' }, { status: 200 });
   } catch (error: any) {
-    console.error('Forgot password error:', error);
+    logger.error('Forgot password error', { error: String(error) });
     return json({ message: 'An error occurred' }, { status: 500 });
   }
 }

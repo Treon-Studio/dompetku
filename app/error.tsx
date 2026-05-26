@@ -1,25 +1,26 @@
 'use client';
 
-// Error components must be Client Components
 import { useEffect } from 'react';
+import { logger } from '~/lib/logger';
+import { logException } from '~/lib/firebase.client';
 
 export default function Error({ error, reset }: { error: Error; reset: () => void }) {
 	useEffect(() => {
-		// Log the error to an error reporting service
-		console.error(error);
+		logger.error('Client error', { error: error.message, stack: error.stack });
+		logException(error.message, true);
 	}, [error]);
 
 	return (
-		<div>
-			<h2>Something went wrong!</h2>
-			<button
-				onClick={
-					// Attempt to recover by trying to re-render the segment
-					() => reset()
-				}
-			>
-				Try again
-			</button>
+		<div className="flex min-h-screen items-center justify-center px-4">
+			<div className="text-center">
+				<h2 className="mb-2 text-xl font-semibold">Something went wrong!</h2>
+				<button
+					onClick={() => reset()}
+					className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+				>
+					Try again
+				</button>
+			</div>
 		</div>
 	);
 }

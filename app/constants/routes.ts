@@ -9,5 +9,6 @@ export const ROUTES = {
   DASHBOARD_INCOME: '/dashboard/income',
   DASHBOARD_INVESTMENTS: '/dashboard/investments',
   DASHBOARD_SUBSCRIPTIONS: '/dashboard/subscriptions',
+  DASHBOARD_PROFILE: '/dashboard/profile',
   PRIVACY: '/privacy',
 } as const;

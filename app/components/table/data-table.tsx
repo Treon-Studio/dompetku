@@ -20,6 +20,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~
 
 import TableLoader from './data-table-loader';
 import DataTableToolbar from './data-table-toolbar';
+import StateDisplay from '~/components/state-display';
 
 declare module '@tanstack/react-table' {
 	interface TableMeta<TData extends RowData> {
@@ -105,8 +106,8 @@ export default function DataTable<TData, TValue>(props: DataTableProps) {
 							<TableLoader rows={5} columns={columns.length} />
 						) : (
 							<TableRow>
-								<TableCell colSpan={columns.length} className="h-24 text-center">
-									No data
+								<TableCell colSpan={columns.length}>
+									<StateDisplay variant="empty" className="h-24" />
 								</TableCell>
 							</TableRow>
 						)}
