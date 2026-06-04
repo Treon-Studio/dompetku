@@ -20,7 +20,7 @@ export default function Privacy() {
 			<div className="relative m-auto h-[40px] max-w-4xl pt-3">
 				<header className="absolute left-0 right-0 top-3 z-20 flex items-center justify-between">
 					<Link to="/" className="flex h-[40px] max-w-[180px] items-center p-3 text-2xl">
-						<img src="/icons/logo.svg" width={30} height={30} alt="dompetku logo" className="mr-2" />
+						<img src="/icons/logo.png" width={30} height={30} alt="dompetku logo" className="mr-2" />
 						<span className="font-black tracking-[-0.03em] text-gray-900">Dompetku</span>
 					</Link>
 				</header>

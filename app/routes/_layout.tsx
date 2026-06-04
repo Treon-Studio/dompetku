@@ -19,7 +19,7 @@ export const meta: MetaFunction = () => [
 
 export const links: LinksFunction = () => [
   { rel: 'manifest', href: 'https://dompetku/manifest.json' },
-  { rel: 'icon', href: 'https://dompetku/icons/icon.svg' },
+  { rel: 'icon', href: '/favicon.ico' },
   { rel: 'apple-touch-icon', href: 'https://dompetku/icons/apple-icon.png' },
 ];
 

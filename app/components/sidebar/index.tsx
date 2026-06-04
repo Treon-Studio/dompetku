@@ -106,7 +106,7 @@ export default function Sidebar() {
 								to="/dashboard"
 								className="mt-[3px] active:scale-95 rounded-lg p-1 transition-all focus:outline-hidden"
 							>
-								<img className="block" src="/icons/white-logo.svg" width={30} height={30} alt="Dompetku" />
+								<img className="block" src="/icons/logo.png" width={30} height={30} alt="Dompetku" />
 							</Link>
 							<Separator className="mb-2 mt-[8px] border-t border-gray-100 opacity-[0.2]" />
 							{navItems.map((link, index) => {
