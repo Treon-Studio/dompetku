@@ -208,7 +208,7 @@ export default function DebtsView() {
 								<div className="space-y-2">
 									<Label>Custom Slug (URL Belakang)</Label>
 									<Input required value={editSlug} onChange={(e) => setEditSlug(e.target.value)} />
-									<p className="text-sm text-gray-500">Preview: {typeof window !== 'undefined' ? window.location.origin : ''}/share/{editSlug}</p>
+									<p suppressHydrationWarning className="text-sm text-gray-500">Preview: {typeof window !== 'undefined' ? window.location.origin : ''}/share/{editSlug}</p>
 								</div>
 								<Button type="submit" disabled={isLoading} className="w-full">
 									{isLoading ? 'Menyimpan...' : 'Simpan Pengaturan'}

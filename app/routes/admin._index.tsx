@@ -3,7 +3,7 @@ import { json } from '@remix-run/cloudflare';
 import { useLoaderData, Link } from '@remix-run/react';
 
 import { createPrismaClient } from '~/lib/prisma';
-import { requireAdmin } from '~/lib/auth.server';
+import { requireAdmin } from '~/features/auth/api.server';
 import LayoutHeader from '~/components/layout/header';
 import { Button } from '~/components/ui/button';
 

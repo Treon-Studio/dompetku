@@ -1,11 +1,12 @@
 'use client';
 
+import { useMemo, useState, useEffect, useRef } from 'react';
 import { addInvestment, editInvestment } from '~/features/investments/api.client';
 import { useResourceForm } from '~/hooks/use-resource-form';
 import debounce from 'debounce';
 
 import AutoCompleteList from '~/components/autocomplete-list';
-import { useUser } from '~/components/context/auth-provider';
+import { useUser } from '~/features/auth/components/auth-provider';
 import CircleLoader from '~/components/loader/circle';
 import Modal from '~/components/modal';
 import { Button } from '~/components/ui/button';

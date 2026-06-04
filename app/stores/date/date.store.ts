@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { useShallow } from 'zustand/react/shallow';
 import { addDays, startOfMonth } from 'date-fns';
 
 export type TDateRange = {
@@ -35,4 +36,4 @@ export const useDateStore = create<TDateState & TDateActions>()((set) => ({
 
 // Selectors
 export const useDateRange = () => useDateStore((s) => s.date);
-export const useDateActions = () => useDateStore((s) => ({ setDate: s.setDate }));
+export const useDateActions = () => useDateStore(useShallow((s) => ({ setDate: s.setDate })));

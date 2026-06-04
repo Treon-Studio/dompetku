@@ -3,7 +3,7 @@ import { json } from '@remix-run/cloudflare';
 
 import FeedbackEmail from 'emails/feedback';
 
-import { requireUser } from '~/lib/auth.server';
+import { requireUser } from '~/features/auth/api.server';
 import { getResend } from '~/lib/email';
 import { createPrismaClient } from '~/lib/prisma';
 import { getCloudflareEnv } from '~/env';

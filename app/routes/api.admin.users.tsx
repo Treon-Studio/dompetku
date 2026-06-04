@@ -2,7 +2,7 @@ import type { LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/cloudfla
 import { json } from '@remix-run/cloudflare';
 
 import { createPrismaClient } from '~/lib/prisma';
-import { requireAdmin } from '~/lib/auth.server';
+import { requireAdmin } from '~/features/auth/api.server';
 import { logger } from '~/lib/logger.server';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {

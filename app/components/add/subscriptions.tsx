@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect, useMemo, useRef } from 'react';
+import debounce from 'debounce';
 import { Link } from '@remix-run/react';
 import { addSubscription, editSubscription } from '~/features/subscriptions/api.client';
 import { useResourceForm } from '~/hooks/use-resource-form';
 import { toast } from 'sonner';
 
 import AutoCompleteList from '~/components/autocomplete-list';
-import { useUser } from '~/components/context/auth-provider';
+import { useUser } from '~/features/auth/components/auth-provider';
 import CircleLoader from '~/components/loader/circle';
 import Modal from '~/components/modal';
 import { Button } from '~/components/ui/button';

@@ -28,17 +28,19 @@ export default function SidebarLink({
 			{shortcut ? (
 				<Tooltip>
 					<TooltipTrigger asChild>
-						<Link
-							onClick={() => {
-								if (onClick) onClick();
-							}}
-							to={href}
-							className={`mb-1.5 mt-1.5 flex items-center justify-center rounded-lg p-2 tracking-wide text-white transition-all hover:bg-[#27272a] ${
-								active ? 'bg-[#27272a]' : ''
-							} ${className}`}
-						>
-							{children}
-						</Link>
+						<span className="block">
+							<Link
+								onClick={() => {
+									if (onClick) onClick();
+								}}
+								to={href}
+								className={`mb-1.5 mt-1.5 flex items-center justify-center rounded-lg p-2 tracking-wide text-white transition-all hover:bg-[#27272a] ${
+									active ? 'bg-[#27272a]' : ''
+								} ${className}`}
+							>
+								{children}
+							</Link>
+						</span>
 					</TooltipTrigger>
 					<TooltipContent side="right">
 						{name}

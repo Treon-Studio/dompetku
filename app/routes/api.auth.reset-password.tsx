@@ -2,9 +2,9 @@ import type { ActionFunctionArgs } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 
 import { createPrismaClient } from '~/lib/prisma';
-import { hashPassword } from '~/lib/auth.server';
+import { hashPassword } from '~/features/auth/api.server';
 import { getCloudflareEnv } from '~/env';
-import { ResetPasswordSchema } from '~/lib/schemas';
+import { ResetPasswordSchema } from '~/features/auth/schemas';
 import { logger } from '~/lib/logger.server';
 
 export async function action({ request, context }: ActionFunctionArgs) {

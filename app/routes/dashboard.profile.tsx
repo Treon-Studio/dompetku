@@ -3,7 +3,7 @@ import { json } from '@remix-run/cloudflare';
 import { useLoaderData } from '@remix-run/react';
 
 import LayoutHeader from '~/components/layout/header';
-import ProfilePage from '~/components/dashboard/profile/page';
+import ProfileView from '~/features/profile/components/profile-view';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
 
@@ -27,7 +27,7 @@ export default function ProfileRoute() {
     <I18nProvider locale={locale} translations={translations}>
       <>
         <LayoutHeader title="profile" />
-        <ProfilePage />
+        <ProfileView />
       </>
     </I18nProvider>
   );

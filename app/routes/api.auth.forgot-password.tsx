@@ -4,10 +4,10 @@ import { json } from '@remix-run/cloudflare';
 import { createPrismaClient } from '~/lib/prisma';
 import { getResend } from '~/lib/email';
 import { getCloudflareEnv } from '~/env';
-import { findUserByIdentity, isPhone } from '~/lib/auth.server';
+import { findUserByIdentity, isPhone } from '~/features/auth/api.server';
 import { emails } from '~/constants/messages';
 import { RESET_TOKEN_EXPIRY_MS } from '~/constants/app';
-import { ForgotPasswordSchema } from '~/lib/schemas';
+import { ForgotPasswordSchema } from '~/features/auth/schemas';
 import { logger } from '~/lib/logger.server';
 
 import ResetPasswordEmail from 'emails/reset-password';

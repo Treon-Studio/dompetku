@@ -3,7 +3,7 @@
 import ExpesenseChart from '~/components/chart/bar';
 import TopSpentExpenses from '~/components/chart/bar-list';
 import DonutChart from '~/components/chart/donut';
-import { useUser } from '~/components/context/auth-provider';
+import { useUser } from '~/features/auth/components/auth-provider';
 import RecentActivitiesTable from '~/components/recent-activities/table';
 import { Card, CardContent, CardHeader } from '~/components/ui/card';
 

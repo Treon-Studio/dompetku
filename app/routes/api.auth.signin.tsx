@@ -1,9 +1,9 @@
 import type { ActionFunctionArgs } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 
-import { login, createSession, isPhone } from '~/lib/auth.server';
+import { login, createSession, isPhone } from '~/features/auth/api.server';
 import { createPrismaClient } from '~/lib/prisma';
-import { SigninSchema } from '~/lib/schemas';
+import { SigninSchema } from '~/features/auth/schemas';
 import { logger } from '~/lib/logger.server';
 
 export async function action({ request, context }: ActionFunctionArgs) {

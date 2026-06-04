@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { useUser } from '~/components/context/auth-provider';
+import { useUser } from '~/features/auth/components/auth-provider';
 import CircleLoader from '~/components/loader/circle';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';

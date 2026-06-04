@@ -91,9 +91,8 @@ export default function App() {
   }, [fbConfig]);
 
   return (
-    <I18nProvider locale={data.locale} translations={data.translations}>
-      <html lang="en" suppressHydrationWarning>
-        <head suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
+      <head suppressHydrationWarning>
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <Meta />
@@ -119,15 +118,16 @@ export default function App() {
             </>
           ) : null}
         </head>
-        <body className="flex h-full flex-col text-gray-600 antialiased" suppressHydrationWarning>
+      <body className="flex h-full flex-col text-gray-600 antialiased" suppressHydrationWarning>
+        <I18nProvider locale={data.locale} translations={data.translations}>
           <QueryClientProvider client={queryClient}>
             <Outlet />
           </QueryClientProvider>
-          <ScrollRestoration />
-          <Scripts />
-        </body>
-      </html>
-    </I18nProvider>
+        </I18nProvider>
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
   );
 }
 

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import { useUser } from '~/components/context/auth-provider';
+import { useUser } from '~/features/auth/components/auth-provider';
 import { Button } from '~/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '~/components/ui/card';
 import { Input } from '~/components/ui/input';

@@ -3,13 +3,13 @@ import { json } from '@remix-run/cloudflare';
 import { Outlet, useLoaderData } from '@remix-run/react';
 import { addYears } from 'date-fns';
 
-import { AuthProvider } from '~/components/context/auth-provider';
+import { AuthProvider } from '~/features/auth/components/auth-provider';
 import { ThemeSync } from '~/stores/ui/theme-sync';
 import DashboardLayout from '~/components/layout';
 import Sidebar from '~/components/sidebar';
 import { Toaster } from '~/components/ui/sonner';
 import { createPrismaClient } from '~/lib/prisma';
-import { requireAdmin } from '~/lib/auth.server';
+import { requireAdmin } from '~/features/auth/api.server';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
 

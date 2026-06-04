@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 
 import { BarChart } from '@tremor/react';
 
-import { useUser } from '~/components/context/auth-provider';
+import { useUser } from '~/features/auth/components/auth-provider';
 import { useOverview } from '~/components/context/overview-provider';
 import ChartLoader from '~/components/loader/chart';
 import StateDisplay from '~/components/state-display';

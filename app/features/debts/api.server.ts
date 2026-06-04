@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 
-import { requireUser } from '~/lib/auth.server';
+import { requireUser } from '~/features/auth/api.server';
 import { createPrismaClient } from '~/lib/prisma';
 import { logger } from '~/lib/logger.server';
 import { DebtSchema } from './schemas';

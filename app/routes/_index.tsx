@@ -5,7 +5,7 @@ import Features from '~/components/home/features';
 
 import url from 'constants/url';
 import { redirect, type LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { getUserFromSession } from '~/lib/auth.server';
+import { getUserFromSession } from '~/features/auth/api.server';
 import { createPrismaClient } from '~/lib/prisma';
 import { premiumPlan } from 'constants/usage';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';

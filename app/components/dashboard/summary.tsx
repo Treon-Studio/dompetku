@@ -2,7 +2,7 @@
 
 import { ArrowRightDown, ArrowRightUp, Case, Wallet, MoneyBag, Chart, PlayCircle } from '@solar-icons/react';
 
-import { useUser } from '~/components/context/auth-provider';
+import { useUser } from '~/features/auth/components/auth-provider';
 import { useOverview } from '~/components/context/overview-provider';
 import CardLoader from '~/components/loader/card';
 import { Badge } from '~/components/ui/badge';

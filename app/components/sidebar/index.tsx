@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from '@remix-run/react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 import { useUiActions, useSidebarOpen } from '~/stores/ui/ui.store';
-import { useUser } from '~/components/context/auth-provider';
+import { useUser } from '~/features/auth/components/auth-provider';
 import {
 	ExpensesIcon,
 	IncomeIcon,

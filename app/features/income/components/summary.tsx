@@ -1,7 +1,7 @@
 'use client';
 
 import SummaryCard from '~/components/card/summary-card';
-import { useUser } from '~/components/context/auth-provider';
+import { useUser } from '~/features/auth/components/auth-provider';
 import { useData } from '~/components/context/data-provider';
 import CardLoader from '~/components/loader/card';
 
