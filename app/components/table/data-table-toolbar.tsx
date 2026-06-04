@@ -1,9 +1,8 @@
 'use client';
 
-import { Cross2Icon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
 import { format } from 'date-fns';
-import { RiDownloadLine } from '@remixicon/react';
+import { Download, CloseCircle } from '@solar-icons/react';
 import { toast } from 'sonner';
 
 import { Button } from '~/components/ui/button';
@@ -63,7 +62,7 @@ export default function DataTableToolbar<TData>(props: DataTableToolbarProps<TDa
 						className="h-8 px-2 text-primary lg:px-3"
 					>
 						Reset
-						<Cross2Icon className="ml-3 h-4 w-4" />
+						<CloseCircle className="ml-3 h-4 w-4" />
 					</Button>
 				)}
 			</div>
@@ -82,7 +81,7 @@ export default function DataTableToolbar<TData>(props: DataTableToolbarProps<TDa
 						size="sm"
 						className="h-8 max-sm:h-10 text-sm capitalize max-sm:px-1 lg:flex"
 					>
-						<RiDownloadLine className="mr-1.5 h-3.5 w-3.5 sm:inline-block" />
+						<Download className="mr-1.5 h-3.5 w-3.5 sm:inline-block" />
 						Export
 					</Button>
 				) : null}

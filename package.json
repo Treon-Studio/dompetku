@@ -1,5 +1,5 @@
 {
-	"name": "expense.fyi",
+	"name": "dompetku",
 	"version": "0.1.0",
 	"private": true,
 	"type": "module",
@@ -57,6 +57,7 @@
 		"@remix-run/react": "^2.17.4",
 		"@remix-run/serve": "^2.17.4",
 		"@remixicon/react": "^4.9.0",
+		"@solar-icons/react": "^1.1.1",
 		"@tailwindcss/postcss": "^4.3.0",
 		"@tailwindcss/vite": "^4.3.0",
 		"@tanstack/react-table": "^8.11.6",

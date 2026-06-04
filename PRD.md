@@ -1,8 +1,8 @@
-# expense.fyi — Product Requirements Document
+# Dompetku — Product Requirements Document
 
 ## 1. Overview
 
-**expense.fyi** is an open-source personal finance management application that allows users to track and manage incomes, investments, subscriptions, and expenses in one place. It provides data-driven insights, real-time visibility into spending habits, and helps identify overspending.
+**Dompetku** is an open-source personal finance management application that allows users to track and manage incomes, investments, subscriptions, and expenses in one place. It provides data-driven insights, real-time visibility into spending habits, and helps identify overspending.
 
 | Field | Value |
 |-------|-------|

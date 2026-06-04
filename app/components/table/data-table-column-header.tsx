@@ -1,4 +1,4 @@
-import { ArrowDownIcon, ArrowUpIcon, CaretSortIcon, EyeNoneIcon } from '@radix-ui/react-icons';
+import { ArrowDown, ArrowUp, SortVertical, EyeClosed } from '@solar-icons/react';
 import { Column } from '@tanstack/react-table';
 
 import { Button } from '~/components/ui/button';
@@ -31,21 +31,21 @@ export default function DataTableColumnHeader<TData, TValue>({
 					>
 						<span className="text-sm capitalize">{title}</span>
 						{column.getIsSorted() === 'desc' ? (
-							<ArrowDownIcon className="ml-1 h-3.5 w-3.5" />
+							<ArrowDown className="ml-1 h-3.5 w-3.5" />
 						) : column.getIsSorted() === 'asc' ? (
-							<ArrowUpIcon className="ml-1 -mt-px h-3.5 w-3.5" />
+							<ArrowUp className="ml-1 -mt-px h-3.5 w-3.5" />
 						) : (
-							<CaretSortIcon className="ml-1 mt-px h-3.5 w-3.5" />
+							<SortVertical className="ml-1 mt-px h-3.5 w-3.5" />
 						)}
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="start">
 					<DropdownMenuItem onClick={() => column.toggleSorting(false)}>
-						<ArrowUpIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/80" />
+						<ArrowUp className="mr-2 h-3.5 w-3.5 text-muted-foreground/80" />
 						Asc
 					</DropdownMenuItem>
 					<DropdownMenuItem onClick={() => column.toggleSorting(true)}>
-						<ArrowDownIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/80" />
+						<ArrowDown className="mr-2 h-3.5 w-3.5 text-muted-foreground/80" />
 						Desc
 					</DropdownMenuItem>
 				</DropdownMenuContent>

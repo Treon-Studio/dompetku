@@ -1,4 +1,4 @@
-import { RiInboxLine, RiAlertLine } from '@remixicon/react';
+import { Inbox, Danger } from '@solar-icons/react';
 
 import { cn } from '~/lib/utils';
 
@@ -14,11 +14,11 @@ type StateDisplayProps = {
 const defaults: Record<string, { title: string; icon: React.ReactNode }> = {
 	empty: {
 		title: 'No data',
-		icon: <RiInboxLine className="h-10 w-10" />,
+		icon: <Inbox className="h-10 w-10" />,
 	},
 	error: {
 		title: 'Something went wrong',
-		icon: <RiAlertLine className="h-10 w-10" />,
+		icon: <Danger className="h-10 w-10" />,
 	},
 };
 

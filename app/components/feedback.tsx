@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { RiCheckboxCircleLine, RiChatNewLine } from '@remixicon/react';
+import { CheckCircle, ChatRoundLine } from '@solar-icons/react';
 import { toast } from 'sonner';
 
 import { Button } from '~/components/ui/button';
@@ -51,7 +51,7 @@ export default function Feedback({ className, showDatePicker }: { className?: st
 			<PopoverTrigger>
 				<Button className={`${className} max-sm:h-9 max-sm:text-sm`} asChild size={'sm'}>
 					<span>
-						<RiChatNewLine className="mr-[6px] mt-[2px] h-4 w-4" />
+						<ChatRoundLine className="mr-[6px] mt-[2px] h-4 w-4" />
 						Feedback
 					</span>
 				</Button>
@@ -81,7 +81,7 @@ export default function Feedback({ className, showDatePicker }: { className?: st
 					</form>
 				) : (
 					<div className="flex h-[140px] flex-col items-center justify-center">
-						<RiCheckboxCircleLine className="mb-2 h-12 w-12 text-green-500" />
+						<CheckCircle className="mb-2 h-12 w-12 text-green-500" />
 						<span className="mb-1 mt-1 block text-sm font-semibold text-primary">Got your feedback</span>
 						<span className="mb-3 block text-sm font-normal text-muted-foreground">
 							Thanks for improving the product.

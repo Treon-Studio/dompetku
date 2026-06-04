@@ -1,10 +1,10 @@
-import { CalendarIcon } from '@radix-ui/react-icons';
+import { Calendar } from '@solar-icons/react';
 import { addDays, format, startOfMonth, startOfYear, subDays } from 'date-fns';
 import { DateRange } from 'react-day-picker';
 import * as React from 'react';
 
 import { Button } from '~/components/ui/button';
-import { Calendar } from '~/components/ui/calendar';
+import { Calendar as CalendarUI } from '~/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
 
@@ -50,7 +50,7 @@ function DatePickerWithRange({ className, date, onChange }: { className?: string
 							!date && 'text-muted-foreground'
 						)}
 					>
-						<CalendarIcon className={`mr-2 hidden h-4 w-4 sm:inline-block`} />
+						<Calendar className={`mr-2 hidden h-4 w-4 sm:inline-block`} />
 						{date?.from ? (
 							date.to ? (
 								<span className="overflow-hidden text-ellipsis whitespace-nowrap">
@@ -65,7 +65,7 @@ function DatePickerWithRange({ className, date, onChange }: { className?: string
 					</Button>
 				</PopoverTrigger>
 				<PopoverContent className="w-auto p-0" align="start">
-					<Calendar
+					<CalendarUI
 						initialFocus
 						mode="range"
 						defaultMonth={date?.from}

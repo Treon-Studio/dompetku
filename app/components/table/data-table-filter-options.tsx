@@ -1,7 +1,7 @@
 'use client';
 
 import { DropdownMenuRadioGroup, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
-import { RiFilter3Line } from '@remixicon/react';
+import { Filter } from '@solar-icons/react';
 
 import { Button } from '~/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioItem } from '~/components/ui/dropdown-menu';
@@ -19,7 +19,7 @@ export default function DataTableFilterOptions<TData>({
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Button variant="outline" size="sm" className="h-8 max-sm:h-10 text-sm capitalize max-sm:px-1 lg:flex">
-					<RiFilter3Line className="mr-1.5 h-3 w-3 sm:inline-block" />
+					<Filter className="mr-1.5 h-3 w-3 sm:inline-block" />
 					{views[filter].name}
 				</Button>
 			</DropdownMenuTrigger>

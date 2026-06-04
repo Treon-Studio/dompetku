@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons';
+import { AddCircle, CheckCircle } from '@solar-icons/react';
 import { Column } from '@tanstack/react-table';
 
 import { useData } from '~/components/context/data-provider';
@@ -52,7 +52,7 @@ export default function DataTableFacetedFilter<TData, TValue>({
 						'max:sm:w-full': selectedValues.size < 1,
 					})}`}
 				>
-					<PlusCircledIcon className="mr-2 h-4 w-4" />
+					<AddCircle className="mr-2 h-4 w-4" />
 					{title}
 					{selectedValues?.size > 0 && (
 						<>
@@ -111,7 +111,7 @@ export default function DataTableFacetedFilter<TData, TValue>({
 												isSelected ? 'bg-primary text-primary-foreground' : 'opacity-50 [&_svg]:invisible'
 											)}
 										>
-											<CheckIcon className={cn('h-4 w-4')} />
+											<CheckCircle className={cn('h-4 w-4')} />
 										</div>
 										{option.icon && <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
 										<span>{option.label}</span>

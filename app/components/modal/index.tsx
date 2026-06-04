@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 
 import { Dialog, Transition } from '@headlessui/react';
 import { useMediaQuery } from 'hooks/useMediaQuery';
-import { RiCloseLine } from '@remixicon/react';
+import { CloseCircle } from '@solar-icons/react';
 
 import { Drawer, DrawerContent, DrawerHeader, DrawerOverlay, DrawerTitle } from '~/components/ui/drawer';
 
@@ -56,7 +56,7 @@ export default function Modal({ show, title, children, onHide, someRef }: ModalP
 												onClick={onHide}
 												className="absolute right-[4px] top-[3px] flex h-[44px] w-[44px] cursor-pointer items-center justify-center rounded-full text-primary transition-all duration-75 hover:bg-secondary focus:outline-hidden active:bg-secondary"
 											>
-												<RiCloseLine className="h-5 w-5 text-primary" />
+												<CloseCircle className="h-5 w-5 text-primary" />
 											</button>
 										</Dialog.Title>
 										{children}

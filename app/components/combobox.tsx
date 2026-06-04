@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { RiCheckLine, RiArrowUpDownLine } from '@remixicon/react';
+import { CheckCircle, SortVertical } from '@solar-icons/react';
 
 import { Button } from '~/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '~/components/ui/command';
@@ -27,7 +27,7 @@ export function Combobox({
 			<PopoverTrigger asChild>
 				<Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
 					{value ? data.find((datum: any) => datum.value === value)?.label : 'Select...'}
-					<RiArrowUpDownLine className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+					<SortVertical className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className="p-0">
@@ -49,7 +49,7 @@ export function Combobox({
 										setOpen(false);
 									}}
 								>
-									<RiCheckLine className={cn('mr-2 h-4 w-4', value === datum.value ? 'opacity-100' : 'opacity-0')} />
+									<CheckCircle className={cn('mr-2 h-4 w-4', value === datum.value ? 'opacity-100' : 'opacity-0')} />
 									{datum.label}
 								</CommandItem>
 							))}

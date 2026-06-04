@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
+import { AltArrowLeft, AltArrowRight } from '@solar-icons/react';
 import { DayPicker } from 'react-day-picker';
 
 import { buttonVariants } from '~/components/ui/button';
@@ -46,8 +46,8 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
 				...classNames,
 			}}
 			components={{
-				IconLeft: ({ ...props }) => <ChevronLeftIcon className="h-4 w-4" />,
-				IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,
+				IconLeft: ({ ...props }) => <AltArrowLeft className="h-4 w-4" />,
+				IconRight: ({ ...props }) => <AltArrowRight className="h-4 w-4" />,
 			}}
 			{...props}
 		/>

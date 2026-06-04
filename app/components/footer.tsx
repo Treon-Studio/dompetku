@@ -1,12 +1,20 @@
 import url from '~/constants/url';
+import pkg from '../../package.json';
 
 const Footer = ({ className }: { className?: String }) => {
+	const commitHash = 'b69af37';
 	return (
 		<footer className={`className flex h-14 w-full items-center border-t pl-6 pr-6 font-medium ${className}`}>
 			<div className="xs:mb-0 flex w-full justify-center">
 				<div className="flex flex-row items-center justify-between gap-6 border-t border-white/5">
-					<p className="text-xs text-gray-600">Copyright {new Date().getFullYear()}, Dompetku</p>
-					<div className="flex gap-3">
+					<div className="flex items-center gap-2">
+						<p className="text-xs text-gray-600">Copyright {new Date().getFullYear()}, Dompetku</p>
+						<span className="text-[10px] text-gray-400 font-mono">({commitHash})</span>
+					</div>
+					<div className="flex items-center gap-3">
+						<span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600 border border-gray-200 uppercase">
+							v{pkg.version}
+						</span>
 						<a className="group" href={url.twitter}>
 							<span className="sr-only">Follow us on Twitter</span>
 							<svg

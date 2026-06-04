@@ -1,7 +1,7 @@
 'use client';
 
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
-import { MixerHorizontalIcon } from '@radix-ui/react-icons';
+import { Tuning } from '@solar-icons/react';
 import { Table } from '@tanstack/react-table';
 
 import { Button } from '~/components/ui/button';
@@ -16,7 +16,7 @@ export default function DataTableViewOptions<TData>({ table }: DataTableViewOpti
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Button variant="outline" size="sm" className="h-8 max-sm:h-10 text-sm capitalize max-sm:px-1 lg:flex">
-					<MixerHorizontalIcon className="mr-1.5 h-4 w-4 sm:inline-block" />
+					<Tuning className="mr-1.5 h-4 w-4 sm:inline-block" />
 					Columns
 				</Button>
 			</DropdownMenuTrigger>
