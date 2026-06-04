@@ -18,6 +18,7 @@ import {
 import { Separator } from '~/components/ui/separator';
 import { Badge } from '~/components/ui/badge';
 import CircleLoader from '~/components/loader/circle';
+import { useTheme, useUiActions } from '~/stores/ui/ui.store';
 import DeleteModal from '~/components/modal/delete';
 import { useTranslation } from '@i18n/client';
 
@@ -60,6 +61,8 @@ export default function ProfilePage() {
 	const [savingPrefs, setSavingPrefs] = useState(false);
 
 	const [email, setEmail] = useState(user.email || '');
+	const theme = useTheme();
+	const { setTheme } = useUiActions();
 	const [phone, setPhone] = useState(user.phone || '');
 	const [savingIdentity, setSavingIdentity] = useState(false);
 

@@ -4,8 +4,8 @@ import { useLoaderData } from '@remix-run/react';
 
 import { DataContextProvider } from '~/components/context/data-provider';
 import LayoutHeader from '~/components/layout/header';
-import SubscriptionsSummary from '~/components/dashboard/subscriptions/summary';
-import SubscriptionsTable from '~/components/dashboard/subscriptions/table';
+import SubscriptionsSummary from '~/features/subscriptions/components/summary';
+import SubscriptionsTable from '~/features/subscriptions/components/table';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
 

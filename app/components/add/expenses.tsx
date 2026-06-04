@@ -1,6 +1,6 @@
 'use client';
 
-import { addExpense, editExpense } from '~/components/dashboard/expenses/apis';
+import { addExpense, editExpense } from '~/features/expenses/api.client';
 import { useResourceForm } from '~/hooks/use-resource-form';
 import debounce from 'debounce';
 

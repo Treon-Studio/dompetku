@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 
 import { views } from '~/constants/table';
 import { getApiUrl } from '~/constants/url';
@@ -25,7 +25,11 @@ export const DataContextProvider = (props: Props) => {
 	const [filter, setFilter] = useState(views.thisMonth.key);
 	const [categories, setCategories] = useState<string[]>([]);
 
-	const { data = [], mutate, isLoading } = useSWR(getApiUrl(filter, name, categories, isNotRange), fetcher);
+	const apiUrl = getApiUrl(filter, name, categories, isNotRange);
+	const { data = [], refetch: mutate, isLoading } = useQuery({
+		queryKey: [name, apiUrl],
+		queryFn: () => fetcher(apiUrl),
+	});
 
 	const onFilter = useCallback((categories: string[] = []) => {
 		setCategories(categories);

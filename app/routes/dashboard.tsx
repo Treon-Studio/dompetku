@@ -4,8 +4,7 @@ import { Outlet, useLoaderData } from '@remix-run/react';
 import { addYears } from 'date-fns';
 
 import { AuthProvider } from '~/components/context/auth-provider';
-import { SidebarContextProvider } from '~/components/context/sidebar-provider';
-import { ThemeProvider } from '~/components/context/theme-provider';
+import { ThemeSync } from '~/stores/ui/theme-sync';
 import DashboardLayout from '~/components/layout';
 import Sidebar from '~/components/sidebar';
 import { Toaster } from '~/components/ui/sonner';
@@ -47,19 +46,16 @@ export default function DashboardLayoutRoute() {
     <I18nProvider locale={locale} translations={translations}>
     <>
       <AuthProvider user={user}>
-        <ThemeProvider>
-          <main className="relative flex min-h-full min-w-full bg-background">
-            <DashboardLayout>
-              <SidebarContextProvider>
-                <Sidebar />
-                <div className="h-full w-full sm:ml-[64px]">
-                  <div className="flex h-full w-full flex-col max-sm:ml-0"><Outlet /></div>
-                </div>
-              </SidebarContextProvider>
-            </DashboardLayout>
-          </main>
-          <Toaster closeButton position="top-right" theme="system" visibleToasts={3} richColors />
-        </ThemeProvider>
+        <ThemeSync />
+        <main className="relative flex min-h-full min-w-full bg-background">
+          <DashboardLayout>
+            <Sidebar />
+            <div className="h-full w-full sm:ml-[64px]">
+              <div className="flex h-full w-full flex-col max-sm:ml-0"><Outlet /></div>
+            </div>
+          </DashboardLayout>
+        </main>
+        <Toaster closeButton position="top-right" visibleToasts={3} richColors />
       </AuthProvider>
     </>
     </I18nProvider>

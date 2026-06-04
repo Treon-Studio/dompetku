@@ -11,20 +11,20 @@ import DataTable from '~/components/table/data-table';
 
 import { lookup } from '~/lib/lookup';
 
-import { incomeCategory } from '~/constants/categories';
+import { expensesCategory } from '~/constants/categories';
 import messages from '~/constants/messages';
 
-import { IncomeData, deleteIncome } from './apis';
+import { ExpenseData, deleteExpense } from '../api.client';
 import { columns } from './columns';
 
-const categories = Object.keys(incomeCategory)
+const categories = Object.keys(expensesCategory)
 	.filter(Boolean)
 	.map((categoryKey) => ({
-		label: incomeCategory[categoryKey],
+		label: expensesCategory[categoryKey].name,
 		value: categoryKey,
 	}));
 
-export default function IncomeTable() {
+export default function ExpenseTable() {
 	const [selected, setSelected] = useState({});
 	const { data, loading, filter, mutate } = useData();
 	const user = useUser();
@@ -32,7 +32,7 @@ export default function IncomeTable() {
 	const onDelete = useCallback(
 		async (id: string) => {
 			try {
-				await deleteIncome(id);
+				await deleteExpense(id);
 				toast.success(messages.deleted);
 				mutate();
 			} catch {
@@ -42,7 +42,7 @@ export default function IncomeTable() {
 		[mutate]
 	);
 
-	const onEdit = useCallback(async (data: IncomeData | any) => {
+	const onEdit = useCallback(async (data: ExpenseData | any) => {
 		setSelected(data);
 	}, []);
 
@@ -60,10 +60,10 @@ export default function IncomeTable() {
 				columns={columns}
 				data={data}
 				loading={loading}
-				filename="Income"
+				filename="Expenses"
 				categories={categories}
 			/>
-			<Add onHide={onHide} onLookup={onLookup} selected={selected} mutate={mutate} type="income" />
+			<Add onHide={onHide} onLookup={onLookup} selected={selected} mutate={mutate} type="expenses" />
 		</>
 	);
 }

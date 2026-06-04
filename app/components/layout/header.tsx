@@ -1,6 +1,6 @@
 'use client';
 
-import { useSidebar } from '~/components/context/sidebar-provider';
+import { useSidebarOpen, useUiActions } from '~/stores/ui/ui.store';
 import { Button } from '~/components/ui/button';
 import { Separator } from '~/components/ui/separator';
 
@@ -24,7 +24,8 @@ const MenuIcon = () => (
 );
 
 export default function LayoutHeader({ title, showDatePicker = false }: { title: string; showDatePicker?: boolean }) {
-	const { show, setShow } = useSidebar();
+	const show = useSidebarOpen();
+	const { toggleSidebar } = useUiActions();
 	return (
 		<>
 			<div
@@ -33,7 +34,7 @@ export default function LayoutHeader({ title, showDatePicker = false }: { title:
 				}`}
 			>
 				<div className="flex">
-					<Button className="mr-2 -mt-px p-1 sm:hidden" onClick={() => setShow(!show)} variant={'ghost'}>
+					<Button className="mr-2 -mt-px p-1 sm:hidden" onClick={toggleSidebar} variant={'ghost'}>
 						<MenuIcon />
 					</Button>
 					<h2

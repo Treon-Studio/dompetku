@@ -4,7 +4,7 @@ import { json } from '@remix-run/cloudflare';
 import { createPrismaClient } from '~/lib/prisma';
 import { hashPassword } from '~/lib/auth.server';
 import { getCloudflareEnv } from '~/env';
-import { validateResetToken, validatePasswordField } from '~/lib/validate';
+import { ResetPasswordSchema } from '~/lib/schemas';
 import { logger } from '~/lib/logger.server';
 
 export async function action({ request, context }: ActionFunctionArgs) {
@@ -12,14 +12,14 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const env = getCloudflareEnv(context);
     const db = createPrismaClient(env);
     const body = await request.json();
-    const token = body.token;
-    const password = body.password;
+    const result = ResetPasswordSchema.safeParse(body);
 
-    const tokenError = validateResetToken(body.token);
-    if (tokenError) return json({ message: tokenError }, { status: 400 });
+    if (!result.success) {
+      const error = result.error.errors[0];
+      return json({ message: error.message }, { status: 400 });
+    }
 
-    const passwordError = validatePasswordField(body.password);
-    if (passwordError) return json({ message: passwordError }, { status: 400 });
+    const { token, password } = result.data;
 
     const resetRecord = await db.password_resets.findUnique({ where: { token } });
 

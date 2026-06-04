@@ -10,9 +10,9 @@ import { Checkbox } from '~/components/ui/checkbox';
 
 import { formatCurrency, formatDate } from '~/lib/formatter';
 
-import { SubscriptionsData } from './apis';
+import { SubscriptionData } from '../api.client';
 
-export const columns: ColumnDef<SubscriptionsData>[] = [
+export const columns: ColumnDef<SubscriptionData>[] = [
 	{
 		accessorKey: 'name',
 		header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,

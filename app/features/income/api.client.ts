@@ -5,3 +5,4 @@ const api = createResourceApi('/api/income');
 export const addIncome = api.add;
 export const editIncome = api.edit;
 export const deleteIncome = api.delete;
+export type IncomeData = any;

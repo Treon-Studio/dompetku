@@ -3,7 +3,7 @@
 import { Link, useLocation, useNavigate } from '@remix-run/react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-import { useSidebar } from '~/components/context/sidebar-provider';
+import { useUiActions, useSidebarOpen } from '~/stores/ui/ui.store';
 import { useUser } from '~/components/context/auth-provider';
 import {
 	ExpensesIcon,
@@ -59,7 +59,8 @@ export default function Sidebar() {
 	const { t } = useTranslation();
 	const pathname = useLocation()?.pathname || '/';
 	const router = useNavigate();
-	const { show, setShow } = useSidebar();
+	const show = useSidebarOpen();
+	const { closeSidebar } = useUiActions();
 	const user = useUser();
 
 	const navItems = [
@@ -92,7 +93,7 @@ export default function Sidebar() {
 	return (
 		<>
 			<div
-				onClick={() => setShow(false)}
+				onClick={closeSidebar}
 				className={`fixed inset-0 left-0 right-0 z-1 hidden bg-black bg-opacity-10 backdrop-blur-sm ${cn({
 					'block!': show,
 				})}`}
@@ -106,7 +107,7 @@ export default function Sidebar() {
 					<div className="flex h-full flex-col items-center justify-between">
 						<div className="flex flex-col items-center">
 							<Link
-								onClick={() => setShow(false)}
+								onClick={closeSidebar}
 								to="/dashboard"
 								className="mt-[3px] active:scale-95 rounded-lg p-1 transition-all focus:outline-hidden"
 							>
@@ -117,7 +118,7 @@ export default function Sidebar() {
 								return (
 									<SidebarLink
 										className={index === 0 ? 'mt-0!' : ''}
-										onClick={() => setShow(false)}
+										onClick={closeSidebar}
 										key={link.key}
 										name={link.name}
 										active={pathname === link.href}
@@ -130,7 +131,7 @@ export default function Sidebar() {
 							})}
 							{user?.role === 'ADMIN' && (
 								<SidebarLink
-									onClick={() => setShow(false)}
+									onClick={closeSidebar}
 									name="Admin Panel"
 									active={pathname.startsWith('/admin')}
 									href="/admin"
@@ -143,7 +144,7 @@ export default function Sidebar() {
 							{settingsLinks.map((link) => {
 								return (
 									<SidebarLink
-										onClick={() => setShow(false)}
+										onClick={closeSidebar}
 										key={link.href}
 										active={pathname === link.href}
 										href={link.href}

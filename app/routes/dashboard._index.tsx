@@ -2,7 +2,6 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 import { useLoaderData } from '@remix-run/react';
 
-import { DatePickerProvider } from '~/components/context/datepicker-provider';
 import { OverviewContextProvider } from '~/components/context/overview-provider';
 import LayoutHeader from '~/components/layout/header';
 import Summary from '~/components/dashboard/summary';
@@ -26,7 +25,6 @@ export default function DashboardIndex() {
 
   return (
     <I18nProvider locale={locale} translations={translations}>
-    <DatePickerProvider>
       <OverviewContextProvider>
         <LayoutHeader title="overview" showDatePicker={true} />
         <div className="p-4 pt-3">
@@ -38,7 +36,6 @@ export default function DashboardIndex() {
         </div>
         <AddData />
       </OverviewContextProvider>
-    </DatePickerProvider>
     </I18nProvider>
   );
 }

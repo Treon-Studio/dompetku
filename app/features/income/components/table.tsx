@@ -9,15 +9,22 @@ import { useUser } from '~/components/context/auth-provider';
 import { useData } from '~/components/context/data-provider';
 import DataTable from '~/components/table/data-table';
 
-import { sortByKey } from '~/lib/extractor';
 import { lookup } from '~/lib/lookup';
 
+import { incomeCategory } from '~/constants/categories';
 import messages from '~/constants/messages';
 
-import { SubscriptionsData, deleteSubscription, editSubscription } from './apis';
+import { IncomeData, deleteIncome } from '../api.client';
 import { columns } from './columns';
 
-export default function SubscriptionsTable() {
+const categories = Object.keys(incomeCategory)
+	.filter(Boolean)
+	.map((categoryKey) => ({
+		label: incomeCategory[categoryKey],
+		value: categoryKey,
+	}));
+
+export default function IncomeTable() {
 	const [selected, setSelected] = useState({});
 	const { data, loading, filter, mutate } = useData();
 	const user = useUser();
@@ -25,7 +32,7 @@ export default function SubscriptionsTable() {
 	const onDelete = useCallback(
 		async (id: string) => {
 			try {
-				await deleteSubscription(id);
+				await deleteIncome(id);
 				toast.success(messages.deleted);
 				mutate();
 			} catch {
@@ -35,20 +42,7 @@ export default function SubscriptionsTable() {
 		[mutate]
 	);
 
-	const onChange = useCallback(
-		async (data: SubscriptionsData | any) => {
-			try {
-				await editSubscription(data);
-				toast.success(messages.updated);
-				mutate();
-			} catch {
-				toast.error(messages.error);
-			}
-		},
-		[mutate]
-	);
-
-	const onEdit = useCallback((data: SubscriptionsData | any) => {
+	const onEdit = useCallback(async (data: IncomeData | any) => {
 		setSelected(data);
 	}, []);
 
@@ -61,15 +55,15 @@ export default function SubscriptionsTable() {
 	return (
 		<>
 			<DataTable
-				options={{ user, onDelete, onEdit, onChange }}
+				options={{ user, onDelete, onEdit }}
 				filter={filter}
 				columns={columns}
-				data={sortByKey(sortByKey(data, 'renewal_date'), 'active')}
+				data={data}
 				loading={loading}
-				filename="Subscriptions"
-				hideViewOptions
+				filename="Income"
+				categories={categories}
 			/>
-			<Add onHide={onHide} onLookup={onLookup} selected={selected} mutate={mutate} type="subscriptions" />
+			<Add onHide={onHide} onLookup={onLookup} selected={selected} mutate={mutate} type="income" />
 		</>
 	);
 }

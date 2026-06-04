@@ -60,6 +60,7 @@
 		"@solar-icons/react": "^1.1.1",
 		"@tailwindcss/postcss": "^4.3.0",
 		"@tailwindcss/vite": "^4.3.0",
+		"@tanstack/react-query": "^5.101.0",
 		"@tanstack/react-table": "^8.11.6",
 		"@tremor/react": "^3.18.7",
 		"bcryptjs": "^3.0.3",
@@ -81,13 +82,14 @@
 		"react-hotkeys-hook": "^4.4.4",
 		"resend": "^2.1.0",
 		"sonner": "^2.0.7",
-		"swr": "^2.4.1",
 		"tailwind-merge": "^3.6.0",
 		"tailwindcss": "^4.3.0",
 		"tailwindcss-animate": "^1.0.7",
 		"text-filter": "^0.1.1",
 		"typescript": "^6.0.3",
-		"vaul": "^0.8.0"
+		"vaul": "^0.8.0",
+		"zod": "^4.4.3",
+		"zustand": "^5.0.14"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.16",

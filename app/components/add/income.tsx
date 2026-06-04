@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { addIncome, editIncome } from '~/components/dashboard/income/apis';
+import { addIncome, editIncome } from '~/features/income/api.client';
 import { useResourceForm } from '~/hooks/use-resource-form';
 import { toast } from 'sonner';
 

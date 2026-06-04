@@ -3,14 +3,14 @@
 import { createContext, useContext } from 'react';
 
 import { format } from 'date-fns';
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 
 import { apiUrls } from '~/lib/apiUrls';
 import fetcher from '~/lib/fetcher';
 
 import { dateFormat } from '~/constants/date';
 
-import { useDate } from './datepicker-provider';
+import { useDateRange } from '~/stores/date/date.store';
 
 const OverviewContext = createContext(null);
 
@@ -22,22 +22,25 @@ interface Data {
 }
 
 export const OverviewContextProvider = (props: any) => {
-	const { date } = useDate();
+	const date = useDateRange();
 	const from = format(date.from || date.to, dateFormat);
 	const to = format(date.to || date.from, dateFormat);
 	const { children, ...others } = props;
+	const expensesUrl = apiUrls.expenses.getExpenses({ from, to });
 	const {
 		data: expensesData = [],
 		isLoading: isExpenseLoading,
-		mutate: mutateExpenses,
-	} = useSWR(apiUrls.expenses.getExpenses({ from, to }), fetcher);
-	const { data: investmentsData = [], isLoading: isInvestmentsLoading } = useSWR(
-		apiUrls.investments.getInvestments({ from, to }), fetcher
-	);
-	const { data: incomeData = [], isLoading: isIncomeLoading } = useSWR(apiUrls.income.getIncome({ from, to }), fetcher);
-	const { data: subscriptionsData = [], isLoading: isSubscriptionsLoading } = useSWR(
-		apiUrls.subscriptions.getSubscriptions({ from, to }), fetcher
-	);
+		refetch: mutateExpenses,
+	} = useQuery({ queryKey: ['overview-expenses', expensesUrl], queryFn: () => fetcher(expensesUrl) });
+	
+	const investmentsUrl = apiUrls.investments.getInvestments({ from, to });
+	const { data: investmentsData = [], isLoading: isInvestmentsLoading } = useQuery({ queryKey: ['overview-investments', investmentsUrl], queryFn: () => fetcher(investmentsUrl) });
+	
+	const incomeUrl = apiUrls.income.getIncome({ from, to });
+	const { data: incomeData = [], isLoading: isIncomeLoading } = useQuery({ queryKey: ['overview-income', incomeUrl], queryFn: () => fetcher(incomeUrl) });
+	
+	const subscriptionsUrl = apiUrls.subscriptions.getSubscriptions({ from, to });
+	const { data: subscriptionsData = [], isLoading: isSubscriptionsLoading } = useQuery({ queryKey: ['overview-subscriptions', subscriptionsUrl], queryFn: () => fetcher(subscriptionsUrl) });
 
 	const data = {
 		expenses: expensesData,

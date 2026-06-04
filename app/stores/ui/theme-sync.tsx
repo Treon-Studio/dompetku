@@ -1,29 +1,24 @@
 'use client';
 
 import * as React from 'react';
+import { useUiStore, type TTheme } from './ui.store';
 
-type Theme = 'light' | 'dark' | 'system';
+export function ThemeSync() {
+	const theme = useUiStore((s) => s.theme);
+	const setTheme = useUiStore((s) => s.setTheme);
 
-interface ThemeContextValue {
-	theme: Theme;
-	setTheme: (theme: Theme) => void;
-}
-
-const ThemeContext = React.createContext<ThemeContextValue | undefined>(undefined);
-
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-	const [theme, setTheme] = React.useState<Theme>('system');
-
+	// Initial load from localStorage
 	React.useEffect(() => {
-		const stored = localStorage.getItem('theme') as Theme | null;
+		const stored = localStorage.getItem('theme') as TTheme | null;
 		if (stored) {
 			setTheme(stored);
 		} else {
 			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 			setTheme(prefersDark ? 'dark' : 'light');
 		}
-	}, []);
+	}, [setTheme]);
 
+	// Apply theme to document
 	React.useEffect(() => {
 		const root = document.documentElement;
 		const resolved = theme === 'system'
@@ -35,6 +30,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 		localStorage.setItem('theme', theme);
 	}, [theme]);
 
+	// Listen for system preference changes
 	React.useEffect(() => {
 		const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 		const handler = () => {
@@ -48,17 +44,5 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 		return () => mediaQuery.removeEventListener('change', handler);
 	}, [theme]);
 
-	return (
-		<ThemeContext.Provider value={{ theme, setTheme }}>
-			{children}
-		</ThemeContext.Provider>
-	);
-}
-
-export function useTheme() {
-	const context = React.useContext(ThemeContext);
-	if (!context) {
-		throw new Error('useTheme must be used within a ThemeProvider');
-	}
-	return context;
+	return null;
 }

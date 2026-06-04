@@ -7,7 +7,7 @@ import { getCloudflareEnv } from '~/env';
 import { findUserByIdentity, isPhone } from '~/lib/auth.server';
 import { emails } from '~/constants/messages';
 import { RESET_TOKEN_EXPIRY_MS } from '~/constants/app';
-import { validateIdentityField } from '~/lib/validate';
+import { ForgotPasswordSchema } from '~/lib/schemas';
 import { logger } from '~/lib/logger.server';
 
 import ResetPasswordEmail from 'emails/reset-password';
@@ -17,10 +17,14 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const env = getCloudflareEnv(context);
     const db = createPrismaClient(env);
     const body = await request.json();
-    const identity = body.identity;
+    const result = ForgotPasswordSchema.safeParse(body);
 
-    const identityError = validateIdentityField(body.identity, isPhone);
-    if (identityError) return json({ message: identityError }, { status: 400 });
+    if (!result.success) {
+      const error = result.error.errors[0];
+      return json({ message: error.message }, { status: 400 });
+    }
+
+    const { identity } = result.data;
 
     const user = await findUserByIdentity(identity, db);
     if (!user || !user.email) {

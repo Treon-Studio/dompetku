@@ -3,21 +3,21 @@ import { json } from '@remix-run/cloudflare';
 
 import { createUser, findUserByIdentity, createSession, isPhone, normalizePhone } from '~/lib/auth.server';
 import { createPrismaClient } from '~/lib/prisma';
-import { validateIdentityField, validatePasswordField } from '~/lib/validate';
+import { SignupSchema } from '~/lib/schemas';
 import { logger } from '~/lib/logger.server';
 
 export async function action({ request, context }: ActionFunctionArgs) {
   try {
     const db = createPrismaClient(context.cloudflare.env);
     const body = await request.json();
-    const identity = body.identity;
-    const password = body.password;
+    const result = SignupSchema.safeParse(body);
+    
+    if (!result.success) {
+      const error = result.error.errors[0];
+      return json({ message: error.message }, { status: 400 });
+    }
 
-    const identityError = validateIdentityField(body.identity, isPhone);
-    if (identityError) return json({ message: identityError }, { status: 400 });
-
-    const passwordError = validatePasswordField(body.password);
-    if (passwordError) return json({ message: passwordError }, { status: 400 });
+    const { identity, password } = result.data;
 
     const existingUser = await findUserByIdentity(identity, db);
     if (existingUser) {

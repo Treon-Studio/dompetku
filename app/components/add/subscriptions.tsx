@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { Link } from '@remix-run/react';
-import { addSubscription, editSubscription } from '~/components/dashboard/subscriptions/apis';
+import { addSubscription, editSubscription } from '~/features/subscriptions/api.client';
 import { useResourceForm } from '~/hooks/use-resource-form';
 import { toast } from 'sonner';
 

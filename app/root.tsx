@@ -8,8 +8,9 @@ import {
   isRouteErrorResponse,
   useRouteError,
 } from '@remix-run/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { LinksFunction, MetaFunction, LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { getCloudflareEnv } from '~/env';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
@@ -60,6 +61,15 @@ export const links: LinksFunction = () => [
 export default function App() {
   const data = useLoaderData<typeof loader>();
   const gaId = data?.ENV?.GA4_ANALYTICS_ID || '';
+  
+  const [queryClient] = useState(() => new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 5 * 60 * 1000,
+        refetchOnWindowFocus: false,
+      },
+    },
+  }));
 
   const fbConfig = data?.ENV;
   useEffect(() => {
@@ -110,7 +120,9 @@ export default function App() {
           ) : null}
         </head>
         <body className="flex h-full flex-col text-gray-600 antialiased" suppressHydrationWarning>
-          <Outlet />
+          <QueryClientProvider client={queryClient}>
+            <Outlet />
+          </QueryClientProvider>
           <ScrollRestoration />
           <Scripts />
         </body>

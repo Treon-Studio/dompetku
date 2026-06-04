@@ -1,6 +1,6 @@
 'use client';
 
-import { addInvestment, editInvestment } from '~/components/dashboard/investments/apis';
+import { addInvestment, editInvestment } from '~/features/investments/api.client';
 import { useResourceForm } from '~/hooks/use-resource-form';
 import debounce from 'debounce';
 

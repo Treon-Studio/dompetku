@@ -6,14 +6,14 @@ import * as React from 'react';
 import { Button } from '~/components/ui/button';
 import { Calendar as CalendarUI } from '~/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
+import { cn } from '~/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
 
-import { cn } from '~/lib/utils';
-
-import { useDate } from './context/datepicker-provider';
+import { useDateRange, useDateActions } from '~/stores/date/date.store';
 
 export default function DatePicker() {
-	const { date, onChange } = useDate();
+	const date = useDateRange();
+	const { setDate: onChange } = useDateActions();
 	const [mounted, setMounted] = React.useState(false);
 
 	React.useEffect(() => {

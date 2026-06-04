@@ -4,8 +4,8 @@ import { useLoaderData } from '@remix-run/react';
 
 import { DataContextProvider } from '~/components/context/data-provider';
 import LayoutHeader from '~/components/layout/header';
-import InvestmentsSummary from '~/components/dashboard/investments/summary';
-import InvestmentsTable from '~/components/dashboard/investments/table';
+import InvestmentsSummary from '~/features/investments/components/summary';
+import InvestmentsTable from '~/features/investments/components/table';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
 

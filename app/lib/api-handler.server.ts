@@ -1,7 +1,7 @@
 import { json } from '@remix-run/cloudflare';
 import { DB_QUERY_LIMIT } from '~/constants/app';
 import { logger } from '~/lib/logger.server';
-import { validateRecordFields } from '~/lib/validate';
+import { z } from 'zod';
 
 export async function handleGetRecords(db: any, modelName: string, user: any, request: Request, selectFields?: any) {
 	const { searchParams } = new URL(request.url);
@@ -34,7 +34,7 @@ export async function handleGetRecords(db: any, modelName: string, user: any, re
 	}
 }
 
-export async function handleActionRecords(db: any, modelName: string, user: any, request: Request, allowedFields: string[]) {
+export async function handleActionRecords(db: any, modelName: string, user: any, request: Request, schema: z.ZodSchema) {
 	const method = request.method.toUpperCase();
 	const body = await request.json() as Record<string, unknown>;
 
@@ -57,13 +57,13 @@ export async function handleActionRecords(db: any, modelName: string, user: any,
 	}
 
 	if (method === 'POST') {
-		const validationError = validateRecordFields(body);
-		if (validationError) return validationError;
+		const result = schema.safeParse(body);
+		if (!result.success) {
+			const error = result.error.errors[0];
+			return json({ message: error.message }, { status: 400 });
+		}
 		
-		const data: any = { user_id: user.id };
-		allowedFields.forEach((field) => {
-			if (body[field] !== undefined) data[field] = body[field];
-		});
+		const data: any = { user_id: user.id, ...result.data };
 
 		try {
 			await db[modelName].create({ data });
@@ -78,16 +78,17 @@ export async function handleActionRecords(db: any, modelName: string, user: any,
 		const { id } = body;
 		if (!id) return json({ message: 'Invalid request' }, { status: 400 });
 		
-		const validationError = validateRecordFields(body);
-		if (validationError) return validationError;
+		const result = schema.safeParse(body);
+		if (!result.success) {
+			const error = result.error.errors[0];
+			return json({ message: error.message }, { status: 400 });
+		}
 		
 		const record = await db[modelName].findUnique({ where: { id } });
 		if (!record || record.user_id !== user.id) return json({ message: 'Not found' }, { status: 404 });
 		
-		const data: any = {};
-		allowedFields.forEach((field) => {
-			if (body[field] !== undefined) data[field] = body[field];
-		});
+		const data = { ...result.data };
+		delete data.id;
 
 		try {
 			await db[modelName].update({

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { MetaFunction } from '@remix-run/cloudflare';
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import LayoutHeader from '~/components/layout/header';
@@ -18,7 +18,8 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function AdminUsersPage() {
 	const [search, setSearch] = useState('');
-	const { data: users = [], mutate, isLoading } = useSWR<any[]>(`/api/admin/users?q=${search}`, fetcher);
+	const apiUrl = `/api/admin/users?q=${search}`;
+	const { data: users = [], refetch: mutate, isLoading } = useQuery({ queryKey: ['admin-users', apiUrl], queryFn: () => fetcher(apiUrl) });
 
 	const handleAction = async (id: string, action: 'UPGRADE' | 'DOWNGRADE' | 'DELETE') => {
 		if (action === 'DELETE') {
