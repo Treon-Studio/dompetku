@@ -2,10 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { incrementUsage } from '~/components/dashboard/apis';
 import { addIncome, editIncome } from '~/components/dashboard/income/apis';
-import { format } from 'date-fns';
-import debounce from 'debounce';
+import { useResourceForm } from '~/hooks/use-resource-form';
 import { toast } from 'sonner';
 
 import AutoCompleteList from '~/components/autocomplete-list';
@@ -16,15 +14,13 @@ import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
 import { Textarea } from '~/components/ui/textarea';
-import { useTranslation } from '@i18n/client';
 
-import { getCurrencySymbol } from '~/lib/formatter';
+import { formatInputPrice, getCurrencySymbol, parseInputPrice } from '~/lib/formatter';
 
 import { incomeCategory } from '~/constants/categories';
-import { dateFormat, datePattern } from '~/constants/date';
-import messages from '~/constants/messages';
+import { datePattern } from '~/constants/date';
 
-interface AddIncome {
+interface AddIncomeProps {
 	show: boolean;
 	selected: any;
 	onHide: () => void;
@@ -41,19 +37,15 @@ const initialState = {
 	autocomplete: [],
 };
 
-export default function AddIncome({ show, onHide, mutate, selected, lookup }: AddIncome) {
-	const { t } = useTranslation();
+export default function AddIncome({ show, onHide, mutate, selected, lookup }: AddIncomeProps) {
 	const user = useUser();
-	const todayDate = format(new Date(), dateFormat);
-	const [state, setState] = useState<any>({ ...initialState, date: todayDate });
-	const [loading, setLoading] = useState(false);
-	const inputRef = useRef<any>(null);
-
-	useEffect(() => {
-		inputRef.current?.focus();
-	}, []);
-
-	useEffect(() => setState(selected.id ? selected : { ...initialState, date: todayDate }), [selected, todayDate]);
+	const { state, setState, loading, inputRef, onSubmit, todayDate, t } = useResourceForm({
+		initialState,
+		selected,
+		onHide,
+		mutate,
+		api: { add: addIncome, edit: editIncome }
+	});
 
 	const onLookup = useMemo(() => {
 		const callbackHandler = (value: string) => {
@@ -61,27 +53,6 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 		};
 		return debounce(callbackHandler, 500);
 	}, [lookup]);
-
-	const onSubmit = async () => {
-		try {
-			setLoading(true);
-			const isEditing = selected?.id;
-			if (isEditing) {
-				await editIncome(state);
-			} else {
-				await addIncome(state);
-				incrementUsage();
-			}
-			setLoading(false);
-			toast.success(isEditing ? messages.updated : messages.success);
-			if (mutate) mutate();
-			onHide();
-			setState({ ...initialState });
-		} catch {
-			setLoading(false);
-			toast.error(messages.error);
-		}
-	};
 
 	return (
 		<Modal someRef={inputRef} show={show} title={selected.id ? t('income.editIncome') : t('income.addIncome')} onHide={onHide}>
@@ -91,7 +62,6 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 					onSubmit={(event) => {
 						event.preventDefault();
 						onSubmit();
-						if (!selected.id) setState({ ...initialState });
 					}}
 				>
 					<div className="relative">
@@ -139,15 +109,12 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 							<Input
 								className="mt-1.5"
 								id="amount"
-								type="number"
-								inputMode="decimal"
-								placeholder="10000"
+								type="text"
+								placeholder="199"
 								required
-								min="0"
-								max="1000000000000"
-								step="any"
-								onChange={(event) => setState({ ...state, price: event.target.value })}
-								value={state.price}
+								inputMode="decimal"
+								onChange={(event) => setState({ ...state, price: parseInputPrice(event.target.value) })}
+								value={formatInputPrice(state.price)}
 							/>
 						</div>
 						<div className="mr-3">

@@ -1,12 +1,8 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
-
-import { incrementUsage } from '~/components/dashboard/apis';
 import { addInvestment, editInvestment } from '~/components/dashboard/investments/apis';
-import { format } from 'date-fns';
+import { useResourceForm } from '~/hooks/use-resource-form';
 import debounce from 'debounce';
-import { toast } from 'sonner';
 
 import AutoCompleteList from '~/components/autocomplete-list';
 import { useUser } from '~/components/context/auth-provider';
@@ -18,11 +14,10 @@ import { Label } from '~/components/ui/label';
 import { Textarea } from '~/components/ui/textarea';
 import { useTranslation } from '@i18n/client';
 
-import { getCurrencySymbol } from '~/lib/formatter';
+import { formatInputPrice, getCurrencySymbol, parseInputPrice } from '~/lib/formatter';
 
 import { investmentCategory } from '~/constants/categories';
-import { dateFormat, datePattern } from '~/constants/date';
-import messages from '~/constants/messages';
+import { datePattern } from '~/constants/date';
 
 interface AddInvestments {
 	show: boolean;
@@ -38,50 +33,26 @@ const initialState = {
 	name: '',
 	notes: '',
 	price: '',
+	units: '',
 	autocomplete: [],
 };
 
 export default function AddInvestments({ show, onHide, mutate, selected, lookup }: AddInvestments) {
-	const { t } = useTranslation();
 	const user = useUser();
-	const todayDate = format(new Date(), dateFormat);
-	const [state, setState] = useState<any>({ ...initialState, date: todayDate });
-	const [loading, setLoading] = useState(false);
-	const inputRef = useRef<any>(null);
-
-	useEffect(() => {
-		inputRef.current?.focus();
-	}, []);
-
-	useEffect(() => setState(selected.id ? selected : { ...initialState, date: todayDate }), [selected, todayDate]);
+	const { state, setState, loading, inputRef, onSubmit, todayDate, t } = useResourceForm({
+		initialState,
+		selected,
+		onHide,
+		mutate,
+		api: { add: addInvestment, edit: editInvestment },
+	});
 
 	const onLookup = useMemo(() => {
 		const callbackHandler = (value: string) => {
 			setState((prev: any) => ({ ...prev, autocomplete: lookup(value) }));
 		};
 		return debounce(callbackHandler, 500);
-	}, [lookup]);
-
-	const onSubmit = async () => {
-		try {
-			setLoading(true);
-			const isEditing = selected?.id;
-			if (isEditing) {
-				await editInvestment(state);
-			} else {
-				await addInvestment(state);
-				incrementUsage();
-			}
-			setLoading(false);
-			if (mutate) mutate();
-			toast.success(isEditing ? messages.updated : messages.success);
-			onHide();
-			setState({ ...initialState });
-		} catch {
-			setLoading(false);
-			toast.error(messages.error);
-		}
-	};
+	}, [lookup, setState]);
 
 	return (
 		<Modal someRef={inputRef} show={show} title={selected.id ? t('investments.editInvestment') : t('investments.addInvestment')} onHide={onHide}>
@@ -91,7 +62,6 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 					onSubmit={(event) => {
 						event.preventDefault();
 						onSubmit();
-						if (!selected.id) setState({ ...initialState });
 					}}
 				>
 					<div className="relative">
@@ -140,14 +110,11 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 								className="mt-1.5"
 								id="price"
 								inputMode="decimal"
-								type="number"
+								type="text"
 								placeholder="1000"
 								required
-								step="any"
-								min="0"
-								max="1000000000000"
-								onChange={(event) => setState({ ...state, price: event.target.value })}
-								value={state.price}
+								onChange={(event) => setState({ ...state, price: parseInputPrice(event.target.value) })}
+								value={formatInputPrice(state.price)}
 							/>
 						</div>
 						<div className="mr-3">
@@ -155,15 +122,12 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 							<Input
 								className="mt-1.5"
 								id="units"
-								type="number"
+								type="text"
 								inputMode="decimal"
 								placeholder="10"
 								required
-								min="0"
-								max="1000000000000"
-								step="any"
-								onChange={(event) => setState({ ...state, units: event.target.value })}
-								value={state.units}
+								onChange={(event) => setState({ ...state, units: parseInputPrice(event.target.value) })}
+								value={formatInputPrice(state.units)}
 							/>
 						</div>
 					</div>

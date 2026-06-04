@@ -46,3 +46,22 @@ export const getCurrencySymbol = (
 		return '';
 	}
 };
+
+export const formatInputPrice = (value: string | number) => {
+	if (value === null || value === undefined || value === '') return '';
+	const str = value.toString();
+	const parts = str.split('.');
+	parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	return parts.join('.');
+};
+
+export const parseInputPrice = (value: string) => {
+	// Remove all characters except digits and dots
+	let raw = value.replace(/[^\d.]/g, '');
+	// Ensure only one dot is kept
+	const parts = raw.split('.');
+	if (parts.length > 2) {
+		raw = parts[0] + '.' + parts.slice(1).join('');
+	}
+	return raw;
+};

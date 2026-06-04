@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { formatInputPrice, parseInputPrice } from '~/lib/formatter';
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 import { useLoaderData } from '@remix-run/react';
@@ -171,11 +172,11 @@ export default function DebtsPage() {
 							<form onSubmit={handleAddDebt} className="space-y-4">
 								<div className="space-y-2">
 									<Label>Nama Teman (Friend's Name)</Label>
-									<Input required value={friendName} onChange={(e) => setFriendName(e.target.value)} placeholder="Misal: Budi" />
+									<Input required value={friendName} onChange={(e) => setFriendName(e.target.value)} placeholder="Misal: Budi" maxLength={30} />
 								</div>
 								<div className="space-y-2">
 									<Label>Deskripsi / Judul (Description)</Label>
-									<Input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Misal: Makan Siang" />
+									<Input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Misal: Makan Siang" maxLength={30} />
 								</div>
 								<div className="space-y-2">
 									<Label>Tipe Transaksi (Type)</Label>
@@ -191,7 +192,7 @@ export default function DebtsPage() {
 								</div>
 								<div className="space-y-2">
 									<Label>Nominal (Amount)</Label>
-									<Input required type="number" min="0" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="50000" />
+									<Input required type="text" inputMode="decimal" value={formatInputPrice(amount)} onChange={(e) => setAmount(parseInputPrice(e.target.value))} placeholder="50000" />
 								</div>
 								<div className="space-y-2">
 									<Label>Tanggal (Date)</Label>

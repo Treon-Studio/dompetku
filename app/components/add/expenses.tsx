@@ -1,12 +1,8 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
-
-import { incrementUsage } from '~/components/dashboard/apis';
 import { addExpense, editExpense } from '~/components/dashboard/expenses/apis';
-import { format } from 'date-fns';
+import { useResourceForm } from '~/hooks/use-resource-form';
 import debounce from 'debounce';
-import { toast } from 'sonner';
 
 import AutoCompleteList from '~/components/autocomplete-list';
 import { useUser } from '~/components/context/auth-provider';
@@ -18,11 +14,10 @@ import { Label } from '~/components/ui/label';
 import { Textarea } from '~/components/ui/textarea';
 import { useTranslation } from '@i18n/client';
 
-import { getCurrencySymbol } from '~/lib/formatter';
+import { formatInputPrice, getCurrencySymbol, parseInputPrice } from '~/lib/formatter';
 
 import { expensesCategory, expensesPay, groupedExpenses } from '~/constants/categories';
-import { dateFormat, datePattern } from '~/constants/date';
-import messages from '~/constants/messages';
+import { datePattern } from '~/constants/date';
 
 interface AddExpenseProps {
 	show: boolean;
@@ -44,26 +39,14 @@ const initialState = {
 };
 
 export default function AddExpense({ show, onHide, mutate, selected, lookup }: AddExpenseProps) {
-	const { t } = useTranslation();
 	const user = useUser();
-	const todayDate = format(new Date(), dateFormat);
-	const [state, setState] = useState<any>({ ...initialState, date: todayDate });
-	const [loading, setLoading] = useState(false);
-	const inputRef = useRef<any>(null);
-
-	useEffect(() => {
-		inputRef.current?.focus();
-	}, []);
-
-	useEffect(
-		() =>
-			setState(
-				selected.id
-					? { ...selected, ...{ paid_via: selected.paid_via ? selected.paid_via : initialState.paid_via } }
-					: { ...initialState, date: todayDate }
-			),
-		[selected, todayDate]
-	);
+	const { state, setState, loading, inputRef, onSubmit, todayDate, t } = useResourceForm({
+		initialState,
+		selected,
+		onHide,
+		mutate,
+		api: { add: addExpense, edit: editExpense },
+	});
 
 	const onLookup = useMemo(() => {
 		const callbackHandler = (value: string) => {
@@ -71,28 +54,7 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 		};
 
 		return debounce(callbackHandler, 500);
-	}, [lookup]);
-
-	const onSubmit = async () => {
-		try {
-			setLoading(true);
-			const isEditing = selected?.id;
-			if (isEditing) {
-				await editExpense(state);
-			} else {
-				await addExpense(state);
-				incrementUsage();
-			}
-			setLoading(false);
-			toast.success(isEditing ? messages.updated : messages.success);
-			if (mutate) mutate();
-			onHide();
-			setState({ ...initialState });
-		} catch {
-			setLoading(false);
-			toast.error(messages.error);
-		}
-	};
+	}, [lookup, setState]);
 
 	return (
 		<Modal someRef={inputRef} show={show} title={selected.id ? t('expenses.editExpense') : t('expenses.addExpense')} onHide={onHide}>
@@ -102,7 +64,6 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 					onSubmit={(event) => {
 						event.preventDefault();
 						onSubmit();
-						if (!selected.id) setState({ ...initialState });
 					}}
 				>
 					<div className="relative">
@@ -150,15 +111,12 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 							<Input
 								className="mt-1.5"
 								id="price"
-								type="number"
+								type="text"
 								placeholder="199"
 								required
-								min="0"
-								max="1000000000000"
 								inputMode="decimal"
-								step="any"
-								onChange={(event) => setState({ ...state, price: event.target.value })}
-								value={state.price}
+								onChange={(event) => setState({ ...state, price: parseInputPrice(event.target.value) })}
+								value={formatInputPrice(state.price)}
 							/>
 						</div>
 						<div className="mr-3">

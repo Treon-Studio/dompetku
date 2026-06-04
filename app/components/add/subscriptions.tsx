@@ -2,10 +2,8 @@
 
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { Link } from '@remix-run/react';
-import { incrementUsage } from '~/components/dashboard/apis';
 import { addSubscription, editSubscription } from '~/components/dashboard/subscriptions/apis';
-import { format } from 'date-fns';
-import debounce from 'debounce';
+import { useResourceForm } from '~/hooks/use-resource-form';
 import { toast } from 'sonner';
 
 import AutoCompleteList from '~/components/autocomplete-list';
@@ -18,11 +16,10 @@ import { Label } from '~/components/ui/label';
 import { Textarea } from '~/components/ui/textarea';
 import { useTranslation } from '@i18n/client';
 
-import { getCurrencySymbol } from '~/lib/formatter';
+import { formatInputPrice, getCurrencySymbol, parseInputPrice } from '~/lib/formatter';
 
 import { subscriptionCategory } from '~/constants/categories';
-import { dateFormat, datePattern } from '~/constants/date';
-import messages from '~/constants/messages';
+import { datePattern } from '~/constants/date';
 
 const checkUrl = (urlString: string) => {
 	let url;
@@ -52,19 +49,16 @@ const initialState = {
 };
 
 export default function AddSubscriptions({ show, onHide, mutate, selected, lookup }: AddSubscriptions) {
-	const { t } = useTranslation();
 	const user = useUser();
-	const todayDate = format(new Date(), dateFormat);
-	const [state, setState] = useState<any>({ ...initialState, date: todayDate });
-	const [loading, setLoading] = useState(false);
+	const { state, setState, loading, inputRef, onSubmit, todayDate, t } = useResourceForm({
+		initialState,
+		selected,
+		onHide,
+		mutate,
+		api: { add: addSubscription, edit: editSubscription },
+	});
 	const [hasValidUrl, setHasValidUrl] = useState(false);
-	const inputRef = useRef<any>(null);
 
-	useEffect(() => {
-		inputRef.current?.focus();
-	}, []);
-
-	useEffect(() => setState(selected.id ? selected : { ...initialState, date: todayDate }), [selected, todayDate]);
 	useEffect(() => setHasValidUrl(checkUrl(state.url)), [state.url]);
 
 	const onLookup = useMemo(() => {
@@ -74,27 +68,6 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 		return debounce(callbackHandler, 500);
 	}, [lookup]);
 
-	const onSubmit = async () => {
-		try {
-			setLoading(true);
-			const isEditing = selected?.id;
-			if (isEditing) {
-				await editSubscription(state);
-			} else {
-				await addSubscription(state);
-				incrementUsage();
-			}
-			setLoading(false);
-			toast.success(isEditing ? messages.updated : messages.success);
-			if (mutate) mutate();
-			onHide();
-			setState({ ...initialState });
-		} catch {
-			setLoading(false);
-			toast.error(messages.error);
-		}
-	};
-
 	return (
 		<Modal someRef={inputRef} show={show} title={selected.id ? t('subscriptions.editSubscription') : t('subscriptions.addSubscription')} onHide={onHide}>
 			<div className="sm:flex sm:items-start max-sm:pb-6">
@@ -103,7 +76,6 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 					onSubmit={(event) => {
 						event.preventDefault();
 						onSubmit();
-						if (!selected.id) setState({ ...initialState });
 					}}
 				>
 					<div className="relative">
@@ -178,14 +150,11 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 								className="mt-1.5"
 								id="price"
 								inputMode="decimal"
-								type="number"
-								placeholder="699"
+								type="text"
+								placeholder="199"
 								required
-								min="0"
-								max="1000000000000"
-								step="any"
-								onChange={(event) => setState({ ...state, price: event.target.value })}
-								value={state.price}
+								onChange={(event) => setState({ ...state, price: parseInputPrice(event.target.value) })}
+								value={formatInputPrice(state.price)}
 							/>
 						</div>
 						<div className="mr-3">
