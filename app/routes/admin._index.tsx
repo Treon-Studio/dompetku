@@ -2,10 +2,10 @@ import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 import { useLoaderData, Link } from '@remix-run/react';
 
-import { createPrismaClient } from '~/lib/prisma';
+import { createPrismaClient } from '~/core/db.server';
 import { requireAdmin } from '~/features/auth/api.server';
-import LayoutHeader from '~/components/layout/header';
-import { Button } from '~/components/ui/button';
+import LayoutHeader from '~/shared/components/layout/header';
+import { Button } from '~/shared/components/ui/button';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
 	const db = createPrismaClient(context.cloudflare.env);

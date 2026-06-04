@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { addYears } from 'date-fns';
 import { hashPassword, verifyPassword, isPhone, normalizePhone } from '~/features/auth/api.server';
-import { isEmail, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from '~/constants/validation';
+import { isEmail, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from '~/shared/constants/validation';
 
 export async function getUserProfile(userId: string, db: PrismaClient) {
   const data = await db.users.findUnique({

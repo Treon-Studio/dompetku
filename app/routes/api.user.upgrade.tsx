@@ -1,8 +1,8 @@
 import type { ActionFunctionArgs } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 import { requireUser } from '~/features/auth/api.server';
-import { createPrismaClient } from '~/lib/prisma';
-import { logger } from '~/lib/logger.server';
+import { createPrismaClient } from '~/core/db.server';
+import { logger } from '~/core/logger.server';
 import { upgradeUserPlan } from '~/features/profile/api.server';
 
 export async function action({ request, context }: ActionFunctionArgs) {

@@ -2,11 +2,11 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 import { useLoaderData } from '@remix-run/react';
 
-import { OverviewContextProvider } from '~/components/context/overview-provider';
-import LayoutHeader from '~/components/layout/header';
-import Summary from '~/components/dashboard/summary';
-import Charts from '~/components/dashboard/charts';
-import AddData from '~/components/dashboard/add-data';
+import { OverviewContextProvider } from '~/shared/components/context/overview-provider';
+import LayoutHeader from '~/shared/components/layout/header';
+import Summary from '~/shared/components/dashboard/summary';
+import Charts from '~/shared/components/dashboard/charts';
+import AddData from '~/shared/components/dashboard/add-data';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
 

@@ -3,10 +3,10 @@ import type { MetaFunction } from '@remix-run/cloudflare';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-import LayoutHeader from '~/components/layout/header';
-import { Button } from '~/components/ui/button';
-import { Input } from '~/components/ui/input';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table';
+import LayoutHeader from '~/shared/components/layout/header';
+import { Button } from '~/shared/components/ui/button';
+import { Input } from '~/shared/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/shared/components/ui/table';
 
 export const meta: MetaFunction = () => {
 	return [

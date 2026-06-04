@@ -2,8 +2,8 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 import { useLoaderData } from '@remix-run/react';
 
-import { DataContextProvider } from '~/components/context/data-provider';
-import LayoutHeader from '~/components/layout/header';
+import { DataContextProvider } from '~/shared/components/context/data-provider';
+import LayoutHeader from '~/shared/components/layout/header';
 import IncomeSummary from '~/features/income/components/summary';
 import IncomeTable from '~/features/income/components/table';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';

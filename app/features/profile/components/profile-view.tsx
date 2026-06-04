@@ -4,27 +4,27 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { useUser } from '~/features/auth/components/auth-provider';
-import { Button } from '~/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '~/components/ui/card';
-import { Input } from '~/components/ui/input';
-import { Label } from '~/components/ui/label';
+import { Button } from '~/shared/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '~/shared/components/ui/card';
+import { Input } from '~/shared/components/ui/input';
+import { Label } from '~/shared/components/ui/label';
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '~/components/ui/select';
-import { Separator } from '~/components/ui/separator';
-import { Badge } from '~/components/ui/badge';
-import CircleLoader from '~/components/loader/circle';
-import { useTheme, useUiActions } from '~/stores/ui/ui.store';
-import DeleteModal from '~/components/modal/delete';
+} from '~/shared/components/ui/select';
+import { Separator } from '~/shared/components/ui/separator';
+import { Badge } from '~/shared/components/ui/badge';
+import CircleLoader from '~/shared/components/loader/circle';
+import { useTheme, useUiActions } from '~/shared/stores/ui/ui.store';
+import DeleteModal from '~/shared/components/modal/delete';
 import { useTranslation } from '@i18n/client';
 
-import { apiUrls } from '~/lib/apiUrls';
-import messages from '~/constants/messages';
-import { PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from '~/constants/validation';
+import { apiUrls } from '~/shared/lib/apiUrls';
+import messages from '~/shared/constants/messages';
+import { PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from '~/shared/constants/validation';
 
 const CURRENCIES = [
 	{ value: 'IDR', label: 'IDR - Indonesian Rupiah' },

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { baseRecordSchema } from '~/lib/schemas';
+import { baseRecordSchema } from '~/shared/lib/schemas';
 
 export const InvestmentSchema = baseRecordSchema.extend({
   units: z.string()

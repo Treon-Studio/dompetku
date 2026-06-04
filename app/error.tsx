@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { logException } from '~/lib/firebase.client';
+import { logException } from '~/core/firebase.client';
 
 export default function Error({ error, reset }: { error: Error; reset: () => void }) {
 	useEffect(() => {

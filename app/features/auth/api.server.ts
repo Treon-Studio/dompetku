@@ -3,14 +3,14 @@ import bcrypt from 'bcryptjs';
 import type { PrismaClient } from '@prisma/client';
 import type { AppLoadContext } from '@remix-run/cloudflare';
 import type { CloudflareEnv } from '~/env';
-import { isEmail, isPhone as checkPhone, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from '~/constants/validation';
+import { isEmail, isPhone as checkPhone, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from '~/shared/constants/validation';
 import {
   SESSION_COOKIE_NAME,
   BCRYPT_SALT_ROUNDS,
   SESSION_DURATION_MS,
-} from '~/constants/app';
+} from '~/shared/constants/app';
 
-export { isEmail } from '~/constants/validation';
+export { isEmail } from '~/shared/constants/validation';
 
 export function isPhone(identity: string): boolean {
   return checkPhone(identity.replace(/[\s\-()]/g, ''));

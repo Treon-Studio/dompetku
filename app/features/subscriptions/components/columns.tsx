@@ -4,11 +4,11 @@ import { ColumnDef } from '@tanstack/react-table';
 import { isThisMonth } from 'date-fns';
 import { Pen2, TrashBinMinimalistic } from '@solar-icons/react';
 
-import DataTableColumnHeader from '~/components/table/data-table-column-header';
-import { Button } from '~/components/ui/button';
-import { Checkbox } from '~/components/ui/checkbox';
+import DataTableColumnHeader from '~/shared/components/table/data-table-column-header';
+import { Button } from '~/shared/components/ui/button';
+import { Checkbox } from '~/shared/components/ui/checkbox';
 
-import { formatCurrency, formatDate } from '~/lib/formatter';
+import { formatCurrency, formatDate } from '~/shared/lib/formatter';
 
 import { SubscriptionData } from '../api.client';
 

@@ -2,7 +2,7 @@ import type { AppLoadContext, EntryContext } from '@remix-run/cloudflare';
 import { RemixServer } from '@remix-run/react';
 import { isbot } from 'isbot';
 import { renderToReadableStream } from 'react-dom/server';
-import { logger, configureLogger } from '~/lib/logger.server';
+import { logger, configureLogger } from '~/core/logger.server';
 import { getCloudflareEnv } from '~/env';
 
 export default async function handleRequest(

@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { Link } from '@remix-run/react';
 import { useTranslation } from '@i18n/client';
 
-import Footer from '~/components/footer';
-import CircleLoader from '~/components/loader/circle';
-import { Button } from '~/components/ui/button';
-import { apiUrls } from '~/lib/apiUrls';
-import url from '~/constants/url';
+import Footer from '~/shared/components/footer';
+import CircleLoader from '~/shared/components/loader/circle';
+import { Button } from '~/shared/components/ui/button';
+import { apiUrls } from '~/shared/lib/apiUrls';
+import url from '~/shared/constants/url';
 
 export default function ForgotPasswordView() {
   const { t } = useTranslation();

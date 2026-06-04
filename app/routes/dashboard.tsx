@@ -4,11 +4,11 @@ import { Outlet, useLoaderData } from '@remix-run/react';
 import { addYears } from 'date-fns';
 
 import { AuthProvider } from '~/features/auth/components/auth-provider';
-import { ThemeSync } from '~/stores/ui/theme-sync';
-import DashboardLayout from '~/components/layout';
-import Sidebar from '~/components/sidebar';
-import { Toaster } from '~/components/ui/sonner';
-import { createPrismaClient } from '~/lib/prisma';
+import { ThemeSync } from '~/shared/stores/ui/theme-sync';
+import DashboardLayout from '~/shared/components/layout';
+import Sidebar from '~/shared/components/sidebar';
+import { Toaster } from '~/shared/components/ui/sonner';
+import { createPrismaClient } from '~/core/db.server';
 import { requireUser } from '~/features/auth/api.server';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';

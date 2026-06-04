@@ -8,8 +8,6 @@ import './overwrites.css';
 const title = 'Dompetku - Track your expenses with ease';
 const description = 'Effortlessly Track and Manage Expenses.';
 
-import { GA4_ANALYTICS_ID } from '~/env';
-
 export const links = () => [
 	{ rel: 'preconnect', href: 'https://fonts.googleapis.com' },
 	{ rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
@@ -60,4 +58,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	);
 }
 
-const GA_SCRIPT = GOOGLE_ANALYTICS_ID;
+const GA_SCRIPT = GA4_ANALYTICS_ID;

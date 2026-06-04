@@ -3,12 +3,12 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Pen2, TrashBinMinimalistic } from '@solar-icons/react';
 
-import DataTableColumnHeader from '~/components/table/data-table-column-header';
-import { Button } from '~/components/ui/button';
+import DataTableColumnHeader from '~/shared/components/table/data-table-column-header';
+import { Button } from '~/shared/components/ui/button';
 
-import { formatCurrency, formatDate } from '~/lib/formatter';
+import { formatCurrency, formatDate } from '~/shared/lib/formatter';
 
-import { incomeCategory } from '~/constants/categories';
+import { incomeCategory } from '~/shared/constants/categories';
 
 export type Income = {
 	name: string;

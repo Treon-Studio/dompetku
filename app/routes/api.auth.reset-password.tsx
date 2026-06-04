@@ -1,11 +1,11 @@
 import type { ActionFunctionArgs } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 
-import { createPrismaClient } from '~/lib/prisma';
+import { createPrismaClient } from '~/core/db.server';
 import { hashPassword } from '~/features/auth/api.server';
 import { getCloudflareEnv } from '~/env';
 import { ResetPasswordSchema } from '~/features/auth/schemas';
-import { logger } from '~/lib/logger.server';
+import { logger } from '~/core/logger.server';
 
 export async function action({ request, context }: ActionFunctionArgs) {
   try {
@@ -15,7 +15,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const result = ResetPasswordSchema.safeParse(body);
 
     if (!result.success) {
-      const error = result.error.errors[0];
+      const error = result.error.issues[0];
       return json({ message: error.message }, { status: 400 });
     }
 

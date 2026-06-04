@@ -1,8 +1,8 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/cloudflare';
 
 import { requireUser } from '~/features/auth/api.server';
-import { createPrismaClient } from '~/lib/prisma';
-import { handleGetRecords, handleActionRecords } from '~/lib/api-handler.server';
+import { createPrismaClient } from '~/core/db.server';
+import { handleGetRecords, handleActionRecords } from '~/shared/lib/api-handler.server';
 import { ExpenseSchema } from './schemas';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {

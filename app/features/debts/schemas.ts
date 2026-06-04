@@ -3,7 +3,7 @@ import {
   INPUT_MAX_LENGTH,
   NOTES_MAX_LENGTH,
   PRICE_MAX_VALUE,
-} from '~/constants/validation';
+} from '~/shared/constants/validation';
 
 export const DebtSchema = z.object({
   id: z.string().optional(),

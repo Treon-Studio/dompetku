@@ -38,9 +38,6 @@ export default defineConfig(async () => {
       dedupe: ['react', 'react-dom'],
       alias: {
         '~': path.resolve(__dirname, 'app'),
-        constants: path.resolve(__dirname, 'constants'),
-        lib: path.resolve(__dirname, 'lib'),
-        hooks: path.resolve(__dirname, 'hooks'),
         emails: path.resolve(__dirname, 'emails'),
       },
     },

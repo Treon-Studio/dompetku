@@ -1,4 +1,4 @@
-import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from '~/constants/app';
+import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from '~/shared/constants/app';
 
 export interface Env {
   TURSO_DATABASE_URL: string;

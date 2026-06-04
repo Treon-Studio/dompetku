@@ -4,7 +4,7 @@ import {
   NOTES_MAX_LENGTH,
   URL_MAX_LENGTH,
   PRICE_MAX_VALUE,
-} from '~/constants/validation';
+} from '~/shared/constants/validation';
 
 export const SubscriptionSchema = z.object({
   id: z.string().optional(),

@@ -3,7 +3,7 @@ import {
   INPUT_MAX_LENGTH,
   NOTES_MAX_LENGTH,
   PRICE_MAX_VALUE,
-} from '~/constants/validation';
+} from '~/shared/constants/validation';
 
 export const baseRecordSchema = z.object({
   id: z.string().optional(), // For PUT requests

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { formatInputPrice, parseInputPrice } from '~/lib/formatter';
+import { formatInputPrice, parseInputPrice } from '~/shared/lib/formatter';
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 import { useLoaderData } from '@remix-run/react';
@@ -7,19 +7,19 @@ import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 
-import LayoutHeader from '~/components/layout/header';
-import { Button } from '~/components/ui/button';
-import { Input } from '~/components/ui/input';
-import { Label } from '~/components/ui/label';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '~/components/ui/dialog';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
-import { Switch } from '~/components/ui/switch';
+import LayoutHeader from '~/shared/components/layout/header';
+import { Button } from '~/shared/components/ui/button';
+import { Input } from '~/shared/components/ui/input';
+import { Label } from '~/shared/components/ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '~/shared/components/ui/dialog';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/shared/components/ui/table';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/shared/components/ui/select';
+import { Switch } from '~/shared/components/ui/switch';
 
 const formatCurrency = (value: number) => {
 	return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value).replace(/\s+/g, ' ').replace(/\u00A0/g, ' ');
 };
-import url from '~/constants/url';
+import url from '~/shared/constants/url';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

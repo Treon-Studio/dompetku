@@ -15,8 +15,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { getCloudflareEnv } from '~/env';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
-import StateDisplay from '~/components/state-display';
-import { initFirebase, logException } from '~/lib/firebase.client';
+import StateDisplay from '~/shared/components/state-display';
+import { initFirebase, logException } from '~/core/firebase.client';
 
 import './globals.css';
 import './overwrites.css';

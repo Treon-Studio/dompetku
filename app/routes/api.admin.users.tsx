@@ -1,9 +1,9 @@
 import type { LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 
-import { createPrismaClient } from '~/lib/prisma';
+import { createPrismaClient } from '~/core/db.server';
 import { requireAdmin } from '~/features/auth/api.server';
-import { logger } from '~/lib/logger.server';
+import { logger } from '~/core/logger.server';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
 	const db = createPrismaClient(context.cloudflare.env);

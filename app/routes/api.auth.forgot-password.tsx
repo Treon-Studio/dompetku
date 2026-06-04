@@ -1,14 +1,14 @@
 import type { ActionFunctionArgs } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 
-import { createPrismaClient } from '~/lib/prisma';
-import { getResend } from '~/lib/email';
+import { createPrismaClient } from '~/core/db.server';
+import { getResend } from '~/shared/lib/email';
 import { getCloudflareEnv } from '~/env';
 import { findUserByIdentity, isPhone } from '~/features/auth/api.server';
-import { emails } from '~/constants/messages';
-import { RESET_TOKEN_EXPIRY_MS } from '~/constants/app';
+import { emails } from '~/shared/constants/messages';
+import { RESET_TOKEN_EXPIRY_MS } from '~/shared/constants/app';
 import { ForgotPasswordSchema } from '~/features/auth/schemas';
-import { logger } from '~/lib/logger.server';
+import { logger } from '~/core/logger.server';
 
 import ResetPasswordEmail from 'emails/reset-password';
 
@@ -20,7 +20,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const result = ForgotPasswordSchema.safeParse(body);
 
     if (!result.success) {
-      const error = result.error.errors[0];
+      const error = result.error.issues[0];
       return json({ message: error.message }, { status: 400 });
     }
 

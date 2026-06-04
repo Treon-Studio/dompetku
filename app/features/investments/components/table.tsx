@@ -4,15 +4,15 @@ import { useCallback, useState } from 'react';
 
 import { toast } from 'sonner';
 
-import Add from '~/components/add-button';
+import Add from '~/shared/components/add-button';
 import { useUser } from '~/features/auth/components/auth-provider';
-import { useData } from '~/components/context/data-provider';
-import DataTable from '~/components/table/data-table';
+import { useData } from '~/shared/components/context/data-provider';
+import DataTable from '~/shared/components/table/data-table';
 
-import { lookup } from '~/lib/lookup';
+import { lookup } from '~/shared/lib/lookup';
 
-import { investmentCategory } from '~/constants/categories';
-import messages from '~/constants/messages';
+import { investmentCategory } from '~/shared/constants/categories';
+import messages from '~/shared/constants/messages';
 
 import { InvestmentData, deleteInvestment } from '../api.client';
 import { columns } from './columns';

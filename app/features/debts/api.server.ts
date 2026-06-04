@@ -2,8 +2,8 @@ import type { LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/cloudfla
 import { json } from '@remix-run/cloudflare';
 
 import { requireUser } from '~/features/auth/api.server';
-import { createPrismaClient } from '~/lib/prisma';
-import { logger } from '~/lib/logger.server';
+import { createPrismaClient } from '~/core/db.server';
+import { logger } from '~/core/logger.server';
 import { DebtSchema } from './schemas';
 
 export async function debtsLoader({ request, context }: LoaderFunctionArgs) {

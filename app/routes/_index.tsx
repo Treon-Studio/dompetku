@@ -1,13 +1,13 @@
 import { Link, useLoaderData } from '@remix-run/react';
 
-import Footer from '~/components/footer';
-import Features from '~/components/home/features';
+import Footer from '~/shared/components/footer';
+import Features from '~/shared/components/home/features';
 
-import url from 'constants/url';
+import url from '~/shared/constants/url';
 import { redirect, type LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { getUserFromSession } from '~/features/auth/api.server';
-import { createPrismaClient } from '~/lib/prisma';
-import { premiumPlan } from 'constants/usage';
+import { createPrismaClient } from '~/core/db.server';
+import { premiumPlan } from '~/shared/constants/usage';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
 import { useTranslation } from '@i18n/client';

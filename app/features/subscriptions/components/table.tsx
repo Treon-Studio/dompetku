@@ -4,15 +4,15 @@ import { useCallback, useState } from 'react';
 
 import { toast } from 'sonner';
 
-import Add from '~/components/add-button';
+import Add from '~/shared/components/add-button';
 import { useUser } from '~/features/auth/components/auth-provider';
-import { useData } from '~/components/context/data-provider';
-import DataTable from '~/components/table/data-table';
+import { useData } from '~/shared/components/context/data-provider';
+import DataTable from '~/shared/components/table/data-table';
 
-import { sortByKey } from '~/lib/extractor';
-import { lookup } from '~/lib/lookup';
+import { sortByKey } from '~/shared/lib/extractor';
+import { lookup } from '~/shared/lib/lookup';
 
-import messages from '~/constants/messages';
+import messages from '~/shared/constants/messages';
 
 import { SubscriptionData, deleteSubscription, editSubscription } from '../api.client';
 import { columns } from './columns';

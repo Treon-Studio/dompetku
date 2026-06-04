@@ -1,4 +1,4 @@
-import Footer from '~/components/footer';
+import Footer from '~/shared/components/footer';
 import SignInForm from './signin-form';
 import { useTranslation } from '@i18n/client';
 

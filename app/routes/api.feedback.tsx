@@ -4,11 +4,11 @@ import { json } from '@remix-run/cloudflare';
 import FeedbackEmail from 'emails/feedback';
 
 import { requireUser } from '~/features/auth/api.server';
-import { getResend } from '~/lib/email';
-import { createPrismaClient } from '~/lib/prisma';
+import { getResend } from '~/shared/lib/email';
+import { createPrismaClient } from '~/core/db.server';
 import { getCloudflareEnv } from '~/env';
 
-import { emails } from '~/constants/messages';
+import { emails } from '~/shared/constants/messages';
 
 export async function action({ request, context }: ActionFunctionArgs) {
 	const db = createPrismaClient(context.cloudflare.env);

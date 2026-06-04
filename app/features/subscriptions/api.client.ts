@@ -1,4 +1,4 @@
-import { createResourceApi } from '~/lib/api-client';
+import { createResourceApi } from '~/shared/lib/api-client';
 
 const api = createResourceApi('/api/subscriptions');
 

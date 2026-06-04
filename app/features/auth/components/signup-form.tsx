@@ -1,13 +1,13 @@
 import { Link } from '@remix-run/react';
 import { useEffect, useRef, useState } from 'react';
 
-import CircleLoader from '~/components/loader/circle';
-import { Button } from '~/components/ui/button';
+import CircleLoader from '~/shared/components/loader/circle';
+import { Button } from '~/shared/components/ui/button';
 
-import { apiUrls } from '~/lib/apiUrls';
+import { apiUrls } from '~/shared/lib/apiUrls';
 
-import url from '~/constants/url';
-import { isEmail, isPhone } from '~/constants/validation';
+import url from '~/shared/constants/url';
+import { isEmail, isPhone } from '~/shared/constants/validation';
 import { useTranslation } from '@i18n/client';
 
 const initialState = { loading: false, identity: '', password: '', confirmPassword: '', success: false, error: '' };
