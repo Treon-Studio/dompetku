@@ -43,13 +43,8 @@ export default defineConfig(async () => {
     },
     optimizeDeps: {
       include: [
-        'react',
-        'react-dom',
-        'react/jsx-runtime',
-        'react/jsx-dev-runtime',
         'sonner',
-        '@radix-ui/react-tooltip',
-        '@remix-run/react'
+        '@radix-ui/react-tooltip'
       ]
     },
     build: {

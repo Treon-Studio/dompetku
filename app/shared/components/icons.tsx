@@ -21,3 +21,5 @@ export const InvestmentIcon = ({ className }: { className?: string }) => <GraphU
 export const SignoutIcon = ({ className }: { className?: string }) => <Logout className={className} />;
 export const ProfileIcon = ({ className }: { className?: string }) => <UserCircle className={className} />;
 export const DebtsIcon = ({ className }: { className?: string }) => <UsersGroupTwoRounded className={className} />;
+export const BudgetsIcon = ({ className }: { className?: string }) => <BillList className={className} />;
+export const GoalsIcon = ({ className }: { className?: string }) => <GraphUp className={className} />;

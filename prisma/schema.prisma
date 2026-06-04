@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -98,6 +99,8 @@ model users {
   password_resets            password_resets[]
   friends                    friends[]
   debts                      debts[]
+  budgets                    budgets[]
+  goals                      goals[]
   role                       String            @default("USER") // "USER" or "ADMIN"
 
   @@unique([email])
@@ -167,4 +170,30 @@ model debts {
   nameHash   String?
   friend     friends  @relation(fields: [friend_id], references: [id], onDelete: Cascade)
   user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model budgets {
+  id         String   @id @default(uuid())
+  category   String
+  amount     String   @default("0")
+  month      String // Format: "YYYY-MM"
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+  user_id    String
+  user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, category, month])
+}
+
+model goals {
+  id             String   @id @default(uuid())
+  name           String
+  target_amount  String   @default("0")
+  current_amount String   @default("0")
+  deadline       String?
+  status         String   @default("IN_PROGRESS") // "IN_PROGRESS", "ACHIEVED"
+  created_at     DateTime @default(now())
+  updated_at     DateTime @default(now()) @updatedAt
+  user_id        String
+  user           users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }

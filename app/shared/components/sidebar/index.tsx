@@ -16,6 +16,8 @@ import {
 	SubscriptionsIcon,
 	SupportIcon,
 	DebtsIcon,
+	BudgetsIcon,
+	GoalsIcon
 } from '~/shared/components/icons';
 import { Separator } from '~/shared/components/ui/separator';
 import { useTranslation } from '@i18n/client';
@@ -70,6 +72,8 @@ export default function Sidebar() {
 		{ key: 'investments', name: t('navigation.investments'), href: '/dashboard/investments', Icon: InvestmentIcon, shortcut: shortcuts.menu.investments.shortcut },
 		{ key: 'subscriptions', name: t('navigation.subscriptions'), href: '/dashboard/subscriptions', Icon: SubscriptionsIcon, shortcut: shortcuts.menu.subscriptions.shortcut },
 		{ key: 'debts', name: 'Hutang Piutang', href: '/dashboard/debts', Icon: DebtsIcon },
+		{ key: 'budgets', name: 'Budgets', href: '/dashboard/budgets', Icon: BudgetsIcon },
+		{ key: 'goals', name: 'Goals', href: '/dashboard/goals', Icon: GoalsIcon },
 	];
 	useHotkeys(
 		menuShortcutList,
