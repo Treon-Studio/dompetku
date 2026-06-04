@@ -1,12 +1,11 @@
 'use client';
 
 import { useEffect } from 'react';
-import { logger } from '~/lib/logger';
 import { logException } from '~/lib/firebase.client';
 
 export default function Error({ error, reset }: { error: Error; reset: () => void }) {
 	useEffect(() => {
-		logger.error('Client error', { error: error.message, stack: error.stack });
+		console.error('Client error', { error: error.message, stack: error.stack });
 		logException(error.message, true);
 	}, [error]);
 

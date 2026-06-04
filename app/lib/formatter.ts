@@ -20,7 +20,7 @@ type Date = {
 
 export const formatCurrency = ({ value, currency = defaultCurrency, locale = defaultLocale }: Currency): any => {
 	try {
-		return new Intl.NumberFormat(locale, { ...currencyStyle, currency }).format(value).replace(/^(\D+)/, '$1 ');
+		return new Intl.NumberFormat(locale, { ...currencyStyle, currency }).format(value).replace(/^(\D+)/, '$1 ').replace(/\s+/g, ' ').replace(/\u00A0/g, ' ');
 	} catch {
 		return value;
 	}

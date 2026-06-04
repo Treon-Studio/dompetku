@@ -8,7 +8,7 @@ import { findUserByIdentity, isPhone } from '~/lib/auth.server';
 import { emails } from '~/constants/messages';
 import { RESET_TOKEN_EXPIRY_MS } from '~/constants/app';
 import { validateIdentityField } from '~/lib/validate';
-import { logger } from '~/lib/logger';
+import { logger } from '~/lib/logger.server';
 
 import ResetPasswordEmail from 'emails/reset-password';
 

@@ -23,16 +23,16 @@ export default defineConfig(async () => {
           v3_singleFetch: true,
           v3_throwAbortReason: true,
         },
-        ssr: {
-          resolve: {
-            externalConditions: ['workerd', 'worker'],
-          },
-        },
       }),
       tsconfigPaths(),
     ],
     server: {
       port: 3000,
+    },
+    ssr: {
+      resolve: {
+        externalConditions: ['workerd', 'worker'],
+      },
     },
     resolve: {
       dedupe: ['react', 'react-dom'],
@@ -43,6 +43,17 @@ export default defineConfig(async () => {
         hooks: path.resolve(__dirname, 'hooks'),
         emails: path.resolve(__dirname, 'emails'),
       },
+    },
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
+        'sonner',
+        '@radix-ui/react-tooltip',
+        '@remix-run/react'
+      ]
     },
     build: {
       chunkSizeWarningLimit: 1000,

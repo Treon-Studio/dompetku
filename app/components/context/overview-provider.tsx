@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import useSWR from 'swr';
 
 import { apiUrls } from '~/lib/apiUrls';
+import fetcher from '~/lib/fetcher';
 
 import { dateFormat } from '~/constants/date';
 
@@ -29,13 +30,13 @@ export const OverviewContextProvider = (props: any) => {
 		data: expensesData = [],
 		isLoading: isExpenseLoading,
 		mutate: mutateExpenses,
-	} = useSWR(apiUrls.expenses.getExpenses({ from, to }));
+	} = useSWR(apiUrls.expenses.getExpenses({ from, to }), fetcher);
 	const { data: investmentsData = [], isLoading: isInvestmentsLoading } = useSWR(
-		apiUrls.investments.getInvestments({ from, to })
+		apiUrls.investments.getInvestments({ from, to }), fetcher
 	);
-	const { data: incomeData = [], isLoading: isIncomeLoading } = useSWR(apiUrls.income.getIncome({ from, to }));
+	const { data: incomeData = [], isLoading: isIncomeLoading } = useSWR(apiUrls.income.getIncome({ from, to }), fetcher);
 	const { data: subscriptionsData = [], isLoading: isSubscriptionsLoading } = useSWR(
-		apiUrls.subscriptions.getSubscriptions({ from, to })
+		apiUrls.subscriptions.getSubscriptions({ from, to }), fetcher
 	);
 
 	const data = {

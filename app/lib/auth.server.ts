@@ -131,6 +131,14 @@ export async function requireUser(request: Request, db: PrismaClient, context: A
   return user;
 }
 
+export async function requireAdmin(request: Request, db: PrismaClient, context: AppLoadContext) {
+  const user = await requireUser(request, db, context);
+  if (user.role !== 'ADMIN') {
+    throw redirect('/dashboard');
+  }
+  return user;
+}
+
 export async function signOut(request: Request, db: PrismaClient, context: AppLoadContext) {
   const session = await getSession(request, context);
   const token = session.get('token');
@@ -174,10 +182,17 @@ export async function findUserByIdentity(identity: string, db: PrismaClient) {
 }
 
 export async function login(identity: string, password: string, db: PrismaClient) {
+  console.log(`[LOGIN DEBUG] Attempting login for identity: "${identity}"`);
   const user = await findUserByIdentity(identity, db);
-  if (!user) return null;
+  if (!user) {
+    console.log(`[LOGIN DEBUG] User not found for identity: "${identity}"`);
+    return null;
+  }
+  
+  console.log(`[LOGIN DEBUG] User found. ID: ${user.id}, DB Phone: "${user.phone}", DB Email: "${user.email}"`);
 
   const isValid = await verifyPassword(password, user.password);
+  console.log(`[LOGIN DEBUG] Password valid: ${isValid}`);
   if (!isValid) return null;
 
   return user;

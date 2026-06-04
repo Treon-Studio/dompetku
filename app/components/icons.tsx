@@ -8,6 +8,7 @@ import {
   GraphUp,
   Logout,
   UserCircle,
+  UsersGroupTwoRounded,
 } from '@solar-icons/react';
 
 export const OverviewIcon = ({ className }: { className?: string }) => <Widget5 className={className} />;
@@ -19,3 +20,4 @@ export const SupportIcon = ({ className }: { className?: string }) => <ChatRound
 export const InvestmentIcon = ({ className }: { className?: string }) => <GraphUp className={className} />;
 export const SignoutIcon = ({ className }: { className?: string }) => <Logout className={className} />;
 export const ProfileIcon = ({ className }: { className?: string }) => <UserCircle className={className} />;
+export const DebtsIcon = ({ className }: { className?: string }) => <UsersGroupTwoRounded className={className} />;

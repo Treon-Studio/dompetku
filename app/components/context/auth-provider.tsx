@@ -17,6 +17,7 @@ interface User {
 	monthly_email_report: boolean;
 	isPremium: boolean;
 	isPremiumPlanEnded: boolean;
+	role: string;
 }
 
 interface Session {}

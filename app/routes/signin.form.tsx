@@ -34,7 +34,7 @@ export default function Form() {
 		try {
 			const res = await fetch(apiUrls.auth.signin, {
 				method: 'POST',
-				body: JSON.stringify({ identity: state.identity, password: state.password }),
+				body: JSON.stringify({ identity: identity, password: state.password }),
 				headers: { 'Content-Type': 'application/json' },
 				redirect: 'manual',
 			});
@@ -81,6 +81,7 @@ export default function Form() {
 				<input
 					className="mt-2 block h-10 w-full appearance-none rounded-md bg-white px-3 text-sm text-black shadow-xs ring-1 ring-gray-300 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-gray-900"
 					type="password"
+					autoComplete="current-password"
 					placeholder="********"
 					required
 					maxLength={128}

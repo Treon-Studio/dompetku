@@ -270,3 +270,66 @@ sessions
 - **Premium Gating**: Recent Activities, Top Spent charts only for premium
 - **SWR**: Client-side stale-while-revalidate data fetching
 - **Privacy**: `nameHash` stores lowercase for efficient autocomplete
+---
+
+## 13. Epics & User Stories
+
+### Epic 1: User Authentication & Profile Management
+As a user, I want to securely create an account and manage my profile so that my financial data remains private and synchronized across devices.
+- **US 1.1:** As a new user, I want to sign up using my email and password so I can create a new account.
+- **US 1.2:** As an existing user, I want to sign in securely to access my dashboard.
+- **US 1.3:** As an authenticated user, I want to log out to protect my session on shared devices.
+
+### Epic 2: Expense & Income Tracking
+As a user, I want to log and categorize my expenses and incomes so that I can monitor my cash flow.
+- **US 2.1:** As a user, I want to add a new expense with details (name, price, date, category, payment method, notes) so I can track my spending.
+- **US 2.2:** As a user, I want to add my income sources so I can see my total earnings.
+- **US 2.3:** As a user, I want to view a list of all my expenses and incomes so I can review past transactions.
+- **US 2.4:** As a user, I want to edit or delete existing entries to correct any mistakes.
+- **US 2.5:** As a user, I want autocomplete suggestions when typing expense names to speed up data entry.
+
+### Epic 3: Investments & Subscriptions
+As a user, I want to track my investments and recurring subscriptions to have a holistic view of my finances.
+- **US 3.1:** As a user, I want to log my investments (e.g., crypto, stocks) including units and price.
+- **US 3.2:** As a user, I want to track recurring subscriptions (monthly/yearly) so I know upcoming fixed costs.
+- **US 3.3:** As a user, I want to mark a subscription as active or cancelled.
+
+### Epic 4: Dashboard & Analytics
+As a user, I want to see a summarized view of my finances with visual charts to easily understand my financial health.
+- **US 4.1:** As a user, I want to see summary cards of my total income, balance, expenses, investments, and subscriptions.
+- **US 4.2:** As a user, I want to see bar charts for my expenses over time.
+- **US 4.3:** As a user, I want to filter the dashboard data by date (This Month, Last Month, This Year, All Time).
+- **US 4.4:** As a Premium user, I want to view advanced charts like "Recent Activities" and "Top Spent Categories".
+
+---
+
+## 14. User Journey
+
+**Persona:** Andi, a freelancer who wants to manage his personal budget and track multiple income streams and subscriptions.
+
+1. **Discovery & Onboarding:** Andi finds Dompetku and signs up with his email. He is immediately redirected to an empty but clean dashboard.
+2. **Initial Setup (Income):** Andi logs his current month's freelance salary. The dashboard immediately reflects his current balance.
+3. **Daily Usage (Expenses):** Throughout the week, Andi logs his daily expenses (food, transport). He uses the hotkey `n` to quickly open the 'Add Expense' modal. Autocomplete helps him add recurring items like "Coffee" faster.
+4. **Subscription Management:** Andi realizes he has several streaming services. He navigates to the Subscriptions tab and adds Netflix and Spotify, setting their billing cycles.
+5. **Review & Analytics:** At the end of the month, Andi reviews the Dashboard. He filters by "This Month" and looks at the charts to see which category consumed most of his budget.
+6. **Upgrade to Premium:** Satisfied with the tool, but wanting to export his data to CSV for tax purposes, Andi upgrades to the Premium plan.
+
+---
+
+## 15. User Flow
+
+### 15.1 Flow: Adding a New Financial Entry (Expense/Income)
+1. User lands on the **Dashboard**.
+2. User clicks the **"+" (Add Data) floating button** or presses the `n` hotkey.
+3. A modal appears asking what type of data to add (Expense, Income, Investment, Subscription).
+4. User selects **Expense**.
+5. Form appears:
+   - *If User types an existing name*, **Autocomplete dropdown** shows suggestions.
+   - User fills in: Name, Price, Date, Category, Paid Via, Notes.
+6. User clicks **Save**.
+7. System validates input.
+   - *If invalid*, shows inline errors.
+   - *If valid*, POST request sent to API.
+8. System updates the database and returns success.
+9. Modal closes, UI displays a success toast, and the Dashboard data/charts update automatically (via SWR).
+

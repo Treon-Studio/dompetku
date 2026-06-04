@@ -96,6 +96,9 @@ model users {
   subscriptions              subscriptions[]
   sessions                   sessions[]
   password_resets            password_resets[]
+  friends                    friends[]
+  debts                      debts[]
+  role                       String            @default("USER") // "USER" or "ADMIN"
 
   @@unique([email])
   @@unique([phone])
@@ -132,5 +135,36 @@ model password_resets {
   expires_at DateTime
   used       Boolean  @default(false)
   created_at DateTime @default(now())
+  user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model friends {
+  id         String   @id @default(uuid())
+  name       String
+  user_id    String
+  slug       String   @unique // Pengganti public_token
+  is_public  Boolean  @default(true) // Untuk toggle public/private
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+  user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  debts      debts[]
+
+  @@unique([user_id, name])
+}
+
+model debts {
+  id         String   @id @default(uuid())
+  name       String
+  type       String // "I_OWE" (Saya Ngutang) atau "OWES_ME" (Teman Ngutang)
+  amount     String   @default("0")
+  status     String   @default("UNPAID") // "UNPAID", "PAID"
+  date       String
+  notes      String?
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+  friend_id  String
+  user_id    String
+  nameHash   String?
+  friend     friends  @relation(fields: [friend_id], references: [id], onDelete: Cascade)
   user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }

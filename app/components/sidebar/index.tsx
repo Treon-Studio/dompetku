@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from '@remix-run/react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 import { useSidebar } from '~/components/context/sidebar-provider';
+import { useUser } from '~/components/context/auth-provider';
 import {
 	ExpensesIcon,
 	IncomeIcon,
@@ -14,6 +15,7 @@ import {
 	SignoutIcon,
 	SubscriptionsIcon,
 	SupportIcon,
+	DebtsIcon,
 } from '~/components/icons';
 import { Separator } from '~/components/ui/separator';
 import { useTranslation } from '@i18n/client';
@@ -58,6 +60,7 @@ export default function Sidebar() {
 	const pathname = useLocation()?.pathname || '/';
 	const router = useNavigate();
 	const { show, setShow } = useSidebar();
+	const user = useUser();
 
 	const navItems = [
 		{ key: 'overview', name: t('navigation.overview'), href: '/dashboard', Icon: OverviewIcon, shortcut: shortcuts.menu.overview.shortcut },
@@ -65,6 +68,7 @@ export default function Sidebar() {
 		{ key: 'expenses', name: t('navigation.expenses'), href: '/dashboard/expenses', Icon: ExpensesIcon, shortcut: shortcuts.menu.expenses.shortcut },
 		{ key: 'investments', name: t('navigation.investments'), href: '/dashboard/investments', Icon: InvestmentIcon, shortcut: shortcuts.menu.investments.shortcut },
 		{ key: 'subscriptions', name: t('navigation.subscriptions'), href: '/dashboard/subscriptions', Icon: SubscriptionsIcon, shortcut: shortcuts.menu.subscriptions.shortcut },
+		{ key: 'debts', name: 'Hutang Piutang', href: '/dashboard/debts', Icon: DebtsIcon },
 	];
 	useHotkeys(
 		menuShortcutList,
@@ -124,6 +128,16 @@ export default function Sidebar() {
 									</SidebarLink>
 								);
 							})}
+							{user?.role === 'ADMIN' && (
+								<SidebarLink
+									onClick={() => setShow(false)}
+									name="Admin Panel"
+									active={pathname.startsWith('/admin')}
+									href="/admin"
+								>
+									<SettingsIcon className="text-white" />
+								</SidebarLink>
+							)}
 						</div>
 						<div className="flex flex-col items-center">
 							{settingsLinks.map((link) => {

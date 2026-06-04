@@ -4,7 +4,7 @@ import { json } from '@remix-run/cloudflare';
 import { createUser, findUserByIdentity, createSession, isPhone, normalizePhone } from '~/lib/auth.server';
 import { createPrismaClient } from '~/lib/prisma';
 import { validateIdentityField, validatePasswordField } from '~/lib/validate';
-import { logger } from '~/lib/logger';
+import { logger } from '~/lib/logger.server';
 
 export async function action({ request, context }: ActionFunctionArgs) {
   try {

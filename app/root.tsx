@@ -8,13 +8,13 @@ import {
   isRouteErrorResponse,
   useRouteError,
 } from '@remix-run/react';
+import { useEffect } from 'react';
 import type { LinksFunction, MetaFunction, LoaderFunctionArgs } from '@remix-run/cloudflare';
 
 import { getCloudflareEnv } from '~/env';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
 import StateDisplay from '~/components/state-display';
-import { logger } from '~/lib/logger';
 import { initFirebase, logException } from '~/lib/firebase.client';
 
 import './globals.css';
@@ -25,14 +25,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const locale = getLocaleFromRequest(request);
   const translations = await loadTranslations(locale);
 
-  if (env.FIREBASE_PROJECT_ID && env.FIREBASE_CLIENT_EMAIL && env.FIREBASE_PRIVATE_KEY) {
-    const { configureLogger } = await import('~/lib/logger');
-    configureLogger({
-      projectId: env.FIREBASE_PROJECT_ID,
-      clientEmail: env.FIREBASE_CLIENT_EMAIL,
-      privateKey: env.FIREBASE_PRIVATE_KEY,
-    });
-  }
+
 
   return {
     ENV: {
@@ -69,56 +62,59 @@ export default function App() {
   const gaId = data?.ENV?.GA4_ANALYTICS_ID || '';
 
   const fbConfig = data?.ENV;
-  if (fbConfig?.FIREBASE_API_KEY && fbConfig?.FIREBASE_PROJECT_ID) {
-    try {
-      initFirebase({
-        apiKey: fbConfig.FIREBASE_API_KEY!,
-        authDomain: fbConfig.FIREBASE_AUTH_DOMAIN!,
-        projectId: fbConfig.FIREBASE_PROJECT_ID!,
-        storageBucket: fbConfig.FIREBASE_STORAGE_BUCKET!,
-        messagingSenderId: fbConfig.FIREBASE_MESSAGING_SENDER_ID!,
-        appId: fbConfig.FIREBASE_APP_ID!,
-        measurementId: fbConfig.FIREBASE_MEASUREMENT_ID,
-      });
-    } catch {
-      // firebase init failed
+  useEffect(() => {
+    if (fbConfig?.FIREBASE_API_KEY && fbConfig?.FIREBASE_PROJECT_ID) {
+      try {
+        initFirebase({
+          apiKey: fbConfig.FIREBASE_API_KEY!,
+          authDomain: fbConfig.FIREBASE_AUTH_DOMAIN!,
+          projectId: fbConfig.FIREBASE_PROJECT_ID!,
+          storageBucket: fbConfig.FIREBASE_STORAGE_BUCKET!,
+          messagingSenderId: fbConfig.FIREBASE_MESSAGING_SENDER_ID!,
+          appId: fbConfig.FIREBASE_APP_ID!,
+          measurementId: fbConfig.FIREBASE_MEASUREMENT_ID,
+        });
+      } catch {
+        // firebase init failed
+      }
     }
-  }
+  }, [fbConfig]);
 
   return (
     <I18nProvider locale={data.locale} translations={data.translations}>
-    <html lang="en" suppressHydrationWarning>
-      <head suppressHydrationWarning>
-        <meta charSet="utf-8" />
-        <Meta />
-        <Links />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||((!t||t==='system')&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark');else document.documentElement.classList.add('light')}catch(e){}})()`,
-          }}
-        />
-        {gaId && (
-          <>
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${gaId}');
-                `,
-              }}
-            />
-            <script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
-          </>
-        )}
-      </head>
-      <body className="flex h-full flex-col text-gray-600 antialiased" suppressHydrationWarning>
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
+      <html lang="en" suppressHydrationWarning>
+        <head suppressHydrationWarning>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <Meta />
+          <Links />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||((!t||t==='system')&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark');else document.documentElement.classList.add('light')}catch(e){}})()`,
+            }}
+          />
+          {gaId ? (
+            <>
+              <script
+                dangerouslySetInnerHTML={{
+                  __html: `
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '${gaId}');
+                  `,
+                }}
+              />
+              <script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+            </>
+          ) : null}
+        </head>
+        <body className="flex h-full flex-col text-gray-600 antialiased" suppressHydrationWarning>
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+        </body>
+      </html>
     </I18nProvider>
   );
 }
@@ -137,12 +133,14 @@ export function ErrorBoundary() {
       heading = `${error.status} Error`;
       message = error.data || error.statusText;
     }
-    logger.error(`Route error: ${heading}`, { status: error.status, message: String(message) });
+    console.error(`Route error: ${heading}`, { status: error.status, message: String(message) });
   } else if (error instanceof Error) {
-    logger.error('Unhandled error', { error: error.message, stack: error.stack });
+    console.error('Unhandled error', { error: error.message, stack: error.stack });
   }
 
-  logException(`${heading}: ${message}`, true);
+  if (typeof window !== 'undefined') {
+    logException(`${heading}: ${message}`, true);
+  }
 
   return (
     <html lang="en">

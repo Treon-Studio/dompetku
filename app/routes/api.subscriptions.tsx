@@ -5,7 +5,7 @@ import { DB_QUERY_LIMIT } from '~/constants/app';
 import { requireUser } from '~/lib/auth.server';
 import { createPrismaClient } from '~/lib/prisma';
 import { validateSubscriptionFields } from '~/lib/validate';
-import { logger } from '~/lib/logger';
+import { logger } from '~/lib/logger.server';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
 	const db = createPrismaClient(context.cloudflare.env);

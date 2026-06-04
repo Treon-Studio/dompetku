@@ -47,7 +47,8 @@ async function ensureTables() {
       new_signup_email INTEGER DEFAULT 0,
       premium_plan_expired_email INTEGER DEFAULT 0,
       premium_usage_limit_email INTEGER DEFAULT 0,
-      monthly_email_report INTEGER DEFAULT 0
+      monthly_email_report INTEGER DEFAULT 0,
+      role TEXT DEFAULT 'USER'
     );
 
     CREATE TABLE IF NOT EXISTS sessions (
@@ -171,6 +172,13 @@ async function migrateColumns() {
   }
 
   try {
+    await client.execute(`ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'USER'`);
+    console.log('Added role column to users');
+  } catch {
+    console.log('role column already exists, skipping');
+  }
+
+  try {
     await client.execute(`CREATE TABLE IF NOT EXISTS password_resets (
       id TEXT PRIMARY KEY,
       user_id TEXT NOT NULL,
@@ -209,11 +217,11 @@ async function main() {
   // Create email user
   const emailUserId = uuid();
   await client.execute({
-    sql: `INSERT INTO users (id, email, phone, password, currency, locale, plan_status)
-          VALUES (?, ?, NULL, ?, 'IDR', 'id', 'premium')`,
+    sql: `INSERT INTO users (id, email, phone, password, currency, locale, plan_status, role)
+          VALUES (?, ?, NULL, ?, 'IDR', 'id', 'premium', 'ADMIN')`,
     args: [emailUserId, TEST_EMAIL, passwordHash],
   });
-  console.log(`Created email user: ${TEST_EMAIL}`);
+  console.log(`Created email user (ADMIN): ${TEST_EMAIL}`);
 
   // Create phone user
   const phoneUserId = uuid();

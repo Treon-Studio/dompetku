@@ -5,7 +5,7 @@ import { createPrismaClient } from '~/lib/prisma';
 import { hashPassword } from '~/lib/auth.server';
 import { getCloudflareEnv } from '~/env';
 import { validateResetToken, validatePasswordField } from '~/lib/validate';
-import { logger } from '~/lib/logger';
+import { logger } from '~/lib/logger.server';
 
 export async function action({ request, context }: ActionFunctionArgs) {
   try {

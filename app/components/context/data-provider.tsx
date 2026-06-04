@@ -6,6 +6,7 @@ import useSWR from 'swr';
 
 import { views } from '~/constants/table';
 import { getApiUrl } from '~/constants/url';
+import fetcher from '~/lib/fetcher';
 
 const DataContext = createContext(null);
 
@@ -24,7 +25,7 @@ export const DataContextProvider = (props: Props) => {
 	const [filter, setFilter] = useState(views.thisMonth.key);
 	const [categories, setCategories] = useState<string[]>([]);
 
-	const { data = [], mutate, isLoading } = useSWR(getApiUrl(filter, name, categories, isNotRange));
+	const { data = [], mutate, isLoading } = useSWR(getApiUrl(filter, name, categories, isNotRange), fetcher);
 
 	const onFilter = useCallback((categories: string[] = []) => {
 		setCategories(categories);

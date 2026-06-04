@@ -6,7 +6,7 @@ import { requireUser } from '~/lib/auth.server';
 import { createPrismaClient } from '~/lib/prisma';
 import { hashPassword, verifyPassword, isPhone, normalizePhone } from '~/lib/auth.server';
 import { isEmail, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from '~/constants/validation';
-import { logger } from '~/lib/logger';
+import { logger } from '~/lib/logger.server';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
 	const db = createPrismaClient(context.cloudflare.env);

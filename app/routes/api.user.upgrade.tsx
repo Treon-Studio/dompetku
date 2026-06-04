@@ -3,7 +3,7 @@ import { json } from '@remix-run/cloudflare';
 
 import { requireUser } from '~/lib/auth.server';
 import { createPrismaClient } from '~/lib/prisma';
-import { logger } from '~/lib/logger';
+import { logger } from '~/lib/logger.server';
 
 export async function action({ request, context }: ActionFunctionArgs) {
 	const db = createPrismaClient(context.cloudflare.env);
