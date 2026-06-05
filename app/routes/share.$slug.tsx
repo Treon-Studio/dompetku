@@ -2,7 +2,9 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 import { useLoaderData } from '@remix-run/react';
 
-import { createPrismaClient } from '~/core/db.server';
+import { createDbClient } from '~/core/db.server';
+import { friends, debts, users } from '~/core/db/schema';
+import { eq, desc } from 'drizzle-orm';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/shared/components/ui/table';
 
 const formatCurrency = (value: number) => {
@@ -22,20 +24,21 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 		throw new Response('Not Found', { status: 404 });
 	}
 
-	const db = createPrismaClient(context.cloudflare.env);
-	const friend = await db.friends.findUnique({
-		where: { slug: slug },
-		include: {
-			debts: {
-				orderBy: { date: 'desc' }
-			},
-			user: true,
-		}
-	});
-
-	if (!friend || !friend.is_public) {
+	const db = createDbClient(context.cloudflare.env);
+	const [friendRecord] = await db.select().from(friends).where(eq(friends.slug, slug)).limit(1);
+	
+	if (!friendRecord || !friendRecord.is_public) {
 		throw new Response('Halaman ini bersifat privat atau tidak ditemukan.', { status: 404 });
 	}
+
+	const friendDebts = await db.select().from(debts).where(eq(debts.friend_id, friendRecord.id)).orderBy(desc(debts.date));
+	const [userRecord] = await db.select().from(users).where(eq(users.id, friendRecord.user_id)).limit(1);
+
+	const friend = {
+		...friendRecord,
+		debts: friendDebts,
+		user: userRecord,
+	};
 
 	return json({ friend });
 }

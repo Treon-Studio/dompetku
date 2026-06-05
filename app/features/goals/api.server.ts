@@ -1,45 +1,41 @@
-import { type PrismaClient } from '@prisma/client';
+import { eq, and, desc } from 'drizzle-orm';
+import type { DB } from '~/core/db.server';
+import { goals } from '~/core/db/schema';
 import { GoalSchema } from './schemas';
-import { handleZodError } from '~/shared/lib/api-handler.server';
 
-export async function getGoals(db: PrismaClient, userId: string) {
-	return await db.goals.findMany({
-		where: { user_id: userId },
-		orderBy: { created_at: 'desc' },
-	});
+export async function getGoals(db: DB, userId: string) {
+	return await db.select().from(goals).where(eq(goals.user_id, userId)).orderBy(desc(goals.created_at));
 }
 
-export async function createGoal(db: PrismaClient, userId: string, formData: FormData) {
+export async function createGoal(db: DB, userId: string, formData: FormData) {
 	const data = Object.fromEntries(formData.entries());
 	const parsed = GoalSchema.safeParse(data);
 
 	if (!parsed.success) {
-		return { success: false, errors: handleZodError(parsed.error) };
+		return { success: false, error: parsed.error.issues[0]?.message || 'Validation error' };
 	}
 
 	try {
-		const goal = await db.goals.create({
-			data: {
-				user_id: userId,
-				name: parsed.data.name,
-				target_amount: parsed.data.target_amount,
-				current_amount: parsed.data.current_amount || '0',
-				deadline: parsed.data.deadline || null,
-				status: parsed.data.status || 'IN_PROGRESS',
-			},
-		});
+		const [goal] = await db.insert(goals).values({
+			user_id: userId,
+			name: parsed.data.name,
+			target_amount: parsed.data.target_amount,
+			current_amount: parsed.data.current_amount || '0',
+			deadline: parsed.data.deadline || null,
+			status: parsed.data.status || 'IN_PROGRESS',
+		}).returning();
 		return { success: true, data: goal };
 	} catch (error: any) {
 		return { success: false, error: error.message };
 	}
 }
 
-export async function updateGoal(db: PrismaClient, userId: string, formData: FormData) {
+export async function updateGoal(db: DB, userId: string, formData: FormData) {
 	const data = Object.fromEntries(formData.entries());
 	const parsed = GoalSchema.safeParse(data);
 
 	if (!parsed.success) {
-		return { success: false, errors: handleZodError(parsed.error) };
+		return { success: false, error: parsed.error.issues[0]?.message || 'Validation error' };
 	}
 
 	if (!parsed.data.id) {
@@ -47,27 +43,25 @@ export async function updateGoal(db: PrismaClient, userId: string, formData: For
 	}
 
 	try {
-		const goal = await db.goals.update({
-			where: { id: parsed.data.id, user_id: userId },
-			data: {
+		const [goal] = await db.update(goals)
+			.set({
 				name: parsed.data.name,
 				target_amount: parsed.data.target_amount,
 				current_amount: parsed.data.current_amount,
 				deadline: parsed.data.deadline,
 				status: parsed.data.status,
-			},
-		});
+			})
+			.where(and(eq(goals.id, parsed.data.id), eq(goals.user_id, userId)))
+			.returning();
 		return { success: true, data: goal };
 	} catch (error: any) {
 		return { success: false, error: error.message };
 	}
 }
 
-export async function deleteGoal(db: PrismaClient, userId: string, id: string) {
+export async function deleteGoal(db: DB, userId: string, id: string) {
 	try {
-		await db.goals.delete({
-			where: { id, user_id: userId },
-		});
+		await db.delete(goals).where(and(eq(goals.id, id), eq(goals.user_id, userId)));
 		return { success: true };
 	} catch (error: any) {
 		return { success: false, error: error.message };

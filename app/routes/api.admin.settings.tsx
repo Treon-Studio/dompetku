@@ -1,23 +1,23 @@
 import type { LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 
-import { createPrismaClient } from '~/core/db.server';
+import { createDbClient } from '~/core/db.server';
+import { app_settings } from '~/core/db/schema';
+import { asc, eq } from 'drizzle-orm';
 import { requireAdmin } from '~/features/auth/api.server';
 import { logger } from '~/core/logger.server';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-	const db = createPrismaClient(context.cloudflare.env);
+	const db = createDbClient(context.cloudflare.env);
 	await requireAdmin(request, db, context);
 
-	const settings = await db.app_settings.findMany({
-		orderBy: { key: 'asc' },
-	});
+	const settings = await db.select().from(app_settings).orderBy(asc(app_settings.key));
 
 	return json(settings);
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
-	const db = createPrismaClient(context.cloudflare.env);
+	const db = createDbClient(context.cloudflare.env);
 	await requireAdmin(request, db, context);
 	
 	const body = await request.json() as Record<string, unknown>;
@@ -29,18 +29,23 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
 	try {
 		if (action === 'TOGGLE') {
-			const existing = await db.app_settings.findUnique({ where: { key } });
+			const [existing] = await db.select().from(app_settings).where(eq(app_settings.key, key)).limit(1);
 			const newValue = existing?.value === 'true' ? 'false' : 'true';
-			await db.app_settings.upsert({
-				where: { key },
-				update: { value: newValue },
-				create: { key, value: newValue, description: typeof description === 'string' ? description : undefined }
-			});
+			
+			if (existing) {
+				await db.update(app_settings).set({ value: newValue }).where(eq(app_settings.key, key));
+			} else {
+				await db.insert(app_settings).values({ 
+					key, 
+					value: newValue, 
+					description: typeof description === 'string' ? description : '' 
+				});
+			}
 			return json({ message: `${key} is now ${newValue}` });
 		}
 		
 		if (action === 'DELETE') {
-			await db.app_settings.delete({ where: { key } });
+			await db.delete(app_settings).where(eq(app_settings.key, key));
 			return json({ message: 'Setting deleted' });
 		}
 		

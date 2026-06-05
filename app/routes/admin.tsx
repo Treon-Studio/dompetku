@@ -8,7 +8,7 @@ import { ThemeSync } from '~/shared/stores/ui/theme-sync';
 import DashboardLayout from '~/shared/components/layout';
 import Sidebar from '~/shared/components/sidebar';
 import { Toaster } from '~/shared/components/ui/sonner';
-import { createPrismaClient } from '~/core/db.server';
+import { createDbClient } from '~/core/db.server';
 import { requireAdmin } from '~/features/auth/api.server';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
@@ -21,7 +21,7 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-  const db = createPrismaClient(context.cloudflare.env);
+  const db = createDbClient(context.cloudflare.env);
   const user = await requireAdmin(request, db, context);
 
   const isPremiumPlan = user.order_status === 'paid' && user.plan_status === 'premium';

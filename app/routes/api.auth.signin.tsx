@@ -2,13 +2,13 @@ import type { ActionFunctionArgs } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 
 import { login, createSession, isPhone } from '~/features/auth/api.server';
-import { createPrismaClient } from '~/core/db.server';
+import { createDbClient } from '~/core/db.server';
 import { SigninSchema } from '~/features/auth/schemas';
 import { logger } from '~/core/logger.server';
 
 export async function action({ request, context }: ActionFunctionArgs) {
   try {
-    const db = createPrismaClient(context.cloudflare.env);
+    const db = createDbClient(context.cloudflare.env);
     const body = await request.json();
     const result = SigninSchema.safeParse(body);
 

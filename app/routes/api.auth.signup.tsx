@@ -2,13 +2,13 @@ import type { ActionFunctionArgs } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 
 import { createUser, findUserByIdentity, createSession, isPhone, normalizePhone } from '~/features/auth/api.server';
-import { createPrismaClient } from '~/core/db.server';
+import { createDbClient } from '~/core/db.server';
 import { SignupSchema } from '~/features/auth/schemas';
 import { logger } from '~/core/logger.server';
 
 export async function action({ request, context }: ActionFunctionArgs) {
   try {
-    const db = createPrismaClient(context.cloudflare.env);
+    const db = createDbClient(context.cloudflare.env);
     const body = await request.json();
     const result = SignupSchema.safeParse(body);
     
@@ -25,11 +25,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
     }
 
     if (isPhone(identity)) {
-      const phone = normalizePhone(identity);
-      const phoneExists = await db.users.findUnique({ where: { phone } });
-      if (phoneExists) {
-        return json({ message: 'Phone number already registered' }, { status: 400 });
-      }
+      // Already checked via findUserByIdentity above, which uses Drizzle
     }
 
     const user = await createUser(identity, password, db);

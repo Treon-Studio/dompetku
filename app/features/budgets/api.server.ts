@@ -1,53 +1,59 @@
-import { type PrismaClient } from '@prisma/client';
+import { eq, and, desc } from 'drizzle-orm';
+import type { DB } from '~/core/db.server';
+import { budgets } from '~/core/db/schema';
 import { BudgetSchema } from './schemas';
-import { handleZodError } from '~/shared/lib/api-handler.server';
 
-export async function getBudgets(db: PrismaClient, userId: string, month: string) {
-	return await db.budgets.findMany({
-		where: { user_id: userId, month },
-		orderBy: { created_at: 'desc' },
-	});
+export async function getBudgets(db: DB, userId: string, month: string) {
+	return await db.select().from(budgets)
+		.where(and(eq(budgets.user_id, userId), eq(budgets.month, month)))
+		.orderBy(desc(budgets.created_at));
 }
 
-export async function createBudget(db: PrismaClient, userId: string, formData: FormData) {
+export async function createBudget(db: DB, userId: string, formData: FormData) {
 	const data = Object.fromEntries(formData.entries());
 	const parsed = BudgetSchema.safeParse(data);
 
 	if (!parsed.success) {
-		return { success: false, errors: handleZodError(parsed.error) };
+		return { success: false, error: parsed.error.issues[0]?.message || 'Validation error' };
 	}
 
 	try {
-		const budget = await db.budgets.upsert({
-			where: {
-				user_id_category_month: {
-					user_id: userId,
-					category: parsed.data.category,
-					month: parsed.data.month,
-				}
-			},
-			update: {
-				amount: parsed.data.amount,
-			},
-			create: {
+		// Upsert: check if exists first
+		const [existing] = await db.select().from(budgets)
+			.where(and(
+				eq(budgets.user_id, userId),
+				eq(budgets.category, parsed.data.category),
+				eq(budgets.month, parsed.data.month)
+			)).limit(1);
+
+		let budget;
+		if (existing) {
+			const [updated] = await db.update(budgets)
+				.set({ amount: parsed.data.amount })
+				.where(eq(budgets.id, existing.id))
+				.returning();
+			budget = updated;
+		} else {
+			const [created] = await db.insert(budgets).values({
 				user_id: userId,
 				category: parsed.data.category,
 				amount: parsed.data.amount,
 				month: parsed.data.month,
-			},
-		});
+			}).returning();
+			budget = created;
+		}
 		return { success: true, data: budget };
 	} catch (error: any) {
 		return { success: false, error: error.message };
 	}
 }
 
-export async function updateBudget(db: PrismaClient, userId: string, formData: FormData) {
+export async function updateBudget(db: DB, userId: string, formData: FormData) {
 	const data = Object.fromEntries(formData.entries());
 	const parsed = BudgetSchema.safeParse(data);
 
 	if (!parsed.success) {
-		return { success: false, errors: handleZodError(parsed.error) };
+		return { success: false, error: parsed.error.issues[0]?.message || 'Validation error' };
 	}
 
 	if (!parsed.data.id) {
@@ -55,25 +61,23 @@ export async function updateBudget(db: PrismaClient, userId: string, formData: F
 	}
 
 	try {
-		const budget = await db.budgets.update({
-			where: { id: parsed.data.id, user_id: userId },
-			data: {
+		const [budget] = await db.update(budgets)
+			.set({
 				category: parsed.data.category,
 				amount: parsed.data.amount,
 				month: parsed.data.month,
-			},
-		});
+			})
+			.where(and(eq(budgets.id, parsed.data.id), eq(budgets.user_id, userId)))
+			.returning();
 		return { success: true, data: budget };
 	} catch (error: any) {
 		return { success: false, error: error.message };
 	}
 }
 
-export async function deleteBudget(db: PrismaClient, userId: string, id: string) {
+export async function deleteBudget(db: DB, userId: string, id: string) {
 	try {
-		await db.budgets.delete({
-			where: { id, user_id: userId },
-		});
+		await db.delete(budgets).where(and(eq(budgets.id, id), eq(budgets.user_id, userId)));
 		return { success: true };
 	} catch (error: any) {
 		return { success: false, error: error.message };

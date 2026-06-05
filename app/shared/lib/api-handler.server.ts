@@ -1,32 +1,52 @@
 import { json } from '@remix-run/cloudflare';
+import { eq, and, gte, lte, inArray, desc } from 'drizzle-orm';
 import { DB_QUERY_LIMIT } from '~/shared/constants/app';
 import { logger } from '~/core/logger.server';
 import { z } from 'zod';
+import type { DB } from '~/core/db.server';
+import * as schema from '~/core/db/schema';
 
-export async function handleGetRecords(db: any, modelName: string, user: any, request: Request, selectFields?: any) {
+type TableName = 'expenses' | 'income' | 'investments' | 'subscriptions';
+
+function getTable(modelName: TableName) {
+	const tableMap = {
+		expenses: schema.expenses,
+		income: schema.income,
+		investments: schema.investments,
+		subscriptions: schema.subscriptions,
+	};
+	return tableMap[modelName];
+}
+
+export async function handleGetRecords(db: DB, modelName: TableName, user: any, request: Request, _selectFields?: any) {
 	const { searchParams } = new URL(request.url);
 	const from = searchParams.get('from') || '';
 	const to = searchParams.get('to') || '';
-	const categories: any = searchParams.get('categories') || '';
-	const OR = { OR: categories?.split(',').map((category: any) => ({ category: { contains: category } })) };
+	const categories = searchParams.get('categories') || '';
 
 	try {
-		const where: any = {
-			user_id: user.id,
-			...(categories.length && OR),
-			...(to && from && { date: { lte: to, gte: from } }),
-		};
+		const table = getTable(modelName) as any;
+		const conditions: any[] = [eq(table.user_id, user.id)];
 
-		if (!from && !to) {
-			delete where.date;
+		if (from && to) {
+			conditions.push(gte(table.date, from));
+			conditions.push(lte(table.date, to));
 		}
 
-		const data = await db[modelName].findMany({
-			where,
-			orderBy: { updated_at: 'desc' },
-			take: DB_QUERY_LIMIT,
-			...(selectFields && { select: selectFields }),
-		});
+		if (categories) {
+			const categoryList = categories.split(',').filter(Boolean);
+			if (categoryList.length > 0) {
+				conditions.push(inArray(table.category, categoryList));
+			}
+		}
+
+		const data = await db
+			.select()
+			.from(table)
+			.where(and(...conditions))
+			.orderBy(desc(table.updated_at))
+			.limit(DB_QUERY_LIMIT);
+
 		return json(data.sort((a: any, b: any) => Date.parse(b.date) - Date.parse(a.date)));
 	} catch (error) {
 		logger.error(`[GET ${modelName}] Request failed`, { error: String(error) });
@@ -34,21 +54,20 @@ export async function handleGetRecords(db: any, modelName: string, user: any, re
 	}
 }
 
-export async function handleActionRecords(db: any, modelName: string, user: any, request: Request, schema: z.ZodSchema) {
+export async function handleActionRecords(db: DB, modelName: TableName, user: any, request: Request, schema_: z.ZodSchema) {
 	const method = request.method.toUpperCase();
 	const body = await request.json() as Record<string, unknown>;
+	const table = getTable(modelName) as any;
 
 	if (method === 'DELETE') {
 		const { id } = body;
 		if (!Array.isArray(id) || id.length === 0) {
 			return json({ message: 'Invalid request' }, { status: 400 });
 		}
-		const record = await db[modelName].findUnique({ where: { id: id[0] } });
+		const [record] = await db.select().from(table).where(eq(table.id, id[0])).limit(1);
 		if (!record || record.user_id !== user.id) return json({ message: 'Not found' }, { status: 404 });
 		try {
-			await db[modelName].delete({
-				where: { id: id[0] },
-			});
+			await db.delete(table).where(eq(table.id, id[0]));
 			return json({ message: 'deleted' }, { status: 200 });
 		} catch (error) {
 			logger.error(`[DELETE ${modelName}] Request failed`, { error: String(error) });
@@ -57,16 +76,16 @@ export async function handleActionRecords(db: any, modelName: string, user: any,
 	}
 
 	if (method === 'POST') {
-		const result = schema.safeParse(body);
+		const result = schema_.safeParse(body);
 		if (!result.success) {
 			const error = result.error.issues[0];
 			return json({ message: error.message }, { status: 400 });
 		}
-		
+
 		const data: any = { user_id: user.id, ...result.data };
 
 		try {
-			await db[modelName].create({ data });
+			await db.insert(table).values(data);
 			return json({ message: 'created' }, { status: 201 });
 		} catch (error) {
 			logger.error(`[POST ${modelName}] Request failed`, { error: String(error) });
@@ -77,24 +96,21 @@ export async function handleActionRecords(db: any, modelName: string, user: any,
 	if (method === 'PUT') {
 		const { id } = body;
 		if (!id) return json({ message: 'Invalid request' }, { status: 400 });
-		
-		const result = schema.safeParse(body);
+
+		const result = schema_.safeParse(body);
 		if (!result.success) {
 			const error = result.error.issues[0];
 			return json({ message: error.message }, { status: 400 });
 		}
-		
-		const record = await db[modelName].findUnique({ where: { id } });
+
+		const [record] = await db.select().from(table).where(eq(table.id, id)).limit(1);
 		if (!record || record.user_id !== user.id) return json({ message: 'Not found' }, { status: 404 });
-		
-		const data = { ...result.data };
+
+		const data: any = { ...result.data };
 		delete data.id;
 
 		try {
-			await db[modelName].update({
-				data,
-				where: { id },
-			});
+			await db.update(table).set(data).where(eq(table.id, id));
 			return json({ message: 'updated' }, { status: 200 });
 		} catch (error) {
 			logger.error(`[PUT ${modelName}] Request failed`, { error: String(error) });

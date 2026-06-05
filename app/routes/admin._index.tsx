@@ -2,23 +2,26 @@ import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 import { useLoaderData, Link } from '@remix-run/react';
 
-import { createPrismaClient } from '~/core/db.server';
+import { createDbClient } from '~/core/db.server';
+import { users, feedbacks } from '~/core/db/schema';
+import { sql, eq } from 'drizzle-orm';
 import { requireAdmin } from '~/features/auth/api.server';
 import LayoutHeader from '~/shared/components/layout/header';
 import { Button } from '~/shared/components/ui/button';
 import { DonutChart, Legend } from '@tremor/react';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-	const db = createPrismaClient(context.cloudflare.env);
+	const db = createDbClient(context.cloudflare.env);
 	await requireAdmin(request, db, context);
 
-	const totalUsers = await db.users.count();
-	const premiumUsers = await db.users.count({
-		where: { plan_status: 'premium' }
-	});
+	const [{ count: tUsers }] = await db.select({ count: sql<number>`count(*)` }).from(users);
+	const totalUsers = Number(tUsers);
+	const [{ count: pUsers }] = await db.select({ count: sql<number>`count(*)` }).from(users).where(eq(users.plan_status, 'premium'));
+	const premiumUsers = Number(pUsers);
 	const basicUsers = totalUsers - premiumUsers;
 	
-	const totalFeedbacks = await db.feedbacks.count();
+	const [{ count: tFeedbacks }] = await db.select({ count: sql<number>`count(*)` }).from(feedbacks);
+	const totalFeedbacks = Number(tFeedbacks);
 	
 	return json({ totalUsers, premiumUsers, basicUsers, totalFeedbacks });
 }

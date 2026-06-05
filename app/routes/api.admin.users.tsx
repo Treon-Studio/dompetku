@@ -1,42 +1,38 @@
 import type { LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 
-import { createPrismaClient } from '~/core/db.server';
+import { createDbClient } from '~/core/db.server';
+import { users } from '~/core/db/schema';
+import { or, like, desc, eq } from 'drizzle-orm';
 import { requireAdmin } from '~/features/auth/api.server';
 import { logger } from '~/core/logger.server';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-	const db = createPrismaClient(context.cloudflare.env);
+	const db = createDbClient(context.cloudflare.env);
 	await requireAdmin(request, db, context);
 
 	const url = new URL(request.url);
 	const search = url.searchParams.get('q') || '';
 	
-	const users = await db.users.findMany({
-		where: {
-			OR: [
-				{ email: { contains: search } },
-				{ phone: { contains: search } }
-			]
-		},
-		select: {
-			id: true,
-			email: true,
-			phone: true,
-			role: true,
-			plan_status: true,
-			order_status: true,
-			created_at: true,
-		},
-		orderBy: { created_at: 'desc' },
-		take: 50,
-	});
+	const usersData = await db.select({
+		id: users.id,
+		email: users.email,
+		phone: users.phone,
+		role: users.role,
+		plan_status: users.plan_status,
+		order_status: users.order_status,
+		created_at: users.created_at,
+	})
+	.from(users)
+	.where(search ? or(like(users.email, `%${search}%`), like(users.phone, `%${search}%`)) : undefined)
+	.orderBy(desc(users.created_at))
+	.limit(50);
 
-	return json(users);
+	return json(usersData);
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
-	const db = createPrismaClient(context.cloudflare.env);
+	const db = createDbClient(context.cloudflare.env);
 	await requireAdmin(request, db, context);
 	
 	const body = await request.json() as Record<string, unknown>;
@@ -48,23 +44,17 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
 	try {
 		if (action === 'UPGRADE') {
-			await db.users.update({
-				where: { id },
-				data: { plan_status: 'premium', order_status: 'paid' }
-			});
+			await db.update(users).set({ plan_status: 'premium', order_status: 'paid' }).where(eq(users.id, id));
 			return json({ message: 'User upgraded to premium' });
 		}
 		
 		if (action === 'DOWNGRADE') {
-			await db.users.update({
-				where: { id },
-				data: { plan_status: 'basic', order_status: null }
-			});
+			await db.update(users).set({ plan_status: 'basic', order_status: null }).where(eq(users.id, id));
 			return json({ message: 'User downgraded to basic' });
 		}
 
 		if (action === 'DELETE') {
-			await db.users.delete({ where: { id } });
+			await db.delete(users).where(eq(users.id, id));
 			return json({ message: 'User deleted' });
 		}
 		

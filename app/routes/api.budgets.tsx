@@ -1,10 +1,12 @@
 import { json, type ActionFunctionArgs, type LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { createPrismaClient } from '~/core/db.server';
+import { createDbClient } from '~/core/db.server';
 import { requireUser } from '~/features/auth/api.server';
 import { getBudgets, createBudget, updateBudget, deleteBudget } from '~/features/budgets/api.server';
+import { expenses as expensesTable } from '~/core/db/schema';
+import { and, eq, like } from 'drizzle-orm';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-	const db = createPrismaClient(context.cloudflare.env);
+	const db = createDbClient(context.cloudflare.env);
 	const user = await requireUser(request, db, context);
 	const url = new URL(request.url);
 	const month = url.searchParams.get('month') || new Date().toISOString().slice(0, 7);
@@ -12,14 +14,12 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 	const budgets = await getBudgets(db, user.id, month);
 
 	// Calculate spent amount for each budget category
-	const expenses = await db.expenses.findMany({
-		where: { 
-			user_id: user.id,
-			date: {
-				startsWith: month // date format is "YYYY-MM-DD"
-			}
-		}
-	});
+	const expenses = await db.select().from(expensesTable).where(
+		and(
+			eq(expensesTable.user_id, user.id),
+			like(expensesTable.date, `${month}%`)
+		)
+	);
 
 	const budgetsWithSpent = budgets.map((budget: any) => {
 		const spent = expenses
@@ -32,7 +32,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
-	const db = createPrismaClient(context.cloudflare.env);
+	const db = createDbClient(context.cloudflare.env);
 	const user = await requireUser(request, db, context);
 	const method = request.method.toUpperCase();
 

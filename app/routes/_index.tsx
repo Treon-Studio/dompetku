@@ -6,14 +6,14 @@ import Features from '~/shared/components/home/features';
 import url from '~/shared/constants/url';
 import { redirect, type LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { getUserFromSession } from '~/features/auth/api.server';
-import { createPrismaClient } from '~/core/db.server';
+import { createDbClient } from '~/core/db.server';
 import { premiumPlan } from '~/shared/constants/usage';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
 import { useTranslation } from '@i18n/client';
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
-  const db = createPrismaClient(context.cloudflare.env);
+  const db = createDbClient(context.cloudflare.env);
   const user = await getUserFromSession(request, db, context);
   if (user) {
     return redirect('/dashboard');

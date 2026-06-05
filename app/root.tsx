@@ -17,7 +17,8 @@ import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
 import StateDisplay from '~/shared/components/state-display';
 import { initFirebase, logException } from '~/core/firebase.client';
-import { createPrismaClient } from '~/core/db.server';
+import { createDbClient } from '~/core/db.server';
+import { app_settings } from '~/core/db/schema';
 import { redirect } from '@remix-run/cloudflare';
 
 import './globals.css';
@@ -28,8 +29,8 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const locale = getLocaleFromRequest(request);
   const translations = await loadTranslations(locale);
 
-  const db = createPrismaClient(env);
-  const settings = await db.app_settings.findMany();
+  const db = createDbClient(env);
+  const settings = await db.select().from(app_settings);
   
   const feature_flags: Record<string, boolean> = {};
   let maintenanceMode = false;
@@ -76,7 +77,7 @@ export const meta: MetaFunction = () => [
 
 export const links: LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-  { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
+  { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' as const },
   { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap' },
   { rel: 'manifest', href: '/manifest.json' },
   { rel: 'icon', href: '/favicon.ico' },
@@ -117,12 +118,13 @@ export default function App() {
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <head suppressHydrationWarning>
+      <head>
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <Meta />
           <Links />
           <script
+            suppressHydrationWarning
             dangerouslySetInnerHTML={{
               __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||((!t||t==='system')&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark');else document.documentElement.classList.add('light')}catch(e){}})()`,
             }}
@@ -130,6 +132,7 @@ export default function App() {
           {gaId ? (
             <>
               <script
+                suppressHydrationWarning
                 dangerouslySetInnerHTML={{
                   __html: `
                     window.dataLayer = window.dataLayer || [];
@@ -143,7 +146,7 @@ export default function App() {
             </>
           ) : null}
         </head>
-      <body className="flex h-full flex-col text-gray-600 antialiased" suppressHydrationWarning>
+      <body className="flex h-full flex-col text-gray-600 antialiased">
         <I18nProvider locale={data.locale} translations={data.translations}>
           <QueryClientProvider client={queryClient}>
             <Outlet />

@@ -1,12 +1,12 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/cloudflare';
 
 import { requireUser } from '~/features/auth/api.server';
-import { createPrismaClient } from '~/core/db.server';
+import { createDbClient } from '~/core/db.server';
 import { handleGetRecords, handleActionRecords } from '~/shared/lib/api-handler.server';
 import { InvestmentSchema } from './schemas';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-	const db = createPrismaClient(context.cloudflare.env);
+	const db = createDbClient(context.cloudflare.env);
 	const user = await requireUser(request, db, context);
 	
 	const selectFields = {
@@ -25,7 +25,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
-	const db = createPrismaClient(context.cloudflare.env);
+	const db = createDbClient(context.cloudflare.env);
 	const user = await requireUser(request, db, context);
 	
 	return handleActionRecords(db, 'investments', user, request, InvestmentSchema);
