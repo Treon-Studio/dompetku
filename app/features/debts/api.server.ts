@@ -42,7 +42,7 @@ export async function debtsAction({ request, context }: ActionFunctionArgs) {
 			return json({ message: result.error.errors[0].message }, { status: 400 });
 		}
 
-		const { name, friend_name, type, amount, date, notes } = result.data;
+		const { name, friend_name, type, amount, date, notes, linked_debt_id } = result.data;
 
 		try {
 			const [existingFriend] = await db.select().from(friends)
@@ -68,7 +68,13 @@ export async function debtsAction({ request, context }: ActionFunctionArgs) {
 				user_id: user.id,
 				friend_id: friend.id,
 				nameHash: String(name).toLowerCase(),
+				status: linked_debt_id ? 'PAID' : 'UNPAID',
 			});
+
+			if (linked_debt_id) {
+				await db.update(debts).set({ status: 'PAID' })
+					.where(and(eq(debts.id, String(linked_debt_id)), eq(debts.user_id, user.id)));
+			}
 
 			return json({ message: 'added' }, { status: 201 });
 		} catch (error) {

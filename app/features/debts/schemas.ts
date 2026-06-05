@@ -19,4 +19,5 @@ export const DebtSchema = z.object({
     }, 'Valid amount is required'),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Valid date is required (YYYY-MM-DD)'),
   status: z.string().optional(),
+  linked_debt_id: z.string().optional(),
 });

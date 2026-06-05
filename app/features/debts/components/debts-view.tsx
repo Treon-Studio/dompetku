@@ -34,6 +34,22 @@ export default function DebtsView() {
 	const [type, setType] = useState('I_OWE'); // I_OWE or OWES_ME
 	const [amount, setAmount] = useState('');
 	const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+	const [linkedDebtId, setLinkedDebtId] = useState('none');
+
+	const selectedFriend = friends.find((f: any) => f.name.toLowerCase() === friendName.toLowerCase());
+	const unpaidDebts = selectedFriend ? selectedFriend.debts.filter((d: any) => d.status === 'UNPAID') : [];
+
+	const handleLinkedDebtChange = (val: string) => {
+		setLinkedDebtId(val);
+		if (val !== 'none') {
+			const debt = unpaidDebts.find((d: any) => d.id === val);
+			if (debt) {
+				setName(`Pembayaran: ${debt.name}`);
+				setType(debt.type === 'I_OWE' ? 'OWES_ME' : 'I_OWE');
+				setAmount(debt.amount);
+			}
+		}
+	};
 
 	// Settings state
 	const [editingFriend, setEditingFriend] = useState<any>(null);
@@ -44,9 +60,14 @@ export default function DebtsView() {
 		e.preventDefault();
 		setIsLoading(true);
 		
+		const payload: any = { friend_name: friendName, name, type, amount, date };
+		if (linkedDebtId !== 'none') {
+			payload.linked_debt_id = linkedDebtId;
+		}
+
 		const res = await fetch('/api/debts', {
 			method: 'POST',
-			body: JSON.stringify({ friend_name: friendName, name, type, amount, date }),
+			body: JSON.stringify(payload),
 			headers: { 'Content-Type': 'application/json' },
 		});
 		
@@ -57,6 +78,7 @@ export default function DebtsView() {
 			setFriendName('');
 			setName('');
 			setAmount('');
+			setLinkedDebtId('none');
 			mutate();
 		} else {
 			toast.error('Failed to add debt');
@@ -156,8 +178,31 @@ export default function DebtsView() {
 							<form onSubmit={handleAddDebt} className="space-y-4">
 								<div className="space-y-2">
 									<Label>Nama Teman (Friend's Name)</Label>
-									<Input required value={friendName} onChange={(e) => setFriendName(e.target.value)} placeholder="Misal: Budi" maxLength={30} />
+									<Input list="friends-list" required value={friendName} onChange={(e) => setFriendName(e.target.value)} placeholder="Misal: Budi" maxLength={30} />
+									<datalist id="friends-list">
+										{friends.map((f: any) => (
+											<option key={f.id} value={f.name} />
+										))}
+									</datalist>
 								</div>
+								{unpaidDebts.length > 0 && (
+									<div className="space-y-2 p-3 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-md">
+										<Label className="text-blue-700 dark:text-blue-400">Lunasi Transaksi Sebelumnya? (Opsional)</Label>
+										<Select value={linkedDebtId} onValueChange={handleLinkedDebtChange}>
+											<SelectTrigger>
+												<SelectValue placeholder="Pilih transaksi" />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectItem value="none">Tidak ada / Buat Hutang Baru</SelectItem>
+												{unpaidDebts.map((d: any) => (
+													<SelectItem key={d.id} value={d.id}>
+														{new Date(d.date).toLocaleDateString()} - {d.name} ({formatCurrency(parseFloat(d.amount))})
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+									</div>
+								)}
 								<div className="space-y-2">
 									<Label>Deskripsi / Judul (Description)</Label>
 									<Input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Misal: Makan Siang" maxLength={30} />
