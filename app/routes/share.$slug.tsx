@@ -142,7 +142,7 @@ export default function SharedDebtPage() {
 					</Table>
 				</div>
 				<div className="text-center text-sm text-gray-400">
-					Dibuat menggunakan Dompetku
+					Dibuat menggunakan <a href="https://dompetku.treonstudio.com" target="_blank" rel="noopener noreferrer" className="font-medium text-blue-500 hover:text-blue-600 hover:underline">Dompetku</a>
 				</div>
 			</div>
 		</div>
