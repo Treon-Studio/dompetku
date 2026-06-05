@@ -46,6 +46,8 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 export default function SharedDebtPage() {
 	const { friend } = useLoaderData<typeof loader>();
 	const unpaidDebts = friend.debts.filter((debt: any) => debt.status === 'UNPAID');
+	const paidDebts = friend.debts.filter((debt: any) => debt.status === 'PAID');
+	
 	
 	let netAmount = 0; 
 	
@@ -87,7 +89,7 @@ export default function SharedDebtPage() {
 				</div>
 
 				<div className="px-2 mb-2">
-					<span className="font-semibold text-gray-700 dark:text-gray-300 text-sm">Riwayat Transaksi</span>
+					<span className="font-semibold text-gray-700 dark:text-gray-300 text-sm">Menunggu Pembayaran</span>
 				</div>
 
 				<div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -122,7 +124,38 @@ export default function SharedDebtPage() {
 						</TableBody>
 					</Table>
 				</div>
-				<div className="text-center text-sm text-gray-400">
+
+				{paidDebts.length > 0 && (
+					<details className="group mt-6">
+						<summary className="cursor-pointer flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium px-2 py-1 outline-none select-none list-none [&::-webkit-details-marker]:hidden">
+							<svg className="w-4 h-4 transition-transform group-open:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+							</svg>
+							<span>Riwayat Lunas ({paidDebts.length})</span>
+						</summary>
+						<div className="mt-3 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden opacity-75">
+							<Table>
+								<TableBody>
+									{paidDebts.map((debt: any) => (
+										<TableRow key={debt.id} className="bg-gray-50/50 dark:bg-gray-900/50">
+											<TableCell suppressHydrationWarning className="whitespace-nowrap text-gray-400 dark:text-gray-500 text-xs sm:text-sm">
+												{new Date(debt.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+											</TableCell>
+											<TableCell className="text-gray-400 dark:text-gray-500 text-xs sm:text-sm">
+												<s className="opacity-80">{debt.name.replace(/^(Pembayaran:\s*|Sisa:\s*)/i, '').split(' - ')[0]}</s>
+											</TableCell>
+											<TableCell className="text-right text-gray-400 dark:text-gray-500 text-xs sm:text-sm">
+												<s className="opacity-80">{formatCurrency(parseFloat(debt.amount))}</s>
+											</TableCell>
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
+						</div>
+					</details>
+				)}
+
+				<div className="text-center text-sm text-gray-400 mt-12">
 					Dibuat menggunakan <a href="https://dompetku.treonstudio.com" target="_blank" rel="noopener noreferrer" className="font-medium text-blue-500 hover:text-blue-600 hover:underline">Dompetku</a>
 				</div>
 			</div>
