@@ -85,12 +85,8 @@ export default function SharedDebtPage() {
 					)}
 				</div>
 
-				<div className="flex flex-col sm:flex-row sm:items-center justify-between px-2 text-sm gap-2">
-					<span className="font-semibold text-gray-700 dark:text-gray-300">Riwayat Transaksi</span>
-					<div className="flex gap-4 text-xs">
-						<span className="text-red-500 font-medium">🔴 Kamu → Teman</span>
-						<span className="text-green-500 font-medium">🟢 Teman → Kamu</span>
-					</div>
+				<div className="px-2 mb-2">
+					<span className="font-semibold text-gray-700 dark:text-gray-300 text-sm">Riwayat Transaksi</span>
 				</div>
 
 				<div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -99,7 +95,6 @@ export default function SharedDebtPage() {
 							<TableRow>
 								<TableHead>Tanggal</TableHead>
 								<TableHead>Deskripsi</TableHead>
-								<TableHead>Tipe</TableHead>
 								<TableHead className="text-right">Nominal</TableHead>
 								<TableHead className="text-center">Status</TableHead>
 							</TableRow>
@@ -107,14 +102,11 @@ export default function SharedDebtPage() {
 						<TableBody>
 							{friend.debts.map((debt: any) => (
 								<TableRow key={debt.id} className={debt.status === 'PAID' ? 'opacity-50' : 'bg-red-50/40 dark:bg-red-900/10'}>
-									<TableCell suppressHydrationWarning>{new Date(debt.date).toLocaleDateString('id-ID')}</TableCell>
-									<TableCell>
-										{debt.name.startsWith('Sisa: ') ? debt.name.replace('Sisa: ', '') : debt.name}
+									<TableCell suppressHydrationWarning className="whitespace-nowrap">
+										{new Date(debt.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
 									</TableCell>
 									<TableCell>
-										<span className={debt.type === 'I_OWE' ? 'text-green-500 font-medium' : 'text-red-500 font-medium'}>
-											{debt.type === 'I_OWE' ? 'Teman → Kamu' : 'Kamu → Teman'}
-										</span>
+										{debt.name.replace(/^(Pembayaran:\s*|Sisa:\s*)/i, '').split(' - ')[0]}
 									</TableCell>
 									<TableCell className="text-right">
 										<div className="font-medium">{formatCurrency(parseFloat(debt.amount))}</div>
