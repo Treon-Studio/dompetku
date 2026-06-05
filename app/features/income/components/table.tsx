@@ -31,6 +31,7 @@ export default function IncomeTable() {
 
 	const onDelete = useCallback(
 		async (id: string) => {
+			if (!confirm('Apakah Anda yakin ingin menghapus data ini?')) return;
 			try {
 				await deleteIncome(id);
 				toast.success(messages.deleted);

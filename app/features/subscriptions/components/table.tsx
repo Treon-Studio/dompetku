@@ -24,6 +24,7 @@ export default function SubscriptionsTable() {
 
 	const onDelete = useCallback(
 		async (id: string) => {
+			if (!confirm('Apakah Anda yakin ingin menghapus data ini?')) return;
 			try {
 				await deleteSubscription(id);
 				toast.success(messages.deleted);

@@ -86,6 +86,7 @@ export default function DebtsView() {
 	};
 
 	const handleDeleteDebt = async (id: string) => {
+		if (!confirm('Apakah Anda yakin ingin menghapus data ini?')) return;
 		const res = await fetch('/api/debts', {
 			method: 'DELETE',
 			body: JSON.stringify({ id }),
