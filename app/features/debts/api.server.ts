@@ -73,8 +73,37 @@ export async function debtsAction({ request, context }: ActionFunctionArgs) {
 			});
 
 			if (linked_debt_id) {
-				await db.update(debts).set({ status: 'PAID' })
-					.where(and(eq(debts.id, String(linked_debt_id)), eq(debts.user_id, user.id)));
+				const [oldDebt] = await db.select().from(debts)
+					.where(and(eq(debts.id, String(linked_debt_id)), eq(debts.user_id, user.id)))
+					.limit(1);
+
+				if (oldDebt) {
+					await db.update(debts).set({ status: 'PAID' })
+						.where(and(eq(debts.id, String(linked_debt_id)), eq(debts.user_id, user.id)));
+
+					const oldSign = oldDebt.type === 'OWES_ME' ? 1 : -1;
+					const newSign = type === 'OWES_ME' ? 1 : -1;
+					const oldAmount = parseFloat(oldDebt.amount);
+					const newAmount = parseFloat(String(amount));
+					const netBalance = (oldSign * oldAmount) + (newSign * newAmount);
+
+					if (Math.abs(netBalance) > 0.01) {
+						const remainderType = netBalance > 0 ? 'OWES_ME' : 'I_OWE';
+						const remainderAmount = Math.abs(netBalance);
+						const sisaName = `Sisa: ${oldDebt.name}`.slice(0, 60);
+						await db.insert(debts).values({
+							notes: 'Otomatis dibuat oleh sistem',
+							name: sisaName,
+							type: remainderType,
+							amount: String(remainderAmount),
+							date: String(date),
+							user_id: user.id,
+							friend_id: friend.id,
+							nameHash: sisaName.toLowerCase(),
+							status: 'UNPAID',
+						});
+					}
+				}
 			}
 
 			return json({ message: 'added' }, { status: 201 });
