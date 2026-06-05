@@ -104,3 +104,7 @@ export async function handleActionRecords(db: any, modelName: string, user: any,
 
 	return json({ message: 'Method not allowed' }, { status: 405 });
 }
+
+export function handleZodError(error: any) {
+	return json({ message: error.issues?.[0]?.message || 'Validation error' }, { status: 400 });
+}
