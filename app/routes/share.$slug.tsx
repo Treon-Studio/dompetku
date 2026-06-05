@@ -45,6 +45,7 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 
 export default function SharedDebtPage() {
 	const { friend } = useLoaderData<typeof loader>();
+	const unpaidDebts = friend.debts.filter((debt: any) => debt.status === 'UNPAID');
 	
 	let netAmount = 0; 
 	
@@ -96,14 +97,13 @@ export default function SharedDebtPage() {
 								<TableHead>Tanggal</TableHead>
 								<TableHead>Deskripsi</TableHead>
 								<TableHead className="text-right">Nominal</TableHead>
-								<TableHead className="text-center">Status</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{friend.debts.map((debt: any) => (
-								<TableRow key={debt.id} className={debt.status === 'PAID' ? 'opacity-50' : 'bg-red-50/40 dark:bg-red-900/10'}>
+							{unpaidDebts.map((debt: any) => (
+								<TableRow key={debt.id} className="bg-red-50/40 dark:bg-red-900/10">
 									<TableCell suppressHydrationWarning className="whitespace-nowrap">
-										{new Date(debt.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+										{new Date(debt.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
 									</TableCell>
 									<TableCell>
 										{debt.name.replace(/^(Pembayaran:\s*|Sisa:\s*)/i, '').split(' - ')[0]}
@@ -112,22 +112,11 @@ export default function SharedDebtPage() {
 										<div className="font-medium">{formatCurrency(parseFloat(debt.amount))}</div>
 										{debt.name.startsWith('Sisa: ') && <span className="text-[10px] sm:text-xs text-gray-500">Sisa Tagihan</span>}
 									</TableCell>
-									<TableCell className="text-center">
-										{debt.status === 'PAID' ? (
-											<span className="px-2 py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
-												LUNAS
-											</span>
-										) : (
-											<span className="px-2 py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
-												BELUM LUNAS
-											</span>
-										)}
-									</TableCell>
 								</TableRow>
 							))}
-							{friend.debts.length === 0 && (
+							{unpaidDebts.length === 0 && (
 								<TableRow>
-									<TableCell colSpan={5} className="text-center py-6 text-gray-500">Tidak ada riwayat transaksi.</TableCell>
+									<TableCell colSpan={3} className="text-center py-6 text-gray-500">Semua transaksi sudah lunas 🎉</TableCell>
 								</TableRow>
 							)}
 						</TableBody>
