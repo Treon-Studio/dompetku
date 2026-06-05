@@ -62,8 +62,8 @@ export default function SharedDebtPage() {
 	const userOwesViewer = netAmount < 0;
 
 	return (
-		<div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 md:p-8 flex justify-center">
-			<div className="max-w-3xl w-full space-y-6">
+		<div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-24 md:pb-8 flex justify-center relative">
+			<div className="max-w-3xl w-full space-y-6 p-4 md:p-0 mt-4 md:mt-8">
 				<div className="text-center space-y-2 mb-8">
 					<h1 className="text-3xl font-bold">Halo, {friend.name}!</h1>
 					<p className="text-gray-500">Berikut adalah rekap catatan transaksi (hutang/piutang).</p>
@@ -155,9 +155,29 @@ export default function SharedDebtPage() {
 					</details>
 				)}
 
-				<div className="text-center text-sm text-gray-400 mt-12">
-					Dibuat menggunakan <a href="https://dompetku.treonstudio.com" target="_blank" rel="noopener noreferrer" className="font-medium text-blue-500 hover:text-blue-600 hover:underline">Dompetku</a>
+				<div className="mt-12 pt-8 text-center space-y-4">
+					<div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm max-w-sm mx-auto">
+						<h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Capek inget-inget hutang?</h3>
+						<p className="text-sm text-gray-500 mb-4">Coba Dompetku — gratis.</p>
+						<a href="https://dompetku.treonstudio.com" target="_blank" rel="noopener noreferrer" className="inline-block w-full py-2.5 px-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium text-sm rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors">
+							Daftar Sekarang →
+						</a>
+					</div>
+					<p className="text-xs text-gray-400">
+						Dipakai 10.000+ orang untuk catat hutang bareng teman
+					</p>
 				</div>
+			</div>
+
+			{/* Smart Banner Mobile */}
+			<div className="fixed bottom-0 left-0 right-0 p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.05)] md:hidden flex items-center justify-between z-50">
+				<div className="flex flex-col">
+					<span className="text-sm font-semibold text-gray-900 dark:text-gray-100">Buka di app Dompetku</span>
+					<span className="text-xs text-gray-500">Pengalaman lebih baik</span>
+				</div>
+				<a href="https://dompetku.treonstudio.com" target="_blank" rel="noopener noreferrer" className="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-full hover:bg-blue-700 transition-colors">
+					Install →
+				</a>
 			</div>
 		</div>
 	);
