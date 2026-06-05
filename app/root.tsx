@@ -28,7 +28,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const locale = getLocaleFromRequest(request);
   const translations = await loadTranslations(locale);
 
-  const db = createPrismaClient(context.cloudflare.env);
+  const db = createPrismaClient(env);
   const settings = await db.app_settings.findMany();
   
   const feature_flags: Record<string, boolean> = {};

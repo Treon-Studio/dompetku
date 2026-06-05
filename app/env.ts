@@ -20,8 +20,8 @@ export interface Env {
 
 export interface CloudflareEnv extends Env {}
 
-export function getCloudflareEnv(context: { cloudflare: { env: CloudflareEnv } }): CloudflareEnv {
-  return context.cloudflare.env;
+export function getCloudflareEnv(context: any): CloudflareEnv {
+  return context?.cloudflare?.env || {};
 }
 
 export const env: Env = {

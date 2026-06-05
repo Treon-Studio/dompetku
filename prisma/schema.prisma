@@ -199,8 +199,8 @@ model goals {
 }
 
 model app_settings {
-  key            String    @id
-  value          String
-  description    String?
-  updated_at     DateTime  @default(now()) @updatedAt
+  key         String   @id
+  value       String
+  description String?
+  updated_at  DateTime @default(now()) @updatedAt
 }
