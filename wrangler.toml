@@ -8,3 +8,7 @@ directory = "./build/client"
 
 [vars]
 NODE_ENV = "production"
+
+[observability.logs]
+enabled = true
+invocation_logs = true
