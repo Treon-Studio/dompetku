@@ -5,7 +5,14 @@ import * as React from 'react';
 import { CheckCircle, SortVertical } from '@solar-icons/react';
 
 import { Button } from '~/shared/components/ui/button';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '~/shared/components/ui/command';
+import {
+	Command,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	CommandList,
+} from '~/shared/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '~/shared/components/ui/popover';
 
 import { cn } from '~/shared/lib/utils';

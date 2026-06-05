@@ -16,7 +16,7 @@ export default function DeleteModal({ show, onHide }: { show: boolean; onHide: (
 	const [loading, setLoading] = useState(false);
 	const [verify, setVerify] = useState('');
 
-	const identity = user.email || user.phone;
+	const identity = user?.email || user?.phone;
 
 	const onDelete = async () => {
 		if (verify === identity) {
@@ -29,12 +29,10 @@ export default function DeleteModal({ show, onHide }: { show: boolean; onHide: (
 
 	return (
 		<Modal show={show} title={t('modal.deleteAccount')} onHide={onHide} someRef={null}>
-			<div className="text-sm text-primary dark:text-muted-foreground">
-				{t('modal.deleteAccountConfirm')}
-			</div>
+			<div className="text-sm text-primary dark:text-muted-foreground">{t('modal.deleteAccountConfirm')}</div>
 			<Input
 				className="mt-3"
-				placeholder={identity}
+				placeholder={identity || ''}
 				type="text"
 				onChange={(event) => {
 					setVerify(event.target.value);

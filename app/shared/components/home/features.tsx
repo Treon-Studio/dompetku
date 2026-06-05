@@ -69,11 +69,7 @@ export default function Features() {
 											<feature.Icon />
 											<h3 className="font-sans font-medium text-black">{feature.name}</h3>
 										</div>
-										{
-											<AltArrowUp
-												className={`${isSelected ? 'rotate-180 transform' : ''} h-5 w-5 text-orange-600`}
-											/>
-										}
+										{<AltArrowUp className={`${isSelected ? 'rotate-180 transform' : ''} h-5 w-5 text-orange-600`} />}
 									</div>
 								</div>
 							</button>

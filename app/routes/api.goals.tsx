@@ -2,9 +2,10 @@ import { json, type ActionFunctionArgs, type LoaderFunctionArgs } from '@remix-r
 import { createDbClient } from '~/core/db.server';
 import { requireUser } from '~/features/auth/api.server';
 import { getGoals, createGoal, updateGoal, deleteGoal } from '~/features/goals/api.server';
+import { getCloudflareEnv } from '~/env';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-	const db = createDbClient(context.cloudflare.env);
+	const db = createDbClient(getCloudflareEnv(context));
 	const user = await requireUser(request, db, context);
 
 	const goals = await getGoals(db, user.id);
@@ -12,7 +13,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
-	const db = createDbClient(context.cloudflare.env);
+	const db = createDbClient(getCloudflareEnv(context));
 	const user = await requireUser(request, db, context);
 	const method = request.method.toUpperCase();
 

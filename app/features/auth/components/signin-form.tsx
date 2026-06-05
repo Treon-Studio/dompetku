@@ -13,10 +13,9 @@ import { useTranslation } from '@i18n/client';
 const initialState = { loading: false, identity: '', password: '', success: false, error: '' };
 
 export default function Form() {
-  const { t } = useTranslation();
-  const [state, setState] = useState(initialState);
-  const inputElement = useRef<HTMLInputElement>(null);
-
+	const { t } = useTranslation();
+	const [state, setState] = useState(initialState);
+	const inputElement = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
 		inputElement.current?.focus();
@@ -44,9 +43,10 @@ export default function Form() {
 				return;
 			}
 
-			const error = await res.json();
+			const error = (await res.json()) as { message?: string };
 			throw new Error(error.message);
-		} catch (error: any) {
+		} catch (e: unknown) {
+			const error = e as Error;
 			setState((prev) => ({ ...prev, error: error.message, loading: false }));
 		}
 	};
@@ -92,10 +92,7 @@ export default function Form() {
 				/>
 			</label>
 			<div className="flex items-center justify-end">
-				<Link
-					to={url.app.forgotPassword}
-					className="text-sm font-medium text-gray-600 hover:text-gray-900"
-				>
+				<Link to={url.app.forgotPassword} className="text-sm font-medium text-gray-600 hover:text-gray-900">
 					{t('auth.forgotPassword')}
 				</Link>
 			</div>

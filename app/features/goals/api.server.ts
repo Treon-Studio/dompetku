@@ -16,16 +16,20 @@ export async function createGoal(db: DB, userId: string, formData: FormData) {
 	}
 
 	try {
-		const [goal] = await db.insert(goals).values({
-			user_id: userId,
-			name: parsed.data.name,
-			target_amount: parsed.data.target_amount,
-			current_amount: parsed.data.current_amount || '0',
-			deadline: parsed.data.deadline || null,
-			status: parsed.data.status || 'IN_PROGRESS',
-		}).returning();
+		const [goal] = await db
+			.insert(goals)
+			.values({
+				user_id: userId,
+				name: parsed.data.name,
+				target_amount: parsed.data.target_amount,
+				current_amount: parsed.data.current_amount || '0',
+				deadline: parsed.data.deadline || null,
+				status: parsed.data.status || 'IN_PROGRESS',
+			})
+			.returning();
 		return { success: true, data: goal };
-	} catch (error: any) {
+	} catch (e: unknown) {
+		const error = e as Error;
 		return { success: false, error: error.message };
 	}
 }
@@ -43,7 +47,8 @@ export async function updateGoal(db: DB, userId: string, formData: FormData) {
 	}
 
 	try {
-		const [goal] = await db.update(goals)
+		const [goal] = await db
+			.update(goals)
 			.set({
 				name: parsed.data.name,
 				target_amount: parsed.data.target_amount,
@@ -54,7 +59,8 @@ export async function updateGoal(db: DB, userId: string, formData: FormData) {
 			.where(and(eq(goals.id, parsed.data.id), eq(goals.user_id, userId)))
 			.returning();
 		return { success: true, data: goal };
-	} catch (error: any) {
+	} catch (e: unknown) {
+		const error = e as Error;
 		return { success: false, error: error.message };
 	}
 }
@@ -63,7 +69,8 @@ export async function deleteGoal(db: DB, userId: string, id: string) {
 	try {
 		await db.delete(goals).where(and(eq(goals.id, id), eq(goals.user_id, userId)));
 		return { success: true };
-	} catch (error: any) {
+	} catch (e: unknown) {
+		const error = e as Error;
 		return { success: false, error: error.message };
 	}
 }

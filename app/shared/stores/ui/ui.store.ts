@@ -30,9 +30,12 @@ export const useUiStore = create<TUiState & TUiActions>()((set) => ({
 // Selectors
 export const useSidebarOpen = () => useUiStore((s) => s.isSidebarOpen);
 export const useTheme = () => useUiStore((s) => s.theme);
-export const useUiActions = () => useUiStore(useShallow((s) => ({
-	toggleSidebar: s.toggleSidebar,
-	openSidebar: s.openSidebar,
-	closeSidebar: s.closeSidebar,
-	setTheme: s.setTheme,
-})));
+export const useUiActions = () =>
+	useUiStore(
+		useShallow((s) => ({
+			toggleSidebar: s.toggleSidebar,
+			openSidebar: s.openSidebar,
+			closeSidebar: s.closeSidebar,
+			setTheme: s.setTheme,
+		}))
+	);

@@ -24,7 +24,7 @@ const customTooltip = ({ payload, active, user }: { payload?: any; active?: bool
 					<div className="flex items-center justify-between space-x-8">
 						<p className="text-black whitespace-nowrap">{categoryPayload.name}</p>
 						<p className="whitespace-nowrap text-black">
-							{formatCurrency({ value: categoryPayload.value, currency: user.currency, locale: user.locale })}
+							{formatCurrency({ value: categoryPayload.value, currency: user?.currency, locale: user?.locale })}
 						</p>
 					</div>
 				</div>
@@ -60,7 +60,7 @@ export default function Donut() {
 				category={'price'}
 				index="name"
 				valueFormatter={(value) => {
-					return formatCurrency({ value, currency: user.currency, locale: user.locale });
+					return formatCurrency({ value, currency: user?.currency, locale: user?.locale });
 				}}
 				showAnimation={false}
 				customTooltip={(props) => customTooltip({ ...props, user })}

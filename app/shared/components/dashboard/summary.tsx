@@ -60,28 +60,28 @@ export default function Summary() {
 					<SummaryCard
 						icon={Case}
 						title={t('dashboard.totalIncome')}
-						data={formatCurrency({ value: totalIncome, currency: user.currency, locale: user.locale })}
+						data={formatCurrency({ value: totalIncome, currency: user?.currency, locale: user?.locale })}
 					/>
 					<SummaryCard
 						icon={Wallet}
 						title={t('dashboard.availableBalance')}
-						data={formatCurrency({ value: totalBalance, currency: user.currency, locale: user.locale })}
+						data={formatCurrency({ value: totalBalance, currency: user?.currency, locale: user?.locale })}
 					/>
 					<SummaryCard
 						icon={MoneyBag}
 						title={t('dashboard.totalSpent')}
 						tooltip={t('messages.totalSpentTooltip')}
-						data={formatCurrency({ value: totalSpent, currency: user.currency, locale: user.locale })}
+						data={formatCurrency({ value: totalSpent, currency: user?.currency, locale: user?.locale })}
 					/>
 					<SummaryCard
 						icon={Chart}
 						title={t('dashboard.totalInvestment')}
-						data={formatCurrency({ value: totalInvesments, currency: user.currency, locale: user.locale })}
+						data={formatCurrency({ value: totalInvesments, currency: user?.currency, locale: user?.locale })}
 					/>
 					<SummaryCard
 						icon={PlayCircle}
 						title={t('dashboard.totalSubscription')}
-						data={formatCurrency({ value: totalSubscriptions, currency: user.currency, locale: user.locale })}
+						data={formatCurrency({ value: totalSubscriptions, currency: user?.currency, locale: user?.locale })}
 					/>
 				</div>
 			)}

@@ -1,6 +1,6 @@
-input[type='number']::-webkit-outer-spin-button,
-input[type='number']::-webkit-inner-spin-button,
-input[type='number'] {
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"] {
 	-webkit-appearance: none;
 	-moz-appearance: textfield !important;
 }
@@ -40,5 +40,5 @@ textarea {
 }
 
 .tremor-BarList-labelText {
-  font-weight: 500;
+	font-weight: 500;
 }

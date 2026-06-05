@@ -6,9 +6,13 @@ import { createDbClient } from '~/core/db.server';
 import { friends, debts, users } from '~/core/db/schema';
 import { eq, desc } from 'drizzle-orm';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/shared/components/ui/table';
+import { getCloudflareEnv } from '~/env';
 
 const formatCurrency = (value: number) => {
-	return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value).replace(/\s+/g, ' ').replace(/\u00A0/g, ' ');
+	return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' })
+		.format(value)
+		.replace(/\s+/g, ' ')
+		.replace(/\u00A0/g, ' ');
 };
 
 export const meta: MetaFunction = () => {
@@ -24,14 +28,18 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 		throw new Response('Not Found', { status: 404 });
 	}
 
-	const db = createDbClient(context.cloudflare.env);
+	const db = createDbClient(getCloudflareEnv(context));
 	const [friendRecord] = await db.select().from(friends).where(eq(friends.slug, slug)).limit(1);
-	
+
 	if (!friendRecord || !friendRecord.is_public) {
 		throw new Response('Halaman ini bersifat privat atau tidak ditemukan.', { status: 404 });
 	}
 
-	const friendDebts = await db.select().from(debts).where(eq(debts.friend_id, friendRecord.id)).orderBy(desc(debts.date), desc(debts.created_at));
+	const friendDebts = await db
+		.select()
+		.from(debts)
+		.where(eq(debts.friend_id, friendRecord.id))
+		.orderBy(desc(debts.date), desc(debts.created_at));
 	const [userRecord] = await db.select().from(users).where(eq(users.id, friendRecord.user_id)).limit(1);
 
 	const friend = {
@@ -47,10 +55,9 @@ export default function SharedDebtPage() {
 	const { friend } = useLoaderData<typeof loader>();
 	const unpaidDebts = friend.debts.filter((debt: any) => debt.status === 'UNPAID');
 	const paidDebts = friend.debts.filter((debt: any) => debt.status === 'PAID');
-	
-	
-	let netAmount = 0; 
-	
+
+	let netAmount = 0;
+
 	friend.debts.forEach((debt: any) => {
 		if (debt.status === 'UNPAID') {
 			if (debt.type === 'I_OWE') netAmount -= parseFloat(debt.amount);
@@ -68,21 +75,25 @@ export default function SharedDebtPage() {
 					<h1 className="text-3xl font-bold">Halo, {friend.name}!</h1>
 					<p className="text-gray-500">Berikut adalah rekap catatan transaksi (hutang/piutang).</p>
 				</div>
-				
-				<div className={`p-6 rounded-xl border text-center space-y-2 shadow-sm ${
-					netAmount === 0 
-						? 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700' 
-						: viewerOwesUser 
-							? 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-900' 
-							: 'bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-900'
-				}`}>
+
+				<div
+					className={`p-6 rounded-xl border text-center space-y-2 shadow-sm ${
+						netAmount === 0
+							? 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+							: viewerOwesUser
+								? 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-900'
+								: 'bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-900'
+					}`}
+				>
 					<h2 className="text-xl font-semibold">
 						{netAmount === 0 && 'Semua tagihan sudah lunas. 🎉'}
 						{viewerOwesUser && 'Sisa hutangmu:'}
 						{userOwesViewer && 'Sisa uangmu yang dipinjam:'}
 					</h2>
 					{netAmount !== 0 && (
-						<p className={`text-4xl font-bold ${viewerOwesUser ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
+						<p
+							className={`text-4xl font-bold ${viewerOwesUser ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}
+						>
 							{formatCurrency(Math.abs(netAmount))}
 						</p>
 					)}
@@ -105,20 +116,26 @@ export default function SharedDebtPage() {
 							{unpaidDebts.map((debt: any) => (
 								<TableRow key={debt.id} className="bg-red-50/40 dark:bg-red-900/10">
 									<TableCell suppressHydrationWarning className="whitespace-nowrap">
-										{new Date(debt.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+										{new Date(debt.date).toLocaleDateString('id-ID', {
+											day: 'numeric',
+											month: 'long',
+											year: 'numeric',
+										})}
 									</TableCell>
-									<TableCell>
-										{debt.name.replace(/^(Pembayaran:\s*|Sisa:\s*)/i, '').split(' - ')[0]}
-									</TableCell>
+									<TableCell>{debt.name.replace(/^(Pembayaran:\s*|Sisa:\s*)/i, '').split(' - ')[0]}</TableCell>
 									<TableCell className="text-right">
 										<div className="font-medium">{formatCurrency(parseFloat(debt.amount))}</div>
-										{debt.name.startsWith('Sisa: ') && <span className="text-[10px] sm:text-xs text-gray-500">Sisa Tagihan</span>}
+										{debt.name.startsWith('Sisa: ') && (
+											<span className="text-[10px] sm:text-xs text-gray-500">Sisa Tagihan</span>
+										)}
 									</TableCell>
 								</TableRow>
 							))}
 							{unpaidDebts.length === 0 && (
 								<TableRow>
-									<TableCell colSpan={3} className="text-center py-6 text-gray-500">Semua transaksi sudah lunas 🎉</TableCell>
+									<TableCell colSpan={3} className="text-center py-6 text-gray-500">
+										Semua transaksi sudah lunas 🎉
+									</TableCell>
 								</TableRow>
 							)}
 						</TableBody>
@@ -128,7 +145,12 @@ export default function SharedDebtPage() {
 				{paidDebts.length > 0 && (
 					<details className="group mt-6">
 						<summary className="cursor-pointer flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium px-2 py-1 outline-none select-none list-none [&::-webkit-details-marker]:hidden">
-							<svg className="w-4 h-4 transition-transform group-open:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<svg
+								className="w-4 h-4 transition-transform group-open:rotate-90"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
 							</svg>
 							<span>Riwayat Lunas ({paidDebts.length})</span>
@@ -138,11 +160,20 @@ export default function SharedDebtPage() {
 								<TableBody>
 									{paidDebts.map((debt: any) => (
 										<TableRow key={debt.id} className="bg-gray-50/50 dark:bg-gray-900/50">
-											<TableCell suppressHydrationWarning className="whitespace-nowrap text-gray-400 dark:text-gray-500 text-xs sm:text-sm">
-												{new Date(debt.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+											<TableCell
+												suppressHydrationWarning
+												className="whitespace-nowrap text-gray-400 dark:text-gray-500 text-xs sm:text-sm"
+											>
+												{new Date(debt.date).toLocaleDateString('id-ID', {
+													day: 'numeric',
+													month: 'short',
+													year: 'numeric',
+												})}
 											</TableCell>
 											<TableCell className="text-gray-400 dark:text-gray-500 text-xs sm:text-sm">
-												<s className="opacity-80">{debt.name.replace(/^(Pembayaran:\s*|Sisa:\s*)/i, '').split(' - ')[0]}</s>
+												<s className="opacity-80">
+													{debt.name.replace(/^(Pembayaran:\s*|Sisa:\s*)/i, '').split(' - ')[0]}
+												</s>
 											</TableCell>
 											<TableCell className="text-right text-gray-400 dark:text-gray-500 text-xs sm:text-sm">
 												<s className="opacity-80">{formatCurrency(parseFloat(debt.amount))}</s>
@@ -159,13 +190,16 @@ export default function SharedDebtPage() {
 					<div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm max-w-sm mx-auto">
 						<h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Capek inget-inget hutang?</h3>
 						<p className="text-sm text-gray-500 mb-4">Coba Dompetku — gratis.</p>
-						<a href="https://dompetku.treonstudio.com" target="_blank" rel="noopener noreferrer" className="inline-block w-full py-2.5 px-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium text-sm rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors">
+						<a
+							href="https://dompetku.treonstudio.com"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="inline-block w-full py-2.5 px-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium text-sm rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+						>
 							Daftar Sekarang →
 						</a>
 					</div>
-					<p className="text-xs text-gray-400">
-						Dipakai 10.000+ orang untuk catat hutang bareng teman
-					</p>
+					<p className="text-xs text-gray-400">Dipakai 10.000+ orang untuk catat hutang bareng teman</p>
 				</div>
 			</div>
 
@@ -175,7 +209,12 @@ export default function SharedDebtPage() {
 					<span className="text-sm font-semibold text-gray-900 dark:text-gray-100">Buka di app Dompetku</span>
 					<span className="text-xs text-gray-500">Pengalaman lebih baik</span>
 				</div>
-				<a href="https://dompetku.treonstudio.com" target="_blank" rel="noopener noreferrer" className="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-full hover:bg-blue-700 transition-colors">
+				<a
+					href="https://dompetku.treonstudio.com"
+					target="_blank"
+					rel="noopener noreferrer"
+					className="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-full hover:bg-blue-700 transition-colors"
+				>
 					Install →
 				</a>
 			</div>

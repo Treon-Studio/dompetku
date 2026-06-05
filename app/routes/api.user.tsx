@@ -4,48 +4,50 @@ import { requireUser } from '~/features/auth/api.server';
 import { createDbClient } from '~/core/db.server';
 import { getUserProfile, updateUserProfile, deleteUserAndData } from '~/features/profile/api.server';
 import { logger } from '~/core/logger.server';
+import { getCloudflareEnv } from '~/env';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-  const db = createDbClient(context.cloudflare.env);
-  const user = await requireUser(request, db, context);
+	const db = createDbClient(getCloudflareEnv(context));
+	const user = await requireUser(request, db, context);
 
-  try {
-    const profile = await getUserProfile(user.id, db);
-    return json(profile, { status: 200 });
-  } catch (error) {
-    logger.error('Request failed', { error: String(error) });
-    return json({ message: 'Request failed' }, { status: 500 });
-  }
+	try {
+		const profile = await getUserProfile(user.id, db);
+		return json(profile, { status: 200 });
+	} catch (error) {
+		logger.error('Request failed', { error: String(error) });
+		return json({ message: 'Request failed' }, { status: 500 });
+	}
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
-  const db = createDbClient(context.cloudflare.env);
-  const user = await requireUser(request, db, context);
-  const method = request.method.toUpperCase();
+	const db = createDbClient(getCloudflareEnv(context));
+	const user = await requireUser(request, db, context);
+	const method = request.method.toUpperCase();
 
-  if (method === 'PATCH') {
-    const body = await request.json();
-    try {
-      await updateUserProfile(user.id, body, user.password, db);
-      return json({ message: 'Updated' });
-    } catch (error: any) {
-      if (error.message === 'Request failed') {
-        logger.error('Request failed', { error: String(error) });
-        return json({ message: 'Request failed' }, { status: 500 });
-      }
-      return json({ message: error.message }, { status: 400 });
-    }
-  }
+	if (method === 'PATCH') {
+		const body = await request.json();
+		try {
+			await updateUserProfile(user.id, body, user.password, db);
+			return json({ message: 'Updated' });
+		} catch (e: unknown) {
+			const error = e as Error;
+			if (error.message === 'Request failed') {
+				logger.error('Request failed', { error: String(error) });
+				return json({ message: 'Request failed' }, { status: 500 });
+			}
+			return json({ message: error.message }, { status: 400 });
+		}
+	}
 
-  if (method === 'DELETE') {
-    try {
-      await deleteUserAndData(user.id, db);
-      return json({ message: 'Deleted' });
-    } catch (error) {
-      logger.error('Request failed', { error: String(error) });
-      return json({ message: 'Request failed' }, { status: 500 });
-    }
-  }
+	if (method === 'DELETE') {
+		try {
+			await deleteUserAndData(user.id, db);
+			return json({ message: 'Deleted' });
+		} catch (error) {
+			logger.error('Request failed', { error: String(error) });
+			return json({ message: 'Request failed' }, { status: 500 });
+		}
+	}
 
-  return json({ message: 'Method not allowed' }, { status: 405 });
+	return json({ message: 'Method not allowed' }, { status: 405 });
 }

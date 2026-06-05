@@ -4,9 +4,10 @@ import { requireUser } from '~/features/auth/api.server';
 import { getBudgets, createBudget, updateBudget, deleteBudget } from '~/features/budgets/api.server';
 import { expenses as expensesTable } from '~/core/db/schema';
 import { and, eq, like } from 'drizzle-orm';
+import { getCloudflareEnv } from '~/env';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-	const db = createDbClient(context.cloudflare.env);
+	const db = createDbClient(getCloudflareEnv(context));
 	const user = await requireUser(request, db, context);
 	const url = new URL(request.url);
 	const month = url.searchParams.get('month') || new Date().toISOString().slice(0, 7);
@@ -14,16 +15,14 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 	const budgets = await getBudgets(db, user.id, month);
 
 	// Calculate spent amount for each budget category
-	const expenses = await db.select().from(expensesTable).where(
-		and(
-			eq(expensesTable.user_id, user.id),
-			like(expensesTable.date, `${month}%`)
-		)
-	);
+	const expenses = await db
+		.select()
+		.from(expensesTable)
+		.where(and(eq(expensesTable.user_id, user.id), like(expensesTable.date, `${month}%`)));
 
 	const budgetsWithSpent = budgets.map((budget: any) => {
 		const spent = expenses
-			.filter(exp => exp.category === budget.category)
+			.filter((exp) => exp.category === budget.category)
 			.reduce((total, exp) => total + parseFloat(exp.price), 0);
 		return { ...budget, spent };
 	});
@@ -32,7 +31,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
-	const db = createDbClient(context.cloudflare.env);
+	const db = createDbClient(getCloudflareEnv(context));
 	const user = await requireUser(request, db, context);
 	const method = request.method.toUpperCase();
 

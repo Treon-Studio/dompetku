@@ -5,17 +5,17 @@ import { I18nProvider } from '@i18n/provider';
 import SignInView from '~/features/auth/components/signin-view';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const locale = getLocaleFromRequest(request);
-  const translations = await loadTranslations(locale);
-  return { locale, translations };
+	const locale = getLocaleFromRequest(request);
+	const translations = await loadTranslations(locale);
+	return { locale, translations };
 };
 
 export default function SignIn() {
-  const { locale, translations } = useLoaderData<typeof loader>();
+	const { locale, translations } = useLoaderData<typeof loader>();
 
-  return (
-    <I18nProvider locale={locale} translations={translations}>
-      <SignInView />
-    </I18nProvider>
-  );
+	return (
+		<I18nProvider locale={locale} translations={translations}>
+			<SignInView />
+		</I18nProvider>
+	);
 }

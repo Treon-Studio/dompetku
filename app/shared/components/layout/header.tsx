@@ -52,7 +52,6 @@ export default function LayoutHeader({ title, showDatePicker = false }: { title:
 							<DatePicker />
 						</div>
 					) : null}
-	
 				</div>
 			</div>
 			<Separator />

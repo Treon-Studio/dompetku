@@ -14,13 +14,13 @@ import { Progress } from '~/shared/components/ui/progress';
 import { formatInputPrice, parseInputPrice } from '~/shared/lib/formatter';
 import { useUser } from '~/features/auth/components/auth-provider';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then((res) => res.json() as Promise<{ goals: any[] }>);
 
 export default function GoalsView() {
 	const user = useUser();
 	const { data, refetch, isLoading } = useQuery({
 		queryKey: ['goals'],
-		queryFn: () => fetcher(`/api/goals`)
+		queryFn: () => fetcher(`/api/goals`),
 	});
 
 	const goals = data?.goals || [];
@@ -49,9 +49,9 @@ export default function GoalsView() {
 		try {
 			const res = await fetch('/api/goals', {
 				method: 'POST',
-				body: formData
+				body: formData,
 			});
-			const result: any = await res.json();
+			const result = (await res.json()) as { success: boolean; error?: string };
 
 			if (result.success) {
 				toast.success('Goal saved successfully');
@@ -90,7 +90,7 @@ export default function GoalsView() {
 
 		try {
 			const res = await fetch('/api/goals', { method: 'PUT', body: formData });
-			const result: any = await res.json();
+			const result = (await res.json()) as { success: boolean; error?: string };
 			if (result.success) {
 				toast.success('Funds added successfully!');
 				setIsAddingFunds(null);
@@ -111,7 +111,7 @@ export default function GoalsView() {
 
 		try {
 			const res = await fetch('/api/goals', { method: 'DELETE', body: formData });
-			const result: any = await res.json();
+			const result = (await res.json()) as { success: boolean; error?: string };
 			if (result.success) {
 				toast.success('Goal deleted');
 				refetch();
@@ -124,7 +124,10 @@ export default function GoalsView() {
 	};
 
 	const formatCurrency = (value: number) => {
-		return new Intl.NumberFormat(user.locale || 'en-US', { style: 'currency', currency: user.currency || 'USD' }).format(value);
+		return new Intl.NumberFormat(user?.locale || 'en-US', {
+			style: 'currency',
+			currency: user?.currency || 'USD',
+		}).format(value);
 	};
 
 	return (
@@ -134,7 +137,9 @@ export default function GoalsView() {
 				<div className="flex justify-between items-center">
 					<div>
 						<h2 className="text-2xl font-semibold tracking-tight text-primary">Your Goals</h2>
-						<p className="text-sm text-muted-foreground">Track your progress towards big purchases or savings targets</p>
+						<p className="text-sm text-muted-foreground">
+							Track your progress towards big purchases or savings targets
+						</p>
 					</div>
 					<Button onClick={() => setIsOpen(true)}>Add Goal</Button>
 				</div>
@@ -154,9 +159,12 @@ export default function GoalsView() {
 							const target = parseFloat(goal.target_amount);
 							const current = parseFloat(goal.current_amount);
 							const percentage = Math.min(100, Math.round((current / target) * 100));
-							
+
 							return (
-								<div key={goal.id} className={`p-4 border rounded-xl bg-card shadow-sm space-y-4 ${goal.status === 'ACHIEVED' ? 'border-green-500' : ''}`}>
+								<div
+									key={goal.id}
+									className={`p-4 border rounded-xl bg-card shadow-sm space-y-4 ${goal.status === 'ACHIEVED' ? 'border-green-500' : ''}`}
+								>
 									<div className="flex justify-between items-start">
 										<div>
 											<h3 className="font-semibold text-lg">{goal.name}</h3>
@@ -164,7 +172,9 @@ export default function GoalsView() {
 												{formatCurrency(current)} / {formatCurrency(target)}
 											</p>
 											{goal.deadline && (
-												<p className="text-xs text-muted-foreground mt-1">Target: {new Date(goal.deadline).toLocaleDateString()}</p>
+												<p className="text-xs text-muted-foreground mt-1">
+													Target: {new Date(goal.deadline).toLocaleDateString()}
+												</p>
 											)}
 										</div>
 										<Button variant="ghost" size="sm" className="text-red-500" onClick={() => handleDelete(goal.id)}>
@@ -172,26 +182,45 @@ export default function GoalsView() {
 										</Button>
 									</div>
 									<div className="space-y-1">
-										<Progress value={percentage} className="h-2" indicatorColor={percentage >= 100 ? 'bg-green-500' : 'bg-primary'} />
+										<Progress
+											value={percentage}
+											className="h-2"
+											indicatorColor={percentage >= 100 ? 'bg-green-500' : 'bg-primary'}
+										/>
 										<p className="text-xs text-right font-medium text-muted-foreground">{percentage}% completed</p>
 									</div>
-									
+
 									{goal.status !== 'ACHIEVED' && (
 										<div className="pt-2">
 											{isAddingFunds === goal.id ? (
 												<form onSubmit={(e) => handleAddFunds(e, goal)} className="flex gap-2">
-													<Input 
+													<Input
 														autoFocus
-														placeholder="Amount" 
+														placeholder="Amount"
 														value={fundAmount}
 														onChange={(e) => setFundAmount(formatInputPrice(e.target.value))}
 														className="h-8 text-sm"
 													/>
-													<Button type="submit" size="sm" className="h-8">Add</Button>
-													<Button type="button" size="sm" variant="ghost" className="h-8" onClick={() => setIsAddingFunds(null)}>Cancel</Button>
+													<Button type="submit" size="sm" className="h-8">
+														Add
+													</Button>
+													<Button
+														type="button"
+														size="sm"
+														variant="ghost"
+														className="h-8"
+														onClick={() => setIsAddingFunds(null)}
+													>
+														Cancel
+													</Button>
 												</form>
 											) : (
-												<Button variant="outline" size="sm" className="w-full" onClick={() => setIsAddingFunds(goal.id)}>
+												<Button
+													variant="outline"
+													size="sm"
+													className="w-full"
+													onClick={() => setIsAddingFunds(goal.id)}
+												>
 													Add Funds
 												</Button>
 											)}

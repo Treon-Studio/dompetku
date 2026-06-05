@@ -27,7 +27,7 @@ const customTooltip = ({ payload, active, user }: { payload?: any; active?: bool
 						<span className="text-black ml-2 capitalize ">{category.dataKey}</span>
 					</div>
 					<span className="text-black flex ml-2">
-						{formatCurrency({ value: category.value, currency: user.currency, locale: user.locale })}
+						{formatCurrency({ value: category.value, currency: user?.currency, locale: user?.locale || 'en-US' })}
 					</span>
 				</div>
 			))}
@@ -39,8 +39,8 @@ export default function ExpesenseChart() {
 	const user = useUser();
 	const { data, loading } = useOverview();
 	const chartData = useMemo<Array<any>>(
-		() => extractExpenses(data.expenses, user.locale),
-		[data.expenses, user.locale]
+		() => extractExpenses(data.expenses, user?.locale || 'en-US'),
+		[data.expenses, user?.locale || 'en-US']
 	);
 	const categoriesData = useMemo<Array<string>>(() => extractExpensesCategory(data.expenses), [data.expenses]);
 	const [maxXAxisValue] = useMemo<Array<any>>(() => extractChartAxis(data.expenses), [data.expenses]);
@@ -60,7 +60,7 @@ export default function ExpesenseChart() {
 			index="date"
 			categories={categoriesData}
 			valueFormatter={(value) => {
-				return formatCurrency({ value, currency: user.currency, locale: user.locale });
+				return formatCurrency({ value, currency: user?.currency, locale: user?.locale || 'en-US' });
 			}}
 			yAxisWidth={84}
 			maxValue={maxXAxisValue?.value}

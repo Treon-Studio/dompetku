@@ -5,33 +5,35 @@ import { createUser, findUserByIdentity, createSession, isPhone, normalizePhone 
 import { createDbClient } from '~/core/db.server';
 import { SignupSchema } from '~/features/auth/schemas';
 import { logger } from '~/core/logger.server';
+import { getCloudflareEnv } from '~/env';
 
 export async function action({ request, context }: ActionFunctionArgs) {
-  try {
-    const db = createDbClient(context.cloudflare.env);
-    const body = await request.json();
-    const result = SignupSchema.safeParse(body);
-    
-    if (!result.success) {
-      const error = result.error.issues[0];
-      return json({ message: error.message }, { status: 400 });
-    }
+	try {
+		const db = createDbClient(getCloudflareEnv(context));
+		const body = await request.json();
+		const result = SignupSchema.safeParse(body);
 
-    const { identity, password } = result.data;
+		if (!result.success) {
+			const error = result.error.issues[0];
+			return json({ message: error.message }, { status: 400 });
+		}
 
-    const existingUser = await findUserByIdentity(identity, db);
-    if (existingUser) {
-      return json({ message: 'Account already exists' }, { status: 400 });
-    }
+		const { identity, password } = result.data;
 
-    if (isPhone(identity)) {
-      // Already checked via findUserByIdentity above, which uses Drizzle
-    }
+		const existingUser = await findUserByIdentity(identity, db);
+		if (existingUser) {
+			return json({ message: 'Account already exists' }, { status: 400 });
+		}
 
-    const user = await createUser(identity, password, db);
-    return createSession(user.id, '/', db, context);
-  } catch (error: any) {
-    logger.error('Signup error', { error: String(error) });
-    return json({ message: 'An error occurred during sign up' }, { status: 500 });
-  }
+		if (isPhone(identity)) {
+			// Already checked via findUserByIdentity above, which uses Drizzle
+		}
+
+		const user = await createUser(identity, password, db);
+		return createSession(user.id, '/', db, context);
+	} catch (e: unknown) {
+		const error = e as Error;
+		logger.error('Signup error', { error: String(error) });
+		return json({ message: 'An error occurred during sign up' }, { status: 500 });
+	}
 }

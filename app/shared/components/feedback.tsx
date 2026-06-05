@@ -35,12 +35,13 @@ export default function Feedback({ className, showDatePicker }: { className?: st
 			});
 
 			if (!res.ok) {
-				const error = await res.json();
+				const error = (await res.json()) as { message?: string };
 				throw new Error(error.message || res.statusText);
 			}
 
 			setState((prev) => ({ ...prev, sent: true, loading: false, message: '' }));
-		} catch (error: any) {
+		} catch (e: unknown) {
+			const error = e as Error;
 			setState((prev) => ({ ...prev, loading: false }));
 			toast.error(emails.feedback.failed);
 		}

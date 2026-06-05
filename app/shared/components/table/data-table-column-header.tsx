@@ -2,7 +2,12 @@ import { ArrowDown, ArrowUp, SortVertical, EyeClosed } from '@solar-icons/react'
 import { Column } from '@tanstack/react-table';
 
 import { Button } from '~/shared/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '~/shared/components/ui/dropdown-menu';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '~/shared/components/ui/dropdown-menu';
 
 import { cn } from '~/shared/lib/utils';
 

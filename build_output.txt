@@ -1,0 +1,384 @@
+
+> dompetku@0.1.0 build
+> remix vite:build
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+Using secrets defined in .dev.vars
+Using secrets defined in .dev.vars
+vite v5.4.21 building for production...
+transforming...
+app/shared/components/sidebar/index.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/sonner.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/layout/index.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/layout/header.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/stores/ui/theme-sync.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/budgets/components/budgets-view.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/goals/components/goals-view.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/context/overview-provider.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/dashboard/summary.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/context/data-provider.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/dashboard/add-data.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/dashboard/charts.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/kanban/goals-kanban.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/subscriptions/components/summary.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/subscriptions/components/table.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/expenses/components/summary.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/switch.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/tooltip.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/separator.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/sidebar/link.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/expenses/components/table.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/profile/components/profile-view.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/label.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/income/components/summary.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/investments/components/summary.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/income/components/table.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/select.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/investments/components/table.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/dialog.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/progress.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/add-button.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/recent-activities/table.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/chart/bar-list.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/chart/bar.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/subscriptions/components/columns.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/expenses/components/columns.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/chart/donut.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/table/data-table.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/income/components/columns.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/investments/components/columns.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/calendar.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/popover.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/modal/delete.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/recent-activities/columns.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/recent-activities/data-table.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/add/subscriptions.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/add/expenses.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/add/investments.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/checkbox.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/add/income.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/table/data-table-toolbar.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/modal/index.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/table/data-table-view-options.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/table/data-table-filter-options.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/dropdown-menu.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/drawer.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/command.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+✓ 6699 modules transformed.
+Generated an empty chunk: "api.auth.forgot-password".
+Generated an empty chunk: "api.auth.reset-password".
+Generated an empty chunk: "api.admin.settings".
+Generated an empty chunk: "api.subscriptions".
+Generated an empty chunk: "api.auth.signout".
+Generated an empty chunk: "api.user.upgrade".
+Generated an empty chunk: "api.admin.users".
+Generated an empty chunk: "api.auth.signin".
+Generated an empty chunk: "api.auth.signup".
+Generated an empty chunk: "api.investments".
+Generated an empty chunk: "api.user.usage".
+Generated an empty chunk: "api.expenses".
+Generated an empty chunk: "api.feedback".
+Generated an empty chunk: "api.budgets".
+Generated an empty chunk: "api.friends".
+Generated an empty chunk: "api.income".
+Generated an empty chunk: "api.debts".
+Generated an empty chunk: "api.goals".
+Generated an empty chunk: "api.user".
+rendering chunks...
+computing gzip size...
+build/client/.vite/manifest.json                           33.80 kB │ gzip:   3.14 kB
+build/client/assets/overwrites-CQvSlizb.css               102.31 kB │ gzip:  17.46 kB
+build/client/assets/api.auth.forgot-password-l0sNRNKZ.js    0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.auth.reset-password-l0sNRNKZ.js     0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.admin.settings-l0sNRNKZ.js          0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.subscriptions-l0sNRNKZ.js           0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.auth.signout-l0sNRNKZ.js            0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.user.upgrade-l0sNRNKZ.js            0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.admin.users-l0sNRNKZ.js             0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.auth.signin-l0sNRNKZ.js             0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.auth.signup-l0sNRNKZ.js             0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.investments-l0sNRNKZ.js             0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.user.usage-l0sNRNKZ.js              0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.expenses-l0sNRNKZ.js                0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.feedback-l0sNRNKZ.js                0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.budgets-l0sNRNKZ.js                 0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.friends-l0sNRNKZ.js                 0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.income-l0sNRNKZ.js                  0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.debts-l0sNRNKZ.js                   0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.goals-l0sNRNKZ.js                   0.00 kB │ gzip:   0.02 kB
+build/client/assets/api.user-l0sNRNKZ.js                    0.00 kB │ gzip:   0.02 kB
+build/client/assets/_-DtCUJE-g.js                           0.05 kB │ gzip:   0.07 kB
+build/client/assets/subMonths-coFd7iWR.js                   0.09 kB │ gzip:   0.10 kB
+build/client/assets/validation-cbMLTeqD.js                  0.17 kB │ gzip:   0.15 kB
+build/client/assets/client-DE6UCWUQ.js                      0.25 kB │ gzip:   0.20 kB
+build/client/assets/auth-provider-B_pw2QeI.js               0.44 kB │ gzip:   0.32 kB
+build/client/assets/provider-CxI0PkMY.js                    0.48 kB │ gzip:   0.34 kB
+build/client/assets/url-Ia4NwE2L.js                         0.55 kB │ gzip:   0.35 kB
+build/client/assets/circle-CC7kHR-z.js                      0.55 kB │ gzip:   0.39 kB
+build/client/assets/input-DZi4kwzz.js                       0.58 kB │ gzip:   0.38 kB
+build/client/assets/date-JJc1C6Q9.js                        0.63 kB │ gzip:   0.35 kB
+build/client/assets/apiUrls-DaRaUzX9.js                     0.79 kB │ gzip:   0.29 kB
+build/client/assets/badge-CNdKW182.js                       0.80 kB │ gzip:   0.42 kB
+build/client/assets/formatter-D4dylrOv.js                   0.95 kB │ gzip:   0.53 kB
+build/client/assets/overwrites-BE-yyS9r.js                  1.07 kB │ gzip:   0.67 kB
+build/client/assets/admin-4N5FrAbB.js                       1.14 kB │ gzip:   0.60 kB
+build/client/assets/dashboard-B_j6a1Rc.js                   1.16 kB │ gzip:   0.62 kB
+build/client/assets/_layout-CfTKtpPU.js                     1.20 kB │ gzip:   0.68 kB
+build/client/assets/extractor-nT0OCNfl.js                   1.33 kB │ gzip:   0.64 kB
+build/client/assets/categories-DMEnWD_X.js                  1.57 kB │ gzip:   0.71 kB
+build/client/assets/table-BuSCxOTf.js                       1.64 kB │ gzip:   0.58 kB
+build/client/assets/maintenance-CIWi7nTA.js                 2.15 kB │ gzip:   0.97 kB
+build/client/assets/index-CmULgiqk.js                       2.18 kB │ gzip:   1.01 kB
+build/client/assets/button-BmFYG1hA.js                      2.34 kB │ gzip:   1.10 kB
+build/client/assets/IconBase-BKINdgdO.js                    2.37 kB │ gzip:   1.12 kB
+build/client/assets/admin._index-Bz9kVGLd.js                2.50 kB │ gzip:   0.87 kB
+build/client/assets/switch-EJQCkEZX.js                      2.60 kB │ gzip:   1.30 kB
+build/client/assets/footer-CnbNyaSd.js                      2.78 kB │ gzip:   1.29 kB
+build/client/assets/admin.users-Cc-vIBZp.js                 3.14 kB │ gzip:   1.50 kB
+build/client/assets/share._slug-BgAKKQ1W.js                 3.24 kB │ gzip:   1.35 kB
+build/client/assets/progress-DqhLPoWU.js                    3.44 kB │ gzip:   1.61 kB
+build/client/assets/forgot-password-B_3q3R_D.js             3.60 kB │ gzip:   1.70 kB
+build/client/assets/entry.client-eXeMTSGJ.js                3.78 kB │ gzip:   1.42 kB
+build/client/assets/admin.settings-CZXig6Xo.js              4.15 kB │ gzip:   1.67 kB
+build/client/assets/reset-password-2emeu_O5.js              4.25 kB │ gzip:   1.75 kB
+build/client/assets/mutation-BX4X-udE.js                    4.39 kB │ gzip:   1.55 kB
+build/client/assets/dashboard.income-RjPGEFDz.js            4.45 kB │ gzip:   1.85 kB
+build/client/assets/dialog-DvmEDhna.js                      4.82 kB │ gzip:   1.79 kB
+build/client/assets/dashboard.expenses-BJdTPgdO.js          4.86 kB │ gzip:   1.92 kB
+build/client/assets/signin-DLhxwNS3.js                      4.89 kB │ gzip:   2.08 kB
+build/client/assets/dashboard.budgets-6XKc0630.js           5.03 kB │ gzip:   2.10 kB
+build/client/assets/dashboard.investments-DVv766dc.js       5.09 kB │ gzip:   1.94 kB
+build/client/assets/signup-CKj4ucM3.js                      5.54 kB │ gzip:   2.15 kB
+build/client/assets/dashboard.goals-ymtyOJ62.js             6.20 kB │ gzip:   2.36 kB
+build/client/assets/Download-U5RxlAgg.js                    6.56 kB │ gzip:   2.01 kB
+build/client/assets/label-Ccs-Xof0.js                       7.68 kB │ gzip:   3.01 kB
+build/client/assets/dashboard.profile-l1dhO9-r.js           7.81 kB │ gzip:   2.68 kB
+build/client/assets/jsx-runtime-BxgXdt3k.js                 8.22 kB │ gzip:   3.09 kB
+build/client/assets/dashboard.debts-TR2EZtn_.js             8.72 kB │ gzip:   3.09 kB
+build/client/assets/privacy-_pKzbBkT.js                     9.34 kB │ gzip:   3.13 kB
+build/client/assets/dashboard.subscriptions-BF9YG3Tj.js    10.32 kB │ gzip:   3.98 kB
+build/client/assets/useQuery-DwGD04Td.js                   10.52 kB │ gzip:   3.75 kB
+build/client/assets/Calendar-Dp4iB84f.js                   11.47 kB │ gzip:   2.25 kB
+build/client/assets/shortcuts-CYkZiChk.js                  14.10 kB │ gzip:   5.22 kB
+build/client/assets/state-display-D_HYaVP4.js              16.47 kB │ gzip:   4.27 kB
+build/client/assets/QueryClientProvider-BF4ZN_O-.js        17.40 kB │ gzip:   6.10 kB
+build/client/assets/format-7E9MNqX7.js                     21.62 kB │ gzip:   5.97 kB
+build/client/assets/utils-DclmTqRz.js                      27.55 kB │ gzip:   8.66 kB
+build/client/assets/index-DkIigF2u.js                      33.87 kB │ gzip:   9.54 kB
+build/client/assets/index-C5SudTc7.js                      41.56 kB │ gzip:  15.33 kB
+build/client/assets/_index-BZ_wrC3N.js                     45.81 kB │ gzip:  11.67 kB
+build/client/assets/index-IfQi8bYa.js                      55.88 kB │ gzip:  19.44 kB
+build/client/assets/dashboard._index-CNkXjRxK.js           64.04 kB │ gzip:  18.43 kB
+build/client/assets/root-DXthUk6i.js                       80.97 kB │ gzip:  18.59 kB
+build/client/assets/lookup-VA3TZJ2Q.js                     81.00 kB │ gzip:  20.29 kB
+build/client/assets/header-88exA1Zr.js                     97.03 kB │ gzip:  29.38 kB
+build/client/assets/sonner-BlbWl7Nt.js                     98.41 kB │ gzip:  24.67 kB
+build/client/assets/data-table-column-header-6RO1gjgp.js  106.18 kB │ gzip:  31.37 kB
+build/client/assets/components-ChzSJ2Gj.js                113.60 kB │ gzip:  37.12 kB
+build/client/assets/index-DS0cQM8W.js                     134.41 kB │ gzip:  43.36 kB
+build/client/assets/Tracker-DH9svCTs.js                   763.25 kB │ gzip: 205.76 kB
+✓ built in 5.82s
+Using secrets defined in .dev.vars
+vite v5.4.21 building SSR bundle for production...
+transforming...
+app/features/income/components/summary.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/layout/header.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/context/data-provider.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/subscriptions/components/table.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/investments/components/summary.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/expenses/components/summary.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/expenses/components/table.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/dashboard/summary.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/investments/components/table.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/dashboard/add-data.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/kanban/goals-kanban.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/dashboard/charts.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/income/components/table.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/layout/index.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/stores/ui/theme-sync.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/sidebar/index.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/subscriptions/components/summary.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/switch.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/sonner.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/goals/components/goals-view.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/context/overview-provider.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/budgets/components/budgets-view.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/profile/components/profile-view.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/separator.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/add-button.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/table/data-table.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/subscriptions/components/columns.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/recent-activities/table.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/expenses/components/columns.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/chart/bar-list.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/chart/donut.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/chart/bar.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/investments/components/columns.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/sidebar/link.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/features/income/components/columns.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/tooltip.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/progress.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/dialog.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/label.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/select.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/modal/delete.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/popover.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/calendar.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/recent-activities/columns.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/add/income.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/checkbox.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/add/expenses.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/table/data-table-toolbar.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/recent-activities/data-table.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/add/subscriptions.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/add/investments.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/modal/index.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/dropdown-menu.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/table/data-table-filter-options.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/table/data-table-view-options.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/drawer.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+app/shared/components/ui/command.tsx (1:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+✓ 193 modules transformed.
+x Build failed in 358ms
+app/features/subscriptions/api.server.ts (4:9): "createPrismaClient" is not exported by "app/core/db.server.ts", imported by "app/features/subscriptions/api.server.ts".
+file: /Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/subscriptions/api.server.ts:4:9
+
+2: 
+3: import { requireUser } from '~/features/auth/api.server';
+4: import { createPrismaClient } from '~/core/db.server';
+            ^
+5: import { handleGetRecords, handleActionRecords } from '~/shared/lib/api-handler.server';
+6: import { SubscriptionSchema } from './schemas';
+
+    at getRollupError (file:///Users/ridho/Documents/go/github.com/raizora/dompetku/node_modules/rollup/dist/es/shared/parseAst.js:406:41)
+    at error (file:///Users/ridho/Documents/go/github.com/raizora/dompetku/node_modules/rollup/dist/es/shared/parseAst.js:402:42)
+    at Module.error (file:///Users/ridho/Documents/go/github.com/raizora/dompetku/node_modules/rollup/dist/es/shared/node-entry.js:17390:16)
+    at Module.traceVariable (file:///Users/ridho/Documents/go/github.com/raizora/dompetku/node_modules/rollup/dist/es/shared/node-entry.js:17823:29)
+    at ModuleScope.findVariable (file:///Users/ridho/Documents/go/github.com/raizora/dompetku/node_modules/rollup/dist/es/shared/node-entry.js:15413:39)
+    at FunctionScope.findVariable (file:///Users/ridho/Documents/go/github.com/raizora/dompetku/node_modules/rollup/dist/es/shared/node-entry.js:5682:38)
+    at FunctionBodyScope.findVariable (file:///Users/ridho/Documents/go/github.com/raizora/dompetku/node_modules/rollup/dist/es/shared/node-entry.js:5682:38)
+    at Identifier.bind (file:///Users/ridho/Documents/go/github.com/raizora/dompetku/node_modules/rollup/dist/es/shared/node-entry.js:5449:40)
+    at CallExpression.bind (file:///Users/ridho/Documents/go/github.com/raizora/dompetku/node_modules/rollup/dist/es/shared/node-entry.js:2831:23)
+    at CallExpression.bind (file:///Users/ridho/Documents/go/github.com/raizora/dompetku/node_modules/rollup/dist/es/shared/node-entry.js:12522:15) {
+  binding: 'createPrismaClient',
+  code: 'MISSING_EXPORT',
+  exporter: '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/core/db.server.ts',
+  id: '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/subscriptions/api.server.ts',
+  url: 'https://rollupjs.org/troubleshooting/#error-name-is-not-exported-by-module',
+  pos: 67,
+  loc: {
+    column: 9,
+    file: '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/subscriptions/api.server.ts',
+    line: 4
+  },
+  frame: '2: \n' +
+    "3: import { requireUser } from '~/features/auth/api.server';\n" +
+    "4: import { createPrismaClient } from '~/core/db.server';\n" +
+    '            ^\n' +
+    "5: import { handleGetRecords, handleActionRecords } from '~/shared/lib/api-handler.server';\n" +
+    "6: import { SubscriptionSchema } from './schemas';",
+  watchFiles: [
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.auth.forgot-password.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/entry.server.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.auth.reset-password.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/dashboard.investments.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/dashboard.subscriptions.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.admin.settings.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/root.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/dashboard.expenses.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.subscriptions.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/dashboard.profile.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.auth.signout.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.user.upgrade.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/dashboard._index.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.admin.users.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/dashboard.income.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.auth.signin.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.auth.signup.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.investments.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/dashboard.budgets.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/dashboard.debts.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/dashboard.goals.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.user.usage.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/admin.settings.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/reset-password.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.expenses.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.feedback.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/admin.users.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/forgot-password.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.budgets.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.friends.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/maintenance.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/admin._index.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/share.$slug.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.debts.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.income.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.goals.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/dashboard.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/_layout.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/api.user.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/privacy.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/_index.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/signup.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/signin.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/admin.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/routes/$.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/package.json',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/core/db.server.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/constants/messages.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/constants/app.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/lib/email.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/env.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/auth/schemas.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/auth/api.server.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/core/db/schema.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/core/logger.server.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/lib/email-templates.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/components/layout/header.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/components/context/data-provider.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/investments/components/table.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/investments/components/summary.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/i18n/provider.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/i18n/server.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/profile/components/profile-view.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/subscriptions/api.server.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/income/components/summary.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/income/components/table.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/subscriptions/components/summary.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/subscriptions/components/table.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/investments/api.server.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/profile/api.server.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/globals.css',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/node_modules/tailwindcss/index.css',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/components/state-display.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/core/firebase.client.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/overwrites.css',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/expenses/components/summary.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/expenses/api.server.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/auth/components/reset-password-view.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/expenses/components/table.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/goals/components/goals-view.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/components/context/overview-provider.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/components/kanban/goals-kanban.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/components/dashboard/summary.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/components/dashboard/charts.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/components/dashboard/add-data.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/budgets/components/budgets-view.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/budgets/api.server.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/debts/api.server.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/auth/components/signup-view.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/auth/components/signin-view.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/debts/components/debts-view.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/auth/components/forgot-password-view.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/features/income/api.server.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/components/ui/input.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/components/ui/button.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/components/ui/table.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/components/footer.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/i18n/client.tsx',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/constants/usage.ts',
+    '/Users/ridho/Documents/go/github.com/raizora/dompetku/app/shared/components/home/features.tsx',
+    ... 591 more items
+  ],
+  [Symbol(augmented)]: true
+}

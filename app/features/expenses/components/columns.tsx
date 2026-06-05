@@ -53,7 +53,11 @@ export const columns: ColumnDef<Expenses>[] = [
 			const user = options.meta?.user;
 			const price = parseFloat(row.getValue('price'));
 			const formatted = formatCurrency({ value: price, currency: user?.currency, locale: user?.locale });
-			return <div className="font-medium tabular-nums" suppressHydrationWarning>{formatted}</div>;
+			return (
+				<div className="font-medium tabular-nums" suppressHydrationWarning>
+					{formatted}
+				</div>
+			);
 		},
 	},
 	{
@@ -67,7 +71,11 @@ export const columns: ColumnDef<Expenses>[] = [
 			const user = options.meta?.user;
 			const date = row.getValue<string>('date');
 			const formatted = formatDate({ date, locale: user?.locale });
-			return <div className="" suppressHydrationWarning>{formatted}</div>;
+			return (
+				<div className="" suppressHydrationWarning>
+					{formatted}
+				</div>
+			);
 		},
 	},
 	{

@@ -4,20 +4,22 @@ import { requireUser } from '~/features/auth/api.server';
 import { createDbClient } from '~/core/db.server';
 import { logger } from '~/core/logger.server';
 import { upgradeUserPlan } from '~/features/profile/api.server';
+import { getCloudflareEnv } from '~/env';
 
 export async function action({ request, context }: ActionFunctionArgs) {
-  const db = createDbClient(context.cloudflare.env);
-  const user = await requireUser(request, db, context);
-  const body = await request.json();
+	const db = createDbClient(getCloudflareEnv(context));
+	const user = await requireUser(request, db, context);
+	const body = await request.json();
 
-  try {
-    await upgradeUserPlan(user.id, body, db);
-    return json('Successful', { status: 200 });
-  } catch (error: any) {
-    if (error.message.startsWith('Invalid')) {
-      return json({ message: error.message }, { status: 400 });
-    }
-    logger.error('Request failed', { error: String(error) });
-    return json({ message: 'Request failed' }, { status: 500 });
-  }
+	try {
+		await upgradeUserPlan(user.id, body, db);
+		return json('Successful', { status: 200 });
+	} catch (e: unknown) {
+		const error = e as Error;
+		if (error.message.startsWith('Invalid')) {
+			return json({ message: error.message }, { status: 400 });
+		}
+		logger.error('Request failed', { error: String(error) });
+		return json({ message: 'Request failed' }, { status: 500 });
+	}
 }

@@ -15,7 +15,7 @@ export default function GoalsKanban() {
 
 	const { data, isLoading } = useQuery({
 		queryKey: ['goals'],
-		queryFn: () => fetcher(`/api/goals`)
+		queryFn: () => fetcher(`/api/goals`),
 	});
 
 	const updateGoalMutation = useMutation({
@@ -41,7 +41,7 @@ export default function GoalsKanban() {
 		},
 		onError: () => {
 			toast.error('Failed to update goal');
-		}
+		},
 	});
 
 	const goals = (data as any)?.goals || [];
@@ -50,7 +50,10 @@ export default function GoalsKanban() {
 	const achievedGoals = goals.filter((g: any) => g.status === 'ACHIEVED');
 
 	const formatCurrency = (value: number) => {
-		return new Intl.NumberFormat(user.locale || 'en-US', { style: 'currency', currency: user.currency || 'USD' }).format(value);
+		return new Intl.NumberFormat(user?.locale || 'en-US', {
+			style: 'currency',
+			currency: user?.currency || 'USD',
+		}).format(value);
 	};
 
 	const [draggedGoal, setDraggedGoal] = useState<any | null>(null);

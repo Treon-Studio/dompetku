@@ -1,32 +1,40 @@
 {
-	"compilerOptions": {
-		"target": "ES2022",
-		"lib": ["DOM", "DOM.Iterable", "ES2022"],
-		"types": ["@remix-run/cloudflare", "vite/client", "@cloudflare/workers-types"],
-		"allowJs": true,
-		"skipLibCheck": true,
-		"strict": true,
-		"forceConsistentCasingInFileNames": true,
-		"noEmit": true,
-		"esModuleInterop": true,
-		"module": "ESNext",
-		"moduleResolution": "Bundler",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"jsx": "react-jsx",
-		"incremental": true,
-		"ignoreDeprecations": "6.0",
-		"plugins": [
-			{
-				"name": "typescript-eslint"
-			}
-		],
-		"baseUrl": ".",
-		"paths": {
-			"~/*": ["./app/*"],
-			"@i18n/*": ["./i18n/*"]
-		}
-	},
-	"include": ["**/*.ts", "**/*.tsx", ".server/**/*.ts", ".server/**/*.tsx", "i18n/**/*.ts", "i18n/**/*.tsx", "i18n/**/*.json"],
-	"exclude": ["node_modules", "text-filter", "prisma/migrations"]
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "types": ["@remix-run/cloudflare", "vite/client", "@cloudflare/workers-types"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "ignoreDeprecations": "6.0",
+    "plugins": [
+      {
+        "name": "typescript-eslint"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./app/*"],
+      "@i18n/*": ["./i18n/*"]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".server/**/*.ts",
+    ".server/**/*.tsx",
+    "i18n/**/*.ts",
+    "i18n/**/*.tsx",
+    "i18n/**/*.json"
+  ],
+  "exclude": ["node_modules", "text-filter", "prisma/migrations"]
 }

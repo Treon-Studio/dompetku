@@ -12,8 +12,18 @@ import { formatCurrency } from '~/shared/lib/formatter';
 export default function SubscriptionsSummary() {
 	const user = useUser();
 	const { data = [], loading = true } = useData();
-	const monthlyData = useMemo(() => data.filter((datum: any) => datum.active && datum.paid === 'monthly'), [data]);
-	const yearlyData = useMemo(() => data.filter((datum: any) => datum.active && datum.paid === 'yearly'), [data]);
+	const monthlyData = useMemo(
+		() =>
+			data.filter(
+				(datum: { active: boolean; paid: string; price: number }) => datum.active && datum.paid === 'monthly'
+			),
+		[data]
+	);
+	const yearlyData = useMemo(
+		() =>
+			data.filter((datum: { active: boolean; paid: string; price: number }) => datum.active && datum.paid === 'yearly'),
+		[data]
+	);
 
 	return (
 		<>
@@ -25,25 +35,25 @@ export default function SubscriptionsSummary() {
 					<SummaryCard title="total subscriptions" data={data.length} />
 					<SummaryCard
 						title="Active - Cancelled"
-						data={`${data.filter((datum: any) => datum.active).length} - ${
-							data.filter((datum: any) => !datum.active).length
+						data={`${data.filter((datum: { active: boolean; paid: string; price: number }) => datum.active).length} - ${
+							data.filter((datum: { active: boolean; paid: string; price: number }) => !datum.active).length
 						}`}
 					/>
 					<SummaryCard
 						title="Total Active - Monthly"
 						data={formatCurrency({
-							value: monthlyData.reduce((acc: any, datum: any) => Number(datum.price) + acc, 0),
-							currency: user.currency,
-							locale: user.locale,
+							value: monthlyData.reduce((acc: number, datum: { price: number }) => Number(datum.price) + acc, 0),
+							currency: user?.currency,
+							locale: user?.locale,
 						})}
 					/>
 
 					<SummaryCard
 						title="Total Active - Yearly"
 						data={formatCurrency({
-							value: yearlyData.reduce((acc: any, datum: any) => Number(datum.price) + acc, 0),
-							currency: user.currency,
-							locale: user.locale,
+							value: yearlyData.reduce((acc: number, datum: { price: number }) => Number(datum.price) + acc, 0),
+							currency: user?.currency,
+							locale: user?.locale,
 						})}
 					/>
 				</div>

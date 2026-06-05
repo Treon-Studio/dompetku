@@ -8,13 +8,7 @@ import { Button } from '~/shared/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '~/shared/components/ui/card';
 import { Input } from '~/shared/components/ui/input';
 import { Label } from '~/shared/components/ui/label';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '~/shared/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/shared/components/ui/select';
 import { Separator } from '~/shared/components/ui/separator';
 import { Badge } from '~/shared/components/ui/badge';
 import CircleLoader from '~/shared/components/loader/circle';
@@ -56,14 +50,14 @@ export default function ProfilePage() {
 	const { t } = useTranslation();
 	const user = useUser();
 
-	const [currency, setCurrency] = useState(user.currency);
-	const [locale, setLocale] = useState(user.locale);
+	const [currency, setCurrency] = useState(user?.currency);
+	const [locale, setLocale] = useState(user?.locale);
 	const [savingPrefs, setSavingPrefs] = useState(false);
 
-	const [email, setEmail] = useState(user.email || '');
+	const [email, setEmail] = useState(user?.email || '');
 	const theme = useTheme();
 	const { setTheme } = useUiActions();
-	const [phone, setPhone] = useState(user.phone || '');
+	const [phone, setPhone] = useState(user?.phone || '');
 	const [savingIdentity, setSavingIdentity] = useState(false);
 
 	const [currentPassword, setCurrentPassword] = useState('');
@@ -102,7 +96,7 @@ export default function ProfilePage() {
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ email: email || null, phone: phone || null }),
 			});
-			const data = await res.json();
+			const data = (await res.json()) as { message?: string };
 			if (!res.ok) {
 				toast.error(data.message || messages.error);
 				return;
@@ -131,7 +125,7 @@ export default function ProfilePage() {
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ currentPassword, newPassword }),
 			});
-			const data = await res.json();
+			const data = (await res.json()) as { message?: string };
 			if (!res.ok) {
 				toast.error(data.message || messages.error);
 				return;
@@ -148,7 +142,7 @@ export default function ProfilePage() {
 
 	const formatDate = (dateStr: string) => {
 		try {
-			return new Intl.DateTimeFormat(user.locale, {
+			return new Intl.DateTimeFormat(user?.locale, {
 				year: 'numeric',
 				month: 'long',
 				day: 'numeric',
@@ -163,16 +157,18 @@ export default function ProfilePage() {
 			<div className="mx-auto max-w-2xl space-y-6 pb-8">
 				<div className="flex items-center gap-4">
 					<div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-2xl font-bold text-primary-foreground">
-						{(user.email || user.phone || '?')[0].toUpperCase()}
+						{(user?.email || user?.phone || '?')[0].toUpperCase()}
 					</div>
 					<div>
-						<h3 className="text-lg font-semibold">{user.email || user.phone}</h3>
+						<h3 className="text-lg font-semibold">{user?.email || user?.phone}</h3>
 						<div className="flex items-center gap-2 text-sm text-muted-foreground">
-							<Badge variant={user.isPremium ? 'default' : 'secondary'}>
-								{user.isPremium ? t('profile.premium') : t('profile.basic')}
+							<Badge variant={user?.isPremium ? 'default' : 'secondary'}>
+								{user?.isPremium ? t('profile.premium') : t('profile.basic')}
 							</Badge>
-							{user.trial_start_date && (
-								<span>{t('profile.memberSince')} {formatDate(user.trial_start_date)}</span>
+							{user?.trial_start_date && (
+								<span>
+									{t('profile.memberSince')} {formatDate(user?.trial_start_date)}
+								</span>
 							)}
 						</div>
 					</div>

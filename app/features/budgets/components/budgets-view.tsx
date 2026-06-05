@@ -17,7 +17,7 @@ import { groupedExpenses } from '~/shared/constants/categories';
 import { useTranslation } from '@i18n/client';
 import { useUser } from '~/features/auth/components/auth-provider';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then((res) => res.json() as Promise<{ budgets: any[] }>);
 
 export default function BudgetsView() {
 	const { t } = useTranslation();
@@ -26,7 +26,7 @@ export default function BudgetsView() {
 
 	const { data, refetch, isLoading } = useQuery({
 		queryKey: ['budgets', currentMonth],
-		queryFn: () => fetcher(`/api/budgets?month=${currentMonth}`)
+		queryFn: () => fetcher(`/api/budgets?month=${currentMonth}`),
 	});
 
 	const budgets = data?.budgets || [];
@@ -52,9 +52,9 @@ export default function BudgetsView() {
 		try {
 			const res = await fetch('/api/budgets', {
 				method: 'POST',
-				body: formData
+				body: formData,
 			});
-			const result: any = await res.json();
+			const result = (await res.json()) as { success: boolean; error?: string };
 
 			if (result.success) {
 				toast.success('Budget saved successfully');
@@ -74,14 +74,14 @@ export default function BudgetsView() {
 
 	const handleDelete = async (id: string) => {
 		if (!confirm('Are you sure you want to delete this budget?')) return;
-		
+
 		const formData = new FormData();
 		formData.append('id', id);
 
 		try {
 			const res = await fetch('/api/budgets', {
 				method: 'DELETE',
-				body: formData
+				body: formData,
 			});
 			const result: any = await res.json();
 			if (result.success) {
@@ -96,7 +96,10 @@ export default function BudgetsView() {
 	};
 
 	const formatCurrency = (value: number) => {
-		return new Intl.NumberFormat(user.locale || 'en-US', { style: 'currency', currency: user.currency || 'USD' }).format(value);
+		return new Intl.NumberFormat(user?.locale || 'en-US', {
+			style: 'currency',
+			currency: user?.currency || 'USD',
+		}).format(value);
 	};
 
 	return (
@@ -122,11 +125,11 @@ export default function BudgetsView() {
 							</Button>
 						</div>
 					) : (
-						budgets.map((budget: any) => {
+						budgets.map((budget: { id: string; category: string; amount: string; spent?: number }) => {
 							const budgetAmount = parseFloat(budget.amount);
 							const spentAmount = budget.spent || 0;
 							const percentage = Math.min(100, Math.round((spentAmount / budgetAmount) * 100));
-							
+
 							let progressColor = 'bg-primary';
 							if (percentage >= 100) progressColor = 'bg-red-500';
 							else if (percentage >= 80) progressColor = 'bg-yellow-500';
@@ -173,7 +176,7 @@ export default function BudgetsView() {
 											{Object.entries(group.list).map(([catKey, cat]) => (
 												<SelectItem key={catKey} value={catKey}>
 													<span className="flex items-center gap-2">
-														<span>{(cat as any).emoji}</span>
+														<span>{(cat as { emoji: string; name: string }).emoji}</span>
 														<span>{cat.name}</span>
 													</span>
 												</SelectItem>

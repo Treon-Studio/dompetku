@@ -26,7 +26,11 @@ export const DataContextProvider = (props: Props) => {
 	const [categories, setCategories] = useState<string[]>([]);
 
 	const apiUrl = getApiUrl(filter, name, categories, isNotRange);
-	const { data = [], refetch: mutate, isLoading } = useQuery({
+	const {
+		data = [],
+		refetch: mutate,
+		isLoading,
+	} = useQuery({
 		queryKey: [name, apiUrl],
 		queryFn: () => fetcher(apiUrl),
 	});

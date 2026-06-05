@@ -25,13 +25,14 @@ export const useDateStore = create<TDateState & TDateActions>()((set) => ({
 	},
 
 	// Actions
-	setDate: (state) => set((s) => ({
-		date: {
-			...s.date,
-			...state,
-			selected: state?.selected ?? s.date.selected,
-		},
-	})),
+	setDate: (state) =>
+		set((s) => ({
+			date: {
+				...s.date,
+				...state,
+				selected: state?.selected ?? s.date.selected,
+			},
+		})),
 }));
 
 // Selectors

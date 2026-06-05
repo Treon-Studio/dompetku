@@ -17,7 +17,7 @@ import {
 	SupportIcon,
 	DebtsIcon,
 	BudgetsIcon,
-	GoalsIcon
+	GoalsIcon,
 } from '~/shared/components/icons';
 import { Separator } from '~/shared/components/ui/separator';
 import { useTranslation } from '@i18n/client';
@@ -66,11 +66,41 @@ export default function Sidebar() {
 	const user = useUser();
 
 	const navItems = [
-		{ key: 'overview', name: t('navigation.overview'), href: '/dashboard', Icon: OverviewIcon, shortcut: shortcuts.menu.overview.shortcut },
-		{ key: 'income', name: t('navigation.income'), href: '/dashboard/income', Icon: IncomeIcon, shortcut: shortcuts.menu.income.shortcut },
-		{ key: 'expenses', name: t('navigation.expenses'), href: '/dashboard/expenses', Icon: ExpensesIcon, shortcut: shortcuts.menu.expenses.shortcut },
-		{ key: 'investments', name: t('navigation.investments'), href: '/dashboard/investments', Icon: InvestmentIcon, shortcut: shortcuts.menu.investments.shortcut },
-		{ key: 'subscriptions', name: t('navigation.subscriptions'), href: '/dashboard/subscriptions', Icon: SubscriptionsIcon, shortcut: shortcuts.menu.subscriptions.shortcut },
+		{
+			key: 'overview',
+			name: t('navigation.overview'),
+			href: '/dashboard',
+			Icon: OverviewIcon,
+			shortcut: shortcuts.menu.overview.shortcut,
+		},
+		{
+			key: 'income',
+			name: t('navigation.income'),
+			href: '/dashboard/income',
+			Icon: IncomeIcon,
+			shortcut: shortcuts.menu.income.shortcut,
+		},
+		{
+			key: 'expenses',
+			name: t('navigation.expenses'),
+			href: '/dashboard/expenses',
+			Icon: ExpensesIcon,
+			shortcut: shortcuts.menu.expenses.shortcut,
+		},
+		{
+			key: 'investments',
+			name: t('navigation.investments'),
+			href: '/dashboard/investments',
+			Icon: InvestmentIcon,
+			shortcut: shortcuts.menu.investments.shortcut,
+		},
+		{
+			key: 'subscriptions',
+			name: t('navigation.subscriptions'),
+			href: '/dashboard/subscriptions',
+			Icon: SubscriptionsIcon,
+			shortcut: shortcuts.menu.subscriptions.shortcut,
+		},
 		{ key: 'debts', name: 'Hutang Piutang', href: '/dashboard/debts', Icon: DebtsIcon },
 		{ key: 'budgets', name: 'Budgets', href: '/dashboard/budgets', Icon: BudgetsIcon },
 		{ key: 'goals', name: 'Goals', href: '/dashboard/goals', Icon: GoalsIcon },
@@ -147,12 +177,7 @@ export default function Sidebar() {
 						<div className="flex flex-col items-center">
 							{settingsLinks.map((link) => {
 								return (
-									<SidebarLink
-										onClick={closeSidebar}
-										key={link.href}
-										active={pathname === link.href}
-										href={link.href}
-									>
+									<SidebarLink onClick={closeSidebar} key={link.href} active={pathname === link.href} href={link.href}>
 										<link.Icon className="text-white" />
 									</SidebarLink>
 								);

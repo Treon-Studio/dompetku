@@ -31,7 +31,9 @@ async function createJwt(clientEmail: string, privateKey: string): Promise<strin
 	const input = `${encodedHeader}.${encodedPayload}`;
 
 	const keyData = pemToArrayBuffer(privateKey);
-	const key = await crypto.subtle.importKey('pkcs8', keyData, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']);
+	const key = await crypto.subtle.importKey('pkcs8', keyData, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, [
+		'sign',
+	]);
 
 	const signature = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', key, new TextEncoder().encode(input));
 	return `${input}.${base64url(String.fromCharCode(...new Uint8Array(signature)))}`;

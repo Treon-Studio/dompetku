@@ -8,7 +8,9 @@ const Footer = ({ className }: { className?: String }) => {
 			<div className="xs:mb-0 flex w-full justify-center">
 				<div className="flex flex-row items-center justify-between gap-6 border-t border-white/5">
 					<div className="flex items-center gap-2">
-						<p suppressHydrationWarning className="text-xs text-gray-600">Copyright {new Date().getFullYear()}, Dompetku</p>
+						<p suppressHydrationWarning className="text-xs text-gray-600">
+							Copyright {new Date().getFullYear()}, Dompetku
+						</p>
 						<span className="text-[10px] text-gray-400 font-mono">({commitHash})</span>
 					</div>
 					<div className="flex items-center gap-3">

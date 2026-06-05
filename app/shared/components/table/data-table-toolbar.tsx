@@ -75,7 +75,7 @@ export default function DataTableToolbar<TData>(props: DataTableToolbarProps<TDa
 						onClick={() => {
 							toast.info(messages.export);
 							exportTableToCsv(
-								`${filename} ${formatDate({ date: format(new Date(), dateFormat), locale: user.locale })}.csv`
+								`${filename} ${formatDate({ date: format(new Date(), dateFormat), locale: user?.locale })}.csv`
 							);
 						}}
 						size="sm"

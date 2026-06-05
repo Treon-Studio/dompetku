@@ -38,7 +38,7 @@ export default function Charts() {
 					</CardContent>
 				</Card>
 			</div>
-			{user.isPremium ? (
+			{user?.isPremium ? (
 				<>
 					<div className="mb-8 flex md:min-h-full w-full flex-col md:mb-0 md:mt-0">
 						<Card className="h-full w-full">

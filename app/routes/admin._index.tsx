@@ -9,20 +9,24 @@ import { requireAdmin } from '~/features/auth/api.server';
 import LayoutHeader from '~/shared/components/layout/header';
 import { Button } from '~/shared/components/ui/button';
 import { DonutChart, Legend } from '@tremor/react';
+import { getCloudflareEnv } from '~/env';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-	const db = createDbClient(context.cloudflare.env);
+	const db = createDbClient(getCloudflareEnv(context));
 	await requireAdmin(request, db, context);
 
 	const [{ count: tUsers }] = await db.select({ count: sql<number>`count(*)` }).from(users);
 	const totalUsers = Number(tUsers);
-	const [{ count: pUsers }] = await db.select({ count: sql<number>`count(*)` }).from(users).where(eq(users.plan_status, 'premium'));
+	const [{ count: pUsers }] = await db
+		.select({ count: sql<number>`count(*)` })
+		.from(users)
+		.where(eq(users.plan_status, 'premium'));
 	const premiumUsers = Number(pUsers);
 	const basicUsers = totalUsers - premiumUsers;
-	
+
 	const [{ count: tFeedbacks }] = await db.select({ count: sql<number>`count(*)` }).from(feedbacks);
 	const totalFeedbacks = Number(tFeedbacks);
-	
+
 	return json({ totalUsers, premiumUsers, basicUsers, totalFeedbacks });
 }
 
@@ -75,10 +79,10 @@ export default function AdminDashboard() {
 								category="value"
 								index="name"
 								valueFormatter={(num) => `${num} Users`}
-								colors={["emerald", "slate"]}
+								colors={['emerald', 'slate']}
 								className="h-72 mt-4"
 							/>
-							<Legend className="mt-3" categories={['Premium Users', 'Basic Users']} colors={["emerald", "slate"]} />
+							<Legend className="mt-3" categories={['Premium Users', 'Basic Users']} colors={['emerald', 'slate']} />
 						</div>
 					</div>
 				</div>

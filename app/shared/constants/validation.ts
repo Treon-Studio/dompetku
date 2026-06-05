@@ -15,33 +15,33 @@ export const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9
 export const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
 export function isEmail(value: string): boolean {
-  return EMAIL_REGEX.test(value);
+	return EMAIL_REGEX.test(value);
 }
 
 export function isPhone(value: string): boolean {
-  return PHONE_REGEX.test(value);
+	return PHONE_REGEX.test(value);
 }
 
 export function isValidDate(value: string): boolean {
-  if (!DATE_REGEX.test(value)) return false;
-  const date = new Date(value);
-  return !isNaN(date.getTime()) && value === date.toISOString().substring(0, 10);
+	if (!DATE_REGEX.test(value)) return false;
+	const date = new Date(value);
+	return !isNaN(date.getTime()) && value === date.toISOString().substring(0, 10);
 }
 
 export function isValidUrl(value: string): boolean {
-  try {
-    const u = new URL(value);
-    return u.protocol === 'http:' || u.protocol === 'https:';
-  } catch {
-    return false;
-  }
+	try {
+		const u = new URL(value);
+		return u.protocol === 'http:' || u.protocol === 'https:';
+	} catch {
+		return false;
+	}
 }
 
 export function isValidPrice(value: string): boolean {
-  const num = parseFloat(value);
-  return !isNaN(num) && isFinite(num) && num >= 0 && num <= PRICE_MAX_VALUE;
+	const num = parseFloat(value);
+	return !isNaN(num) && isFinite(num) && num >= 0 && num <= PRICE_MAX_VALUE;
 }
 
 export function isRequired(value: unknown): value is string {
-  return typeof value === 'string' && value.trim().length > 0;
+	return typeof value === 'string' && value.trim().length > 0;
 }

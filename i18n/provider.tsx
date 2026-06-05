@@ -11,9 +11,5 @@ export interface I18nProviderProps {
 export function I18nProvider({ locale, translations, children }: I18nProviderProps) {
 	const t: Translator = createTranslator(translations);
 
-	return (
-		<I18nContext.Provider value={{ locale, t }}>
-			{children}
-		</I18nContext.Provider>
-	);
+	return <I18nContext.Provider value={{ locale, t }}>{children}</I18nContext.Provider>;
 }

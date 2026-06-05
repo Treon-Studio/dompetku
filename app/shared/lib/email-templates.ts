@@ -6,7 +6,7 @@
 const BASE_URL = 'https://dompetku.treonstudio.com';
 
 export function resetPasswordEmailHtml(actionLink: string): string {
-  return `
+	return `
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,7 +47,7 @@ export function resetPasswordEmailHtml(actionLink: string): string {
 }
 
 export function feedbackEmailHtml(message: string, email: string): string {
-  return `
+	return `
 <!DOCTYPE html>
 <html>
 <head>

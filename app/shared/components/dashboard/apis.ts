@@ -1,4 +1,3 @@
-
 export const incrementUsage = async () => {
 	try {
 		const res = await fetch('/api/user/usage', { method: 'POST' });

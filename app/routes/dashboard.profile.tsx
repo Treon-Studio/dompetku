@@ -8,27 +8,24 @@ import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: 'Dompetku - Profile' },
-    { name: 'description', content: 'Manage your account and preferences.' },
-  ];
+	return [{ title: 'Dompetku - Profile' }, { name: 'description', content: 'Manage your account and preferences.' }];
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const locale = getLocaleFromRequest(request);
-  const translations = await loadTranslations(locale);
-  return json({ locale, translations });
+	const locale = getLocaleFromRequest(request);
+	const translations = await loadTranslations(locale);
+	return json({ locale, translations });
 }
 
 export default function ProfileRoute() {
-  const { locale, translations } = useLoaderData<typeof loader>();
+	const { locale, translations } = useLoaderData<typeof loader>();
 
-  return (
-    <I18nProvider locale={locale} translations={translations}>
-      <>
-        <LayoutHeader title="profile" />
-        <ProfileView />
-      </>
-    </I18nProvider>
-  );
+	return (
+		<I18nProvider locale={locale} translations={translations}>
+			<>
+				<LayoutHeader title="profile" />
+				<ProfileView />
+			</>
+		</I18nProvider>
+	);
 }

@@ -54,9 +54,15 @@ export async function handleGetRecords(db: DB, modelName: TableName, user: any, 
 	}
 }
 
-export async function handleActionRecords(db: DB, modelName: TableName, user: any, request: Request, schema_: z.ZodSchema) {
+export async function handleActionRecords(
+	db: DB,
+	modelName: TableName,
+	user: any,
+	request: Request,
+	schema_: z.ZodSchema
+) {
 	const method = request.method.toUpperCase();
-	const body = await request.json() as Record<string, unknown>;
+	const body = (await request.json()) as Record<string, unknown>;
 	const table = getTable(modelName) as any;
 
 	if (method === 'DELETE') {
@@ -82,7 +88,7 @@ export async function handleActionRecords(db: DB, modelName: TableName, user: an
 			return json({ message: error.message }, { status: 400 });
 		}
 
-		const data: any = { user_id: user.id, ...result.data };
+		const data = { user_id: user.id, ...(result.data as object) };
 
 		try {
 			await db.insert(table).values(data);
@@ -106,8 +112,8 @@ export async function handleActionRecords(db: DB, modelName: TableName, user: an
 		const [record] = await db.select().from(table).where(eq(table.id, id)).limit(1);
 		if (!record || record.user_id !== user.id) return json({ message: 'Not found' }, { status: 404 });
 
-		const data: any = { ...result.data };
-		delete data.id;
+		const data = { ...(result.data as object) };
+		delete (data as { id?: string }).id;
 
 		try {
 			await db.update(table).set(data).where(eq(table.id, id));

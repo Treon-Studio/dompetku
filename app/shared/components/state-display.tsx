@@ -22,23 +22,11 @@ const defaults: Record<string, { title: string; icon: React.ReactNode }> = {
 	},
 };
 
-export default function StateDisplay({
-	variant,
-	title,
-	description,
-	icon,
-	action,
-	className,
-}: StateDisplayProps) {
+export default function StateDisplay({ variant, title, description, icon, action, className }: StateDisplayProps) {
 	const config = defaults[variant];
 
 	return (
-		<div
-			className={cn(
-				'flex flex-col items-center justify-center gap-2 text-center text-muted-foreground',
-				className
-			)}
-		>
+		<div className={cn('flex flex-col items-center justify-center gap-2 text-center text-muted-foreground', className)}>
 			<div className="mb-1 opacity-50">{icon ?? config.icon}</div>
 			<p className="text-sm font-medium text-foreground">{title ?? config.title}</p>
 			{description && <p className="text-sm">{description}</p>}

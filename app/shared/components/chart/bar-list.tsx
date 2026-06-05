@@ -29,7 +29,7 @@ export default function TopSpentExpenses() {
 		<BarList
 			data={chartData}
 			valueFormatter={(value: any) => {
-				return formatCurrency({ value, currency: user.currency, locale: user.locale });
+				return formatCurrency({ value, currency: user?.currency, locale: user?.locale });
 			}}
 			showAnimation={false}
 			className="mt-2"

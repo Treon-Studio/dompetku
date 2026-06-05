@@ -11,10 +11,10 @@ import { getCloudflareEnv } from '~/env';
 import { emails } from '~/shared/constants/messages';
 
 export async function action({ request, context }: ActionFunctionArgs) {
-	const db = createDbClient(context.cloudflare.env);
+	const db = createDbClient(getCloudflareEnv(context));
 	const env = getCloudflareEnv(context);
 	const user = await requireUser(request, db, context);
-	const { message } = await request.json();
+	const { message } = (await request.json()) as { message: string };
 	try {
 		await db.insert(feedbacks).values({ message, user_id: user.id });
 		await getResend(env).emails.send({
@@ -25,7 +25,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
 			html: feedbackEmailHtml(message, user.email || user.phone || ''),
 		});
 		return json({ message: emails.feedback.sent }, { status: 201 });
-	} catch (error: any) {
+	} catch (e: unknown) {
+		const error = e as Error;
 		return json({ message: emails.feedback.failed }, { status: 500 });
 	}
 }

@@ -4,7 +4,7 @@ interface User {
 	currency: string;
 	locale: string;
 	billing_start_date: string | null;
-	trial_start_date: string;
+	trial_start_date: string | null;
 	order_status: string | null;
 	usage: number;
 	email: string | null;
@@ -42,7 +42,7 @@ export const AuthProvider = ({ user, children }: { user: User; children: React.R
 };
 
 export const useUser = () => {
-	const context = useContext<any>(AuthContext);
+	const context = useContext(AuthContext);
 	if (context === undefined) {
 		throw new Error(`useUser must be used within a AuthContext.`);
 	}

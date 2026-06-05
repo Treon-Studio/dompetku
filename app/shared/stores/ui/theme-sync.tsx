@@ -21,9 +21,8 @@ export function ThemeSync() {
 	// Apply theme to document
 	React.useEffect(() => {
 		const root = document.documentElement;
-		const resolved = theme === 'system'
-			? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-			: theme;
+		const resolved =
+			theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme;
 
 		root.classList.remove('light', 'dark');
 		root.classList.add(resolved);

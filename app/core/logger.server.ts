@@ -33,11 +33,14 @@ export const logger = {
 };
 
 function log(level: LogLevel, message: string, context?: Record<string, any>) {
-	const consoleFn = level === 'CRITICAL' || level === 'ERROR' ? console.error : level === 'WARNING' ? console.warn : console.log;
+	const consoleFn =
+		level === 'CRITICAL' || level === 'ERROR' ? console.error : level === 'WARNING' ? console.warn : console.log;
 	consoleFn(`[${level}] ${message}`, context || '');
 
 	if (serverConfig) {
-		writeLog(serverConfig.projectId, serverConfig.clientEmail, serverConfig.privateKey, level, message, context).catch(() => {});
+		writeLog(serverConfig.projectId, serverConfig.clientEmail, serverConfig.privateKey, level, message, context).catch(
+			() => {}
+		);
 	}
 
 	if (typeof window !== 'undefined') {

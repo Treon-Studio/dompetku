@@ -6,7 +6,6 @@ import { useLoaderData } from '@remix-run/react';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-
 import LayoutHeader from '~/shared/components/layout/header';
 import { Button } from '~/shared/components/ui/button';
 import { Input } from '~/shared/components/ui/input';
@@ -17,14 +16,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~
 import { Switch } from '~/shared/components/ui/switch';
 
 const formatCurrency = (value: number) => {
-	return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value).replace(/\s+/g, ' ').replace(/\u00A0/g, ' ');
+	return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' })
+		.format(value)
+		.replace(/\s+/g, ' ')
+		.replace(/\u00A0/g, ' ');
 };
 import url from '~/shared/constants/url';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function DebtsView() {
-	const { data: friends = [], refetch: mutate } = useQuery({ queryKey: ['debts'], queryFn: () => fetcher('/api/debts') });
+	const { data: friendsData = [], refetch: mutate } = useQuery({
+		queryKey: ['debts'],
+		queryFn: () => fetcher('/api/debts'),
+	});
+	const friends = friendsData as any[];
 	const [isOpen, setIsOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -60,8 +66,8 @@ export default function DebtsView() {
 		e.preventDefault();
 		if (!friendName) return toast.error('Nama Teman harus diisi');
 		setIsLoading(true);
-		
-		const payload: any = { friend_name: friendName, name, type, amount, date };
+
+		const payload: Record<string, string | number> = { friend_name: friendName, name, type, amount, date };
 		if (linkedDebtId !== 'none') {
 			payload.linked_debt_id = linkedDebtId;
 		}
@@ -71,7 +77,7 @@ export default function DebtsView() {
 			body: JSON.stringify(payload),
 			headers: { 'Content-Type': 'application/json' },
 		});
-		
+
 		setIsLoading(false);
 		if (res.ok) {
 			toast.success('Debt added successfully');
@@ -98,7 +104,7 @@ export default function DebtsView() {
 			mutate();
 		}
 	};
-	
+
 	const handleMarkPaid = async (id: string, currentStatus: string) => {
 		const newStatus = currentStatus === 'PAID' ? 'UNPAID' : 'PAID';
 		const res = await fetch('/api/debts', {
@@ -135,7 +141,7 @@ export default function DebtsView() {
 			setEditingFriend(null);
 			mutate();
 		} else {
-			const data = await res.json();
+			const data = (await res.json()) as { message?: string };
 			toast.error(data.message || 'Failed to update settings');
 		}
 	};
@@ -182,7 +188,14 @@ export default function DebtsView() {
 							<form onSubmit={handleAddDebt} className="space-y-4">
 								<div className="space-y-2">
 									<Label>Nama Teman (Friend's Name)</Label>
-									<Input list="friends-list" required value={friendName} onChange={(e) => setFriendName(e.target.value)} placeholder="Misal: Budi" maxLength={60} />
+									<Input
+										list="friends-list"
+										required
+										value={friendName}
+										onChange={(e) => setFriendName(e.target.value)}
+										placeholder="Misal: Budi"
+										maxLength={60}
+									/>
 									<datalist id="friends-list">
 										{friends.map((f: any) => (
 											<option key={f.id} value={f.name} />
@@ -200,7 +213,8 @@ export default function DebtsView() {
 												<SelectItem value="none">Tidak ada / Buat Hutang Baru</SelectItem>
 												{unpaidDebts.map((d: any) => (
 													<SelectItem key={d.id} value={d.id}>
-														{new Date(d.date).toLocaleDateString('id-ID')} - {d.name} ({formatCurrency(parseFloat(d.amount))})
+														{new Date(d.date).toLocaleDateString('id-ID')} - {d.name} (
+														{formatCurrency(parseFloat(d.amount))})
 													</SelectItem>
 												))}
 											</SelectContent>
@@ -209,7 +223,13 @@ export default function DebtsView() {
 								)}
 								<div className="space-y-2">
 									<Label>Deskripsi / Judul (Description)</Label>
-									<Input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Misal: Makan Siang" maxLength={60} />
+									<Input
+										required
+										value={name}
+										onChange={(e) => setName(e.target.value)}
+										placeholder="Misal: Makan Siang"
+										maxLength={60}
+									/>
 								</div>
 								<div className="space-y-2">
 									<Label>Tipe Transaksi (Type)</Label>
@@ -225,7 +245,14 @@ export default function DebtsView() {
 								</div>
 								<div className="space-y-2">
 									<Label>Nominal (Amount)</Label>
-									<Input required type="text" inputMode="decimal" value={formatInputPrice(amount)} onChange={(e) => setAmount(parseInputPrice(e.target.value))} placeholder="50000" />
+									<Input
+										required
+										type="text"
+										inputMode="decimal"
+										value={formatInputPrice(amount)}
+										onChange={(e) => setAmount(parseInputPrice(e.target.value))}
+										placeholder="50000"
+									/>
 								</div>
 								<div className="space-y-2">
 									<Label>Tanggal (Date)</Label>
@@ -257,7 +284,9 @@ export default function DebtsView() {
 								<div className="space-y-2">
 									<Label>Custom Slug (URL Belakang)</Label>
 									<Input required value={editSlug} onChange={(e) => setEditSlug(e.target.value)} />
-									<p suppressHydrationWarning className="text-sm text-gray-500">Preview: {typeof window !== 'undefined' ? window.location.origin : ''}/share/{editSlug}</p>
+									<p suppressHydrationWarning className="text-sm text-gray-500">
+										Preview: {typeof window !== 'undefined' ? window.location.origin : ''}/share/{editSlug}
+									</p>
 								</div>
 								<Button type="submit" disabled={isLoading} className="w-full">
 									{isLoading ? 'Menyimpan...' : 'Simpan Pengaturan'}
@@ -280,7 +309,7 @@ export default function DebtsView() {
 									if (debt.type === 'OWES_ME') friendTotal += parseFloat(debt.amount);
 								}
 							});
-							
+
 							const isOwesYou = friendTotal > 0;
 							const isYouOwe = friendTotal < 0;
 
@@ -291,16 +320,22 @@ export default function DebtsView() {
 											<h3 className="text-xl font-bold">{friend.name}</h3>
 											<p className="text-sm text-gray-500">
 												{isOwesYou ? `${friend.name} berhutang ${formatCurrency(Math.abs(friendTotal))} kepadamu` : ''}
-												{isYouOwe ? `Kamu berhutang ${formatCurrency(Math.abs(friendTotal))} kepada ${friend.name}` : ''}
+												{isYouOwe
+													? `Kamu berhutang ${formatCurrency(Math.abs(friendTotal))} kepada ${friend.name}`
+													: ''}
 												{friendTotal === 0 ? 'Tidak ada hutang aktif.' : ''}
 											</p>
 										</div>
 										<div className="space-x-2">
-											<Button variant="outline" size="sm" onClick={() => {
-												setEditingFriend(friend);
-												setEditSlug(friend.slug);
-												setEditIsPublic(friend.is_public);
-											}}>
+											<Button
+												variant="outline"
+												size="sm"
+												onClick={() => {
+													setEditingFriend(friend);
+													setEditSlug(friend.slug);
+													setEditIsPublic(friend.is_public);
+												}}
+											>
 												⚙️ Pengaturan
 											</Button>
 											<Button variant="outline" size="sm" onClick={() => copyLink(friend.slug)}>
@@ -323,7 +358,9 @@ export default function DebtsView() {
 										<TableBody>
 											{friend.debts.map((debt: any) => (
 												<TableRow key={debt.id} className={debt.status === 'PAID' ? 'opacity-50' : ''}>
-													<TableCell suppressHydrationWarning className="py-2 px-3 sm:py-4 sm:px-4 text-xs sm:text-sm">{new Date(debt.date).toLocaleDateString('id-ID')}</TableCell>
+													<TableCell suppressHydrationWarning className="py-2 px-3 sm:py-4 sm:px-4 text-xs sm:text-sm">
+														{new Date(debt.date).toLocaleDateString('id-ID')}
+													</TableCell>
 													<TableCell>{debt.name}</TableCell>
 													<TableCell>
 														<span className={debt.type === 'I_OWE' ? 'text-red-500' : 'text-green-500'}>
@@ -332,7 +369,11 @@ export default function DebtsView() {
 													</TableCell>
 													<TableCell>{formatCurrency(parseFloat(debt.amount))}</TableCell>
 													<TableCell>
-														<span className={debt.status === 'PAID' ? 'text-gray-500 font-bold' : 'text-orange-500 font-bold'}>
+														<span
+															className={
+																debt.status === 'PAID' ? 'text-gray-500 font-bold' : 'text-orange-500 font-bold'
+															}
+														>
 															{debt.status}
 														</span>
 													</TableCell>
@@ -348,7 +389,9 @@ export default function DebtsView() {
 											))}
 											{friend.debts.length === 0 && (
 												<TableRow>
-													<TableCell colSpan={6} className="text-center py-4 text-gray-500">Tidak ada riwayat.</TableCell>
+													<TableCell colSpan={6} className="text-center py-4 text-gray-500">
+														Tidak ada riwayat.
+													</TableCell>
 												</TableRow>
 											)}
 										</TableBody>

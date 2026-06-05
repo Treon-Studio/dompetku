@@ -32,15 +32,24 @@ export const OverviewContextProvider = (props: any) => {
 		isLoading: isExpenseLoading,
 		refetch: mutateExpenses,
 	} = useQuery({ queryKey: ['overview-expenses', expensesUrl], queryFn: () => fetcher(expensesUrl) });
-	
+
 	const investmentsUrl = apiUrls.investments.getInvestments({ from, to });
-	const { data: investmentsData = [], isLoading: isInvestmentsLoading } = useQuery({ queryKey: ['overview-investments', investmentsUrl], queryFn: () => fetcher(investmentsUrl) });
-	
+	const { data: investmentsData = [], isLoading: isInvestmentsLoading } = useQuery({
+		queryKey: ['overview-investments', investmentsUrl],
+		queryFn: () => fetcher(investmentsUrl),
+	});
+
 	const incomeUrl = apiUrls.income.getIncome({ from, to });
-	const { data: incomeData = [], isLoading: isIncomeLoading } = useQuery({ queryKey: ['overview-income', incomeUrl], queryFn: () => fetcher(incomeUrl) });
-	
+	const { data: incomeData = [], isLoading: isIncomeLoading } = useQuery({
+		queryKey: ['overview-income', incomeUrl],
+		queryFn: () => fetcher(incomeUrl),
+	});
+
 	const subscriptionsUrl = apiUrls.subscriptions.getSubscriptions({ from, to });
-	const { data: subscriptionsData = [], isLoading: isSubscriptionsLoading } = useQuery({ queryKey: ['overview-subscriptions', subscriptionsUrl], queryFn: () => fetcher(subscriptionsUrl) });
+	const { data: subscriptionsData = [], isLoading: isSubscriptionsLoading } = useQuery({
+		queryKey: ['overview-subscriptions', subscriptionsUrl],
+		queryFn: () => fetcher(subscriptionsUrl),
+	});
 
 	const data = {
 		expenses: expensesData,

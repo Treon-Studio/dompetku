@@ -16,7 +16,7 @@ export function getLocaleFromRequest(request: Request): Locale {
 			cookieHeader.split('; ').map((c) => {
 				const [key, ...val] = c.split('=');
 				return [key, val.join('=')];
-			}),
+			})
 		);
 		const localeFromCookie = cookies['locale'];
 		if (localeFromCookie && isValidLocale(localeFromCookie)) {
@@ -59,10 +59,7 @@ export function createTranslator(translations: Record<string, any>) {
 		if (typeof value !== 'string') return key;
 
 		if (params) {
-			return Object.entries(params).reduce(
-				(str, [k, v]) => str.replace(new RegExp(`{{${k}}}`, 'g'), String(v)),
-				value,
-			);
+			return Object.entries(params).reduce((str, [k, v]) => str.replace(new RegExp(`{{${k}}}`, 'g'), String(v)), value);
 		}
 
 		return value;

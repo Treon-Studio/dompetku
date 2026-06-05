@@ -58,7 +58,12 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 	}, [lookup, setState]);
 
 	return (
-		<Modal someRef={inputRef} show={show} title={selected.id ? t('expenses.editExpense') : t('expenses.addExpense')} onHide={onHide}>
+		<Modal
+			someRef={inputRef}
+			show={show}
+			title={selected.id ? t('expenses.editExpense') : t('expenses.addExpense')}
+			onHide={onHide}
+		>
 			<div className="sm:flex sm:items-start max-sm:pb-6">
 				<form
 					className="md:[420px] grid w-full grid-cols-1 items-center gap-3"
@@ -106,7 +111,7 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 							<Label htmlFor="price">
 								{t('expenses.price')}
 								<span className="ml-2 font-mono text-xs text-muted-foreground">
-									({getCurrencySymbol(user.currency, user.locale)})
+									({getCurrencySymbol(user?.currency, user?.locale)})
 								</span>
 							</Label>
 							<Input
@@ -189,7 +194,8 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 					</div>
 					<div>
 						<Label className="block">
-							{t('expenses.notes')} <span className="text-center text-sm text-muted-foreground">{t('common.optional')}</span>
+							{t('expenses.notes')}{' '}
+							<span className="text-center text-sm text-muted-foreground">{t('common.optional')}</span>
 						</Label>
 						<Textarea
 							className="mt-2 h-20"
@@ -200,7 +206,7 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 					</div>
 
 					<Button disabled={loading} className="mt-1.5" type="submit">
-						{loading ? <CircleLoader /> : (selected?.id ? t('common.update') : t('common.submit'))}
+						{loading ? <CircleLoader /> : selected?.id ? t('common.update') : t('common.submit')}
 					</Button>
 				</form>
 			</div>

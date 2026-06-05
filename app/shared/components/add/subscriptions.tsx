@@ -70,7 +70,12 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 	}, [lookup]);
 
 	return (
-		<Modal someRef={inputRef} show={show} title={selected.id ? t('subscriptions.editSubscription') : t('subscriptions.addSubscription')} onHide={onHide}>
+		<Modal
+			someRef={inputRef}
+			show={show}
+			title={selected.id ? t('subscriptions.editSubscription') : t('subscriptions.addSubscription')}
+			onHide={onHide}
+		>
 			<div className="sm:flex sm:items-start max-sm:pb-6">
 				<form
 					className="md:[420px] grid w-full grid-cols-1 items-center gap-3"
@@ -144,7 +149,7 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 							<Label htmlFor="price">
 								{t('subscriptions.price')}
 								<span className="ml-2 font-mono text-xs text-muted-foreground">
-									({getCurrencySymbol(user.currency, user.locale)})
+									({getCurrencySymbol(user?.currency, user?.locale)})
 								</span>
 							</Label>
 							<Input
@@ -196,7 +201,8 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 					</div>
 					<div>
 						<Label className="block">
-							{t('subscriptions.notes')} <span className="text-center text-sm text-muted-foreground">{t('common.optional')}</span>
+							{t('subscriptions.notes')}{' '}
+							<span className="text-center text-sm text-muted-foreground">{t('common.optional')}</span>
 						</Label>
 						<Textarea
 							className="mt-2 h-20"
@@ -207,7 +213,7 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 					</div>
 
 					<Button disabled={loading} className="mt-2" type="submit">
-						{loading ? <CircleLoader /> : (selected?.id ? t('common.update') : t('common.submit'))}
+						{loading ? <CircleLoader /> : selected?.id ? t('common.update') : t('common.submit')}
 					</Button>
 				</form>
 			</div>

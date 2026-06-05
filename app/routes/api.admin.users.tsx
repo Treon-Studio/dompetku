@@ -6,36 +6,38 @@ import { users } from '~/core/db/schema';
 import { or, like, desc, eq } from 'drizzle-orm';
 import { requireAdmin } from '~/features/auth/api.server';
 import { logger } from '~/core/logger.server';
+import { getCloudflareEnv } from '~/env';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-	const db = createDbClient(context.cloudflare.env);
+	const db = createDbClient(getCloudflareEnv(context));
 	await requireAdmin(request, db, context);
 
 	const url = new URL(request.url);
 	const search = url.searchParams.get('q') || '';
-	
-	const usersData = await db.select({
-		id: users.id,
-		email: users.email,
-		phone: users.phone,
-		role: users.role,
-		plan_status: users.plan_status,
-		order_status: users.order_status,
-		created_at: users.created_at,
-	})
-	.from(users)
-	.where(search ? or(like(users.email, `%${search}%`), like(users.phone, `%${search}%`)) : undefined)
-	.orderBy(desc(users.created_at))
-	.limit(50);
+
+	const usersData = await db
+		.select({
+			id: users.id,
+			email: users.email,
+			phone: users.phone,
+			role: users.role,
+			plan_status: users.plan_status,
+			order_status: users.order_status,
+			created_at: users.created_at,
+		})
+		.from(users)
+		.where(search ? or(like(users.email, `%${search}%`), like(users.phone, `%${search}%`)) : undefined)
+		.orderBy(desc(users.created_at))
+		.limit(50);
 
 	return json(usersData);
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
-	const db = createDbClient(context.cloudflare.env);
+	const db = createDbClient(getCloudflareEnv(context));
 	await requireAdmin(request, db, context);
-	
-	const body = await request.json() as Record<string, unknown>;
+
+	const body = (await request.json()) as Record<string, unknown>;
 	const { id, action } = body;
 
 	if (!id || typeof id !== 'string') {
@@ -47,7 +49,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 			await db.update(users).set({ plan_status: 'premium', order_status: 'paid' }).where(eq(users.id, id));
 			return json({ message: 'User upgraded to premium' });
 		}
-		
+
 		if (action === 'DOWNGRADE') {
 			await db.update(users).set({ plan_status: 'basic', order_status: null }).where(eq(users.id, id));
 			return json({ message: 'User downgraded to basic' });
@@ -57,7 +59,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 			await db.delete(users).where(eq(users.id, id));
 			return json({ message: 'User deleted' });
 		}
-		
+
 		return json({ message: 'Unknown action' }, { status: 400 });
 	} catch (error) {
 		logger.error('Admin action failed', { error: String(error) });

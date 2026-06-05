@@ -9,17 +9,19 @@ import { Switch } from '~/shared/components/ui/switch';
 import { Input } from '~/shared/components/ui/input';
 
 export const meta: MetaFunction = () => {
-	return [
-		{ title: 'Dompetku - Settings' },
-	];
+	return [{ title: 'Dompetku - Settings' }];
 };
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function AdminSettingsPage() {
-	const { data: settings = [], refetch: mutate, isLoading } = useQuery({ 
-		queryKey: ['admin-settings'], 
-		queryFn: () => fetcher('/api/admin/settings') 
+	const {
+		data: settings = [],
+		refetch: mutate,
+		isLoading,
+	} = useQuery({
+		queryKey: ['admin-settings'],
+		queryFn: () => fetcher('/api/admin/settings'),
 	});
 
 	const [newFlagKey, setNewFlagKey] = useState('');
@@ -40,7 +42,7 @@ export default function AdminSettingsPage() {
 			body: JSON.stringify({ key, action, description }),
 			headers: { 'Content-Type': 'application/json' },
 		});
-		
+
 		if (res.ok) {
 			const data = (await res.json()) as any;
 			toast.success(data.message);
@@ -61,7 +63,6 @@ export default function AdminSettingsPage() {
 		<>
 			<LayoutHeader title="System Settings" />
 			<div className="p-6 space-y-8 max-w-4xl">
-				
 				{/* Maintenance Mode Section */}
 				<div className="bg-card border rounded-lg overflow-hidden shadow-sm p-6">
 					<div className="flex items-center justify-between">
@@ -72,11 +73,9 @@ export default function AdminSettingsPage() {
 							</p>
 						</div>
 						<div className="flex items-center gap-3">
-							<span className="text-sm font-medium">
-								{maintenanceFlag?.value === 'true' ? 'Active' : 'Inactive'}
-							</span>
-							<Switch 
-								checked={maintenanceFlag?.value === 'true'} 
+							<span className="text-sm font-medium">{maintenanceFlag?.value === 'true' ? 'Active' : 'Inactive'}</span>
+							<Switch
+								checked={maintenanceFlag?.value === 'true'}
 								onCheckedChange={() => handleAction('maintenance_mode', 'TOGGLE')}
 							/>
 						</div>
@@ -87,26 +86,24 @@ export default function AdminSettingsPage() {
 				<div className="bg-card border rounded-lg shadow-sm">
 					<div className="p-6 border-b">
 						<h3 className="text-lg font-bold">Feature Flags</h3>
-						<p className="text-sm text-gray-500 mt-1">
-							Dynamically enable or disable features across the application.
-						</p>
+						<p className="text-sm text-gray-500 mt-1">Dynamically enable or disable features across the application.</p>
 					</div>
-					
+
 					<div className="p-6 space-y-6">
 						{/* Add New Flag */}
 						<div className="flex gap-4 items-end bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border">
 							<div className="flex-1">
 								<label className="text-xs font-semibold mb-1 block">Flag Key</label>
-								<Input 
-									placeholder="e.g. new_charts_ui" 
+								<Input
+									placeholder="e.g. new_charts_ui"
 									value={newFlagKey}
 									onChange={(e) => setNewFlagKey(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
 								/>
 							</div>
 							<div className="flex-1">
 								<label className="text-xs font-semibold mb-1 block">Description</label>
-								<Input 
-									placeholder="What does this toggle?" 
+								<Input
+									placeholder="What does this toggle?"
 									value={newFlagDesc}
 									onChange={(e) => setNewFlagDesc(e.target.value)}
 								/>
@@ -123,17 +120,22 @@ export default function AdminSettingsPage() {
 								<div className="p-6 text-center text-gray-500">No custom feature flags defined.</div>
 							)}
 							{featureFlags.map((flag: any) => (
-								<div key={flag.key} className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+								<div
+									key={flag.key}
+									className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+								>
 									<div>
 										<h4 className="font-semibold text-primary">{flag.key}</h4>
 										<p className="text-sm text-gray-500">{flag.description || 'No description'}</p>
 									</div>
 									<div className="flex items-center gap-4">
-										<Switch 
-											checked={flag.value === 'true'} 
-											onCheckedChange={() => handleAction(flag.key, 'TOGGLE')}
-										/>
-										<Button variant="ghost" size="sm" className="text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => handleAction(flag.key, 'DELETE')}>
+										<Switch checked={flag.value === 'true'} onCheckedChange={() => handleAction(flag.key, 'TOGGLE')} />
+										<Button
+											variant="ghost"
+											size="sm"
+											className="text-red-500 hover:text-red-700 hover:bg-red-50"
+											onClick={() => handleAction(flag.key, 'DELETE')}
+										>
 											Delete
 										</Button>
 									</div>
