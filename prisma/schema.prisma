@@ -197,3 +197,10 @@ model goals {
   user_id        String
   user           users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
+
+model app_settings {
+  key            String    @id
+  value          String
+  description    String?
+  updated_at     DateTime  @default(now()) @updatedAt
+}

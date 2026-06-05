@@ -6,6 +6,7 @@ import { OverviewContextProvider } from '~/shared/components/context/overview-pr
 import LayoutHeader from '~/shared/components/layout/header';
 import Summary from '~/shared/components/dashboard/summary';
 import Charts from '~/shared/components/dashboard/charts';
+import GoalsKanban from '~/shared/components/kanban/goals-kanban';
 import AddData from '~/shared/components/dashboard/add-data';
 import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
@@ -33,6 +34,7 @@ export default function DashboardIndex() {
           <div className="mb-8 grid grid-cols-1 gap-1 md:gap-8 lg:grid-cols-2">
             <Charts />
           </div>
+          <GoalsKanban />
         </div>
         <AddData />
       </OverviewContextProvider>

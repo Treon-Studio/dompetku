@@ -17,6 +17,8 @@ import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
 import { I18nProvider } from '@i18n/provider';
 import StateDisplay from '~/shared/components/state-display';
 import { initFirebase, logException } from '~/core/firebase.client';
+import { createPrismaClient } from '~/core/db.server';
+import { redirect } from '@remix-run/cloudflare';
 
 import './globals.css';
 import './overwrites.css';
@@ -26,7 +28,29 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const locale = getLocaleFromRequest(request);
   const translations = await loadTranslations(locale);
 
+  const db = createPrismaClient(context.cloudflare.env);
+  const settings = await db.app_settings.findMany();
+  
+  const feature_flags: Record<string, boolean> = {};
+  let maintenanceMode = false;
 
+  settings.forEach((setting) => {
+    if (setting.key === 'maintenance_mode') {
+      maintenanceMode = setting.value === 'true';
+    } else {
+      feature_flags[setting.key] = setting.value === 'true';
+    }
+  });
+
+  const url = new URL(request.url);
+  const isBypassedPath = url.pathname.startsWith('/admin') || 
+                         url.pathname.startsWith('/signin') || 
+                         url.pathname.startsWith('/api/auth') || 
+                         url.pathname === '/maintenance';
+
+  if (maintenanceMode && !isBypassedPath) {
+    return redirect('/maintenance');
+  }
 
   return {
     ENV: {
@@ -38,6 +62,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
       FIREBASE_MESSAGING_SENDER_ID: env.FIREBASE_MESSAGING_SENDER_ID,
       FIREBASE_APP_ID: env.FIREBASE_APP_ID,
       FIREBASE_MEASUREMENT_ID: env.FIREBASE_MEASUREMENT_ID,
+      feature_flags,
     },
     locale,
     translations,
