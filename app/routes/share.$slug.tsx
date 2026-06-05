@@ -31,7 +31,7 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 		throw new Response('Halaman ini bersifat privat atau tidak ditemukan.', { status: 404 });
 	}
 
-	const friendDebts = await db.select().from(debts).where(eq(debts.friend_id, friendRecord.id)).orderBy(desc(debts.date));
+	const friendDebts = await db.select().from(debts).where(eq(debts.friend_id, friendRecord.id)).orderBy(desc(debts.date), desc(debts.created_at));
 	const [userRecord] = await db.select().from(users).where(eq(users.id, friendRecord.user_id)).limit(1);
 
 	const friend = {
@@ -108,13 +108,11 @@ export default function SharedDebtPage() {
 									</TableCell>
 									<TableCell className="text-right">{formatCurrency(parseFloat(debt.amount))}</TableCell>
 									<TableCell className="text-center">
-										<span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-											debt.status === 'PAID' 
-												? 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300' 
-												: 'bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-300'
-										}`}>
-											{debt.status}
-										</span>
+										{debt.status === 'PAID' && (
+											<span className="px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+												LUNAS
+											</span>
+										)}
 									</TableCell>
 								</TableRow>
 							))}
