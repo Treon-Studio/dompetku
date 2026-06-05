@@ -18,7 +18,7 @@ export async function debtsLoader({ request, context }: LoaderFunctionArgs) {
 		friendsList.map(async (friend) => {
 			const debtsList = await db.select().from(debts)
 				.where(eq(debts.friend_id, friend.id))
-				.orderBy(desc(debts.date), desc(debts.created_at));
+				.orderBy(desc(debts.date), desc(debts.status), desc(debts.created_at));
 			return { ...friend, debts: debtsList };
 		})
 	);
