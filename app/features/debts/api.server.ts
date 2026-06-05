@@ -99,7 +99,7 @@ export async function debtsAction({ request, context }: ActionFunctionArgs) {
 	}
 
 	if (request.method === 'PUT') {
-		const result = DebtSchema.safeParse(body);
+		const result = DebtSchema.partial().safeParse(body);
 		if (!result.success) {
 			return json({ message: result.error.errors[0].message }, { status: 400 });
 		}

@@ -108,6 +108,8 @@ export default function DebtsView() {
 		if (res.ok) {
 			toast.success(`Marked as ${newStatus}`);
 			mutate();
+		} else {
+			toast.error('Gagal memperbarui status lunas');
 		}
 	};
 
