@@ -39,6 +39,7 @@ export async function debtsAction({ request, context }: ActionFunctionArgs) {
 	if (request.method === 'POST') {
 		const result = DebtSchema.safeParse(body);
 		if (!result.success) {
+			console.error("POST Validation Error:", result.error);
 			return json({ message: result.error?.issues?.[0]?.message || 'Validation error' }, { status: 400 });
 		}
 
@@ -101,6 +102,7 @@ export async function debtsAction({ request, context }: ActionFunctionArgs) {
 	if (request.method === 'PUT') {
 		const result = DebtSchema.partial().safeParse(body);
 		if (!result.success) {
+			console.error("PUT Validation Error:", result.error);
 			return json({ message: result.error?.issues?.[0]?.message || 'Validation error' }, { status: 400 });
 		}
 

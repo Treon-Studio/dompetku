@@ -1,6 +1,6 @@
 export const PASSWORD_MIN_LENGTH = 6;
 export const PASSWORD_MAX_LENGTH = 128;
-export const INPUT_MAX_LENGTH = 30;
+export const INPUT_MAX_LENGTH = 60;
 export const NOTES_MAX_LENGTH = 60;
 export const URL_MAX_LENGTH = 2000;
 export const FEEDBACK_MAX_LENGTH = 500;

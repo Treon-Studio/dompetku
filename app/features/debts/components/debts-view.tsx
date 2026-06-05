@@ -182,7 +182,7 @@ export default function DebtsView() {
 							<form onSubmit={handleAddDebt} className="space-y-4">
 								<div className="space-y-2">
 									<Label>Nama Teman (Friend's Name)</Label>
-									<Input list="friends-list" required value={friendName} onChange={(e) => setFriendName(e.target.value)} placeholder="Misal: Budi" maxLength={30} />
+									<Input list="friends-list" required value={friendName} onChange={(e) => setFriendName(e.target.value)} placeholder="Misal: Budi" maxLength={60} />
 									<datalist id="friends-list">
 										{friends.map((f: any) => (
 											<option key={f.id} value={f.name} />
@@ -209,7 +209,7 @@ export default function DebtsView() {
 								)}
 								<div className="space-y-2">
 									<Label>Deskripsi / Judul (Description)</Label>
-									<Input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Misal: Makan Siang" maxLength={30} />
+									<Input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Misal: Makan Siang" maxLength={60} />
 								</div>
 								<div className="space-y-2">
 									<Label>Tipe Transaksi (Type)</Label>
