@@ -99,7 +99,7 @@ export default function SharedDebtPage() {
 						<TableBody>
 							{friend.debts.map((debt: any) => (
 								<TableRow key={debt.id} className={debt.status === 'PAID' ? 'opacity-50' : ''}>
-									<TableCell suppressHydrationWarning>{new Date(debt.date).toLocaleDateString()}</TableCell>
+									<TableCell suppressHydrationWarning>{new Date(debt.date).toLocaleDateString('id-ID')}</TableCell>
 									<TableCell>{debt.name}</TableCell>
 									<TableCell>
 										<span className={debt.type === 'I_OWE' ? 'text-green-500 font-medium' : 'text-red-500 font-medium'}>

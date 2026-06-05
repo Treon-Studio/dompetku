@@ -200,7 +200,7 @@ export default function DebtsView() {
 												<SelectItem value="none">Tidak ada / Buat Hutang Baru</SelectItem>
 												{unpaidDebts.map((d: any) => (
 													<SelectItem key={d.id} value={d.id}>
-														{new Date(d.date).toLocaleDateString()} - {d.name} ({formatCurrency(parseFloat(d.amount))})
+														{new Date(d.date).toLocaleDateString('id-ID')} - {d.name} ({formatCurrency(parseFloat(d.amount))})
 													</SelectItem>
 												))}
 											</SelectContent>
@@ -323,7 +323,7 @@ export default function DebtsView() {
 										<TableBody>
 											{friend.debts.map((debt: any) => (
 												<TableRow key={debt.id} className={debt.status === 'PAID' ? 'opacity-50' : ''}>
-													<TableCell suppressHydrationWarning>{new Date(debt.date).toLocaleDateString()}</TableCell>
+													<TableCell suppressHydrationWarning className="py-2 px-3 sm:py-4 sm:px-4 text-xs sm:text-sm">{new Date(debt.date).toLocaleDateString('id-ID')}</TableCell>
 													<TableCell>{debt.name}</TableCell>
 													<TableCell>
 														<span className={debt.type === 'I_OWE' ? 'text-red-500' : 'text-green-500'}>
