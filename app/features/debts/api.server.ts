@@ -39,7 +39,7 @@ export async function debtsAction({ request, context }: ActionFunctionArgs) {
 	if (request.method === 'POST') {
 		const result = DebtSchema.safeParse(body);
 		if (!result.success) {
-			return json({ message: result.error.errors[0].message }, { status: 400 });
+			return json({ message: result.error?.issues?.[0]?.message || 'Validation error' }, { status: 400 });
 		}
 
 		const { name, friend_name, type, amount, date, notes, linked_debt_id } = result.data;
@@ -101,7 +101,7 @@ export async function debtsAction({ request, context }: ActionFunctionArgs) {
 	if (request.method === 'PUT') {
 		const result = DebtSchema.partial().safeParse(body);
 		if (!result.success) {
-			return json({ message: result.error.errors[0].message }, { status: 400 });
+			return json({ message: result.error?.issues?.[0]?.message || 'Validation error' }, { status: 400 });
 		}
 
 		const { status, name, amount, date, notes } = result.data;
