@@ -74,15 +74,23 @@ export default function SharedDebtPage() {
 							: 'bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-900'
 				}`}>
 					<h2 className="text-xl font-semibold">
-						{netAmount === 0 && 'Semua hutang/piutang sudah lunas. 🎉'}
-						{viewerOwesUser && 'Total yang harus kamu bayar (You Owe):'}
-						{userOwesViewer && 'Total yang harus dibayar kepadamu (Owes You):'}
+						{netAmount === 0 && 'Semua tagihan sudah lunas. 🎉'}
+						{viewerOwesUser && 'Sisa hutangmu:'}
+						{userOwesViewer && 'Sisa uangmu yang dipinjam:'}
 					</h2>
 					{netAmount !== 0 && (
 						<p className={`text-4xl font-bold ${viewerOwesUser ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
 							{formatCurrency(Math.abs(netAmount))}
 						</p>
 					)}
+				</div>
+
+				<div className="flex flex-col sm:flex-row sm:items-center justify-between px-2 text-sm gap-2">
+					<span className="font-semibold text-gray-700 dark:text-gray-300">Riwayat Transaksi</span>
+					<div className="flex gap-4 text-xs">
+						<span className="text-red-500 font-medium">🔴 Kamu → Teman</span>
+						<span className="text-green-500 font-medium">🟢 Teman → Kamu</span>
+					</div>
 				</div>
 
 				<div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -98,19 +106,28 @@ export default function SharedDebtPage() {
 						</TableHeader>
 						<TableBody>
 							{friend.debts.map((debt: any) => (
-								<TableRow key={debt.id} className={debt.status === 'PAID' ? 'opacity-50' : ''}>
+								<TableRow key={debt.id} className={debt.status === 'PAID' ? 'opacity-50' : 'bg-red-50/40 dark:bg-red-900/10'}>
 									<TableCell suppressHydrationWarning>{new Date(debt.date).toLocaleDateString('id-ID')}</TableCell>
-									<TableCell>{debt.name}</TableCell>
+									<TableCell>
+										{debt.name.startsWith('Sisa: ') ? debt.name.replace('Sisa: ', '') : debt.name}
+									</TableCell>
 									<TableCell>
 										<span className={debt.type === 'I_OWE' ? 'text-green-500 font-medium' : 'text-red-500 font-medium'}>
-											{debt.type === 'I_OWE' ? 'Temanmu Berhutang' : 'Kamu Berhutang'}
+											{debt.type === 'I_OWE' ? 'Teman → Kamu' : 'Kamu → Teman'}
 										</span>
 									</TableCell>
-									<TableCell className="text-right">{formatCurrency(parseFloat(debt.amount))}</TableCell>
+									<TableCell className="text-right">
+										<div className="font-medium">{formatCurrency(parseFloat(debt.amount))}</div>
+										{debt.name.startsWith('Sisa: ') && <span className="text-[10px] sm:text-xs text-gray-500">Sisa Tagihan</span>}
+									</TableCell>
 									<TableCell className="text-center">
-										{debt.status === 'PAID' && (
-											<span className="px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+										{debt.status === 'PAID' ? (
+											<span className="px-2 py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
 												LUNAS
+											</span>
+										) : (
+											<span className="px-2 py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
+												BELUM LUNAS
 											</span>
 										)}
 									</TableCell>
