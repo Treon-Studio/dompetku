@@ -15,7 +15,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/shared/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/shared/components/ui/select';
 import { Switch } from '~/shared/components/ui/switch';
-import CreatableSelect from 'react-select/creatable';
 
 const formatCurrency = (value: number) => {
 	return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value).replace(/\s+/g, ' ').replace(/\u00A0/g, ' ');
@@ -181,18 +180,14 @@ export default function DebtsView() {
 								<DialogTitle>Tambah Catatan Hutang/Piutang</DialogTitle>
 							</DialogHeader>
 							<form onSubmit={handleAddDebt} className="space-y-4">
-								<div className="space-y-2 text-sm">
+								<div className="space-y-2">
 									<Label>Nama Teman (Friend's Name)</Label>
-									<CreatableSelect
-										isClearable
-										options={friends.map((f: any) => ({ label: f.name, value: f.name }))}
-										value={friendName ? { label: friendName, value: friendName } : null}
-										onChange={(newValue: any) => setFriendName(newValue?.value || '')}
-										placeholder="Pilih atau ketik nama teman..."
-										formatCreateLabel={(inputValue) => `Tambah teman baru: "${inputValue}"`}
-										className="my-react-select-container text-black"
-										classNamePrefix="my-react-select"
-									/>
+									<Input list="friends-list" required value={friendName} onChange={(e) => setFriendName(e.target.value)} placeholder="Misal: Budi" maxLength={30} />
+									<datalist id="friends-list">
+										{friends.map((f: any) => (
+											<option key={f.id} value={f.name} />
+										))}
+									</datalist>
 								</div>
 								{unpaidDebts.length > 0 && (
 									<div className="space-y-2 p-3 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-md">
