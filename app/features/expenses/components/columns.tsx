@@ -1,14 +1,12 @@
-'use client';
+"use client";
 
-import { ColumnDef, RowData } from '@tanstack/react-table';
-import { Pen2, TrashBinMinimalistic } from '@solar-icons/react';
+import { Pen2, TrashBinMinimalistic } from "@solar-icons/react";
+import type { ColumnDef, RowData } from "@tanstack/react-table";
 
-import DataTableColumnHeader from '~/shared/components/table/data-table-column-header';
-import { Button } from '~/shared/components/ui/button';
-
-import { formatCurrency, formatDate } from '~/shared/lib/formatter';
-
-import { expensesCategory, expensesPay } from '~/shared/constants/categories';
+import DataTableColumnHeader from "~/shared/components/table/data-table-column-header";
+import { Button } from "~/shared/components/ui/button";
+import { expensesCategory, expensesPay } from "~/shared/constants/categories";
+import { formatCurrency, formatDate } from "~/shared/lib/formatter";
 
 export type Expenses = {
 	name: string;
@@ -23,7 +21,7 @@ export type Expenses = {
 	actions: string;
 };
 
-declare module '@tanstack/table-core' {
+declare module "@tanstack/table-core" {
 	interface ColumnMeta<TData extends RowData, TValue> {
 		isTogglable: boolean;
 	}
@@ -31,19 +29,19 @@ declare module '@tanstack/table-core' {
 
 export const columns: ColumnDef<Expenses>[] = [
 	{
-		accessorKey: 'name',
+		accessorKey: "name",
 		header: ({ column }) => <DataTableColumnHeader column={column} title="name" />,
 		cell: ({ row }) => {
-			const category = row.getValue<string>('category');
+			const category = row.getValue<string>("category");
 			return (
 				<div className="font-medium">
-					<span className="mr-2">{expensesCategory[category]?.emoji}</span> {row.getValue('name')}
+					<span className="mr-2">{expensesCategory[category]?.emoji}</span> {row.getValue("name")}
 				</div>
 			);
 		},
 	},
 	{
-		accessorKey: 'price',
+		accessorKey: "price",
 		header: ({ column }) => <DataTableColumnHeader column={column} title="Price" />,
 		cell: (props) => {
 			const {
@@ -51,7 +49,7 @@ export const columns: ColumnDef<Expenses>[] = [
 				table: { options },
 			} = props;
 			const user = options.meta?.user;
-			const price = parseFloat(row.getValue('price'));
+			const price = parseFloat(row.getValue("price"));
 			const formatted = formatCurrency({ value: price, currency: user?.currency, locale: user?.locale });
 			return (
 				<div className="font-medium tabular-nums" suppressHydrationWarning>
@@ -61,7 +59,7 @@ export const columns: ColumnDef<Expenses>[] = [
 		},
 	},
 	{
-		accessorKey: 'date',
+		accessorKey: "date",
 		header: ({ column }) => <DataTableColumnHeader column={column} title="spent date" />,
 		cell: (props) => {
 			const {
@@ -69,7 +67,7 @@ export const columns: ColumnDef<Expenses>[] = [
 				table: { options },
 			} = props;
 			const user = options.meta?.user;
-			const date = row.getValue<string>('date');
+			const date = row.getValue<string>("date");
 			const formatted = formatDate({ date, locale: user?.locale });
 			return (
 				<div className="" suppressHydrationWarning>
@@ -79,10 +77,10 @@ export const columns: ColumnDef<Expenses>[] = [
 		},
 	},
 	{
-		accessorKey: 'category',
+		accessorKey: "category",
 		header: ({ column }) => <DataTableColumnHeader column={column} title="category" />,
 		cell: ({ row }) => {
-			const category = row.getValue<string>('category');
+			const category = row.getValue<string>("category");
 			return <div className="">{expensesCategory[category]?.name}</div>;
 		},
 		filterFn: (row, id, value) => {
@@ -90,16 +88,16 @@ export const columns: ColumnDef<Expenses>[] = [
 		},
 	},
 	{
-		accessorKey: 'paid_via',
+		accessorKey: "paid_via",
 		header: ({ column }) => <DataTableColumnHeader column={column} title="paid via" />,
 		cell: ({ row }) => {
-			const paid_via = row.getValue<string>('paid_via');
+			const paid_via = row.getValue<string>("paid_via");
 			return <div className="">{expensesPay[paid_via]?.name}</div>;
 		},
 	},
-	{ accessorKey: 'notes' },
+	{ accessorKey: "notes" },
 	{
-		accessorKey: 'actions',
+		accessorKey: "actions",
 		cell: (props) => {
 			const {
 				row,
@@ -109,7 +107,7 @@ export const columns: ColumnDef<Expenses>[] = [
 			} = props;
 			return (
 				<div className="flex">
-					<Button className="mr-1 rounded-lg p-0 hover:bg-transparent hover:opacity-70" variant={'ghost'}>
+					<Button className="mr-1 rounded-lg p-0 hover:bg-transparent hover:opacity-70" variant={"ghost"}>
 						<Pen2
 							className="h-4 w-4"
 							onClick={() => {
@@ -117,7 +115,7 @@ export const columns: ColumnDef<Expenses>[] = [
 							}}
 						/>
 					</Button>
-					<Button className="ml-2 rounded-lg p-0 hover:bg-transparent hover:opacity-70" variant={'ghost'}>
+					<Button className="ml-2 rounded-lg p-0 hover:bg-transparent hover:opacity-70" variant={"ghost"}>
 						<TrashBinMinimalistic
 							className="h-4 w-4"
 							onClick={() => {

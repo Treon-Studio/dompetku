@@ -1,21 +1,18 @@
-'use client';
+"use client";
 
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react";
 
-import { toast } from 'sonner';
+import { toast } from "sonner";
+import { useUser } from "~/features/auth/components/auth-provider";
+import Add from "~/shared/components/add-button";
+import { useData } from "~/shared/components/context/data-provider";
+import DataTable from "~/shared/components/table/data-table";
+import messages from "~/shared/constants/messages";
+import { sortByKey } from "~/shared/lib/extractor";
+import { lookup } from "~/shared/lib/lookup";
 
-import Add from '~/shared/components/add-button';
-import { useUser } from '~/features/auth/components/auth-provider';
-import { useData } from '~/shared/components/context/data-provider';
-import DataTable from '~/shared/components/table/data-table';
-
-import { sortByKey } from '~/shared/lib/extractor';
-import { lookup } from '~/shared/lib/lookup';
-
-import messages from '~/shared/constants/messages';
-
-import { SubscriptionData, deleteSubscription, editSubscription } from '../api.client';
-import { columns } from './columns';
+import { deleteSubscription, editSubscription, type SubscriptionData } from "../api.client";
+import { columns } from "./columns";
 
 export default function SubscriptionsTable() {
 	const [selected, setSelected] = useState({});
@@ -24,7 +21,7 @@ export default function SubscriptionsTable() {
 
 	const onDelete = useCallback(
 		async (id: string) => {
-			if (!confirm('Apakah Anda yakin ingin menghapus data ini?')) return;
+			if (!confirm("Apakah Anda yakin ingin menghapus data ini?")) return;
 			try {
 				await deleteSubscription(id);
 				toast.success(messages.deleted);
@@ -33,11 +30,11 @@ export default function SubscriptionsTable() {
 				toast.error(messages.error);
 			}
 		},
-		[mutate]
+		[mutate],
 	);
 
 	const onChange = useCallback(
-		async (data: SubscriptionData | any) => {
+		async (data: SubscriptionData | unknown) => {
 			try {
 				await editSubscription(data);
 				toast.success(messages.updated);
@@ -46,10 +43,10 @@ export default function SubscriptionsTable() {
 				toast.error(messages.error);
 			}
 		},
-		[mutate]
+		[mutate],
 	);
 
-	const onEdit = useCallback((data: SubscriptionData | any) => {
+	const onEdit = useCallback((data: SubscriptionData | unknown) => {
 		setSelected(data);
 	}, []);
 
@@ -65,7 +62,7 @@ export default function SubscriptionsTable() {
 				options={{ user, onDelete, onEdit, onChange }}
 				filter={filter}
 				columns={columns}
-				data={sortByKey(sortByKey(data, 'renewal_date'), 'active')}
+				data={sortByKey(sortByKey(data, "renewal_date"), "active")}
 				loading={loading}
 				filename="Subscriptions"
 				hideViewOptions

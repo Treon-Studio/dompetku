@@ -1,8 +1,8 @@
-import { useLoaderData } from '@remix-run/react';
-import { type LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
-import { I18nProvider } from '@i18n/provider';
-import SignUpView from '~/features/auth/components/signup-view';
+import { I18nProvider } from "@i18n/provider";
+import { getLocaleFromRequest, loadTranslations } from "@i18n/server";
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
+import SignUpView from "~/features/auth/components/signup-view";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const locale = getLocaleFromRequest(request);

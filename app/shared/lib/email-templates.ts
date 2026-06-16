@@ -3,7 +3,7 @@
  * Resend supports `html:` parameter natively
  */
 
-const BASE_URL = 'https://dompetku.treonstudio.com';
+const BASE_URL = "https://dompetku.treonstudio.com";
 
 export function resetPasswordEmailHtml(actionLink: string): string {
 	return `
@@ -61,7 +61,7 @@ export function feedbackEmailHtml(message: string, email: string): string {
       <strong>From:</strong> ${email}
     </p>
     <div style="background:#f3f4f6;border-radius:6px;padding:16px;margin:16px 0;">
-      <p style="color:#374151;font-size:14px;line-height:24px;margin:0;">${message.replace(/\n/g, '<br/>')}</p>
+      <p style="color:#374151;font-size:14px;line-height:24px;margin:0;">${message.replace(/\n/g, "<br/>")}</p>
     </div>
     <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;" />
     <p style="color:#9ca3af;font-size:12px;text-align:center;">

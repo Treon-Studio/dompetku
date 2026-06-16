@@ -1,6 +1,14 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '~/shared/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from "~/shared/components/ui/card";
 
-export default function CardComponent({ title, data, children }: { title: String; data: String; children?: any }) {
+export default function CardComponent({
+	title,
+	data,
+	children,
+}: {
+	title: string;
+	data: string;
+	children?: React.ReactNode;
+}) {
 	return (
 		<Card className="bg-card text-card-foreground">
 			{children ? (

@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useCallback } from 'react';
+import { useCallback } from "react";
 
-import Add from '~/shared/components/add-button';
-import { useOverview } from '~/shared/components/context/overview-provider';
+import Add from "~/shared/components/add-button";
+import { useOverview } from "~/shared/components/context/overview-provider";
 
-import { lookup } from '~/shared/lib/lookup';
+import { lookup } from "~/shared/lib/lookup";
 
 const AddData = () => {
 	const { data } = useOverview();

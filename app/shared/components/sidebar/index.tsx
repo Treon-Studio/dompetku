@@ -1,12 +1,14 @@
-'use client';
+"use client";
 
-import { Link, useLocation, useNavigate } from '@remix-run/react';
-import { useHotkeys } from 'react-hotkeys-hook';
-
-import { useUiActions, useSidebarOpen } from '~/shared/stores/ui/ui.store';
-import { useUser } from '~/features/auth/components/auth-provider';
+import { useTranslation } from "@i18n/client";
+import { Link, useLocation, useNavigate } from "@remix-run/react";
+import { useHotkeys } from "react-hotkeys-hook";
+import { useUser } from "~/features/auth/components/auth-provider";
 import {
+	BudgetsIcon,
+	DebtsIcon,
 	ExpensesIcon,
+	GoalsIcon,
 	IncomeIcon,
 	InvestmentIcon,
 	OverviewIcon,
@@ -15,40 +17,36 @@ import {
 	SignoutIcon,
 	SubscriptionsIcon,
 	SupportIcon,
-	DebtsIcon,
-	BudgetsIcon,
-	GoalsIcon,
-} from '~/shared/components/icons';
-import { Separator } from '~/shared/components/ui/separator';
-import { useTranslation } from '@i18n/client';
+} from "~/shared/components/icons";
+import { Separator } from "~/shared/components/ui/separator";
+import shortcuts from "~/shared/constants/shortcuts";
 
-import { cn } from '~/shared/lib/utils';
+import { cn } from "~/shared/lib/utils";
+import { useSidebarOpen, useUiActions } from "~/shared/stores/ui/ui.store";
 
-import shortcuts from '~/shared/constants/shortcuts';
+import SidebarLink from "./link";
 
-import SidebarLink from './link';
-
-const dashboardLinks = [
-	{ name: 'Overview', href: '/dashboard', Icon: OverviewIcon, shortcutText: shortcuts.menu.overview.shortcut },
-	{ name: 'Income', href: '/dashboard/income', Icon: IncomeIcon, shortcutText: shortcuts.menu.income.shortcut },
-	{ name: 'Expenses', href: '/dashboard/expenses', Icon: ExpensesIcon, shortcutText: shortcuts.menu.expenses.shortcut },
+const _dashboardLinks = [
+	{ name: "Overview", href: "/dashboard", Icon: OverviewIcon, shortcutText: shortcuts.menu.overview.shortcut },
+	{ name: "Income", href: "/dashboard/income", Icon: IncomeIcon, shortcutText: shortcuts.menu.income.shortcut },
+	{ name: "Expenses", href: "/dashboard/expenses", Icon: ExpensesIcon, shortcutText: shortcuts.menu.expenses.shortcut },
 	{
-		name: 'Investments',
-		href: '/dashboard/investments',
+		name: "Investments",
+		href: "/dashboard/investments",
 		Icon: InvestmentIcon,
 		shortcutText: shortcuts.menu.investments.shortcut,
 	},
 	{
-		name: 'Subscriptions',
-		href: '/dashboard/subscriptions',
+		name: "Subscriptions",
+		href: "/dashboard/subscriptions",
 		Icon: SubscriptionsIcon,
 		shortcutText: shortcuts.menu.subscriptions.shortcut,
 	},
 ];
 
 const settingsLinks = [
-	{ href: '/dashboard/profile', name: 'Profile', Icon: ProfileIcon },
-	{ href: 'mailto:support@dompetku', name: 'Support', Icon: SupportIcon },
+	{ href: "/dashboard/profile", name: "Profile", Icon: ProfileIcon },
+	{ href: "mailto:support@dompetku", name: "Support", Icon: SupportIcon },
 ];
 
 const menuShortcutList = Object.values(shortcuts.menu).map((_) => _.shortcut);
@@ -59,7 +57,7 @@ const options = {
 
 export default function Sidebar() {
 	const { t } = useTranslation();
-	const pathname = useLocation()?.pathname || '/';
+	const pathname = useLocation()?.pathname || "/";
 	const router = useNavigate();
 	const show = useSidebarOpen();
 	const { closeSidebar } = useUiActions();
@@ -67,61 +65,61 @@ export default function Sidebar() {
 
 	const navItems = [
 		{
-			key: 'overview',
-			name: t('navigation.overview'),
-			href: '/dashboard',
+			key: "overview",
+			name: t("navigation.overview"),
+			href: "/dashboard",
 			Icon: OverviewIcon,
 			shortcut: shortcuts.menu.overview.shortcut,
 		},
 		{
-			key: 'income',
-			name: t('navigation.income'),
-			href: '/dashboard/income',
+			key: "income",
+			name: t("navigation.income"),
+			href: "/dashboard/income",
 			Icon: IncomeIcon,
 			shortcut: shortcuts.menu.income.shortcut,
 		},
 		{
-			key: 'expenses',
-			name: t('navigation.expenses'),
-			href: '/dashboard/expenses',
+			key: "expenses",
+			name: t("navigation.expenses"),
+			href: "/dashboard/expenses",
 			Icon: ExpensesIcon,
 			shortcut: shortcuts.menu.expenses.shortcut,
 		},
 		{
-			key: 'investments',
-			name: t('navigation.investments'),
-			href: '/dashboard/investments',
+			key: "investments",
+			name: t("navigation.investments"),
+			href: "/dashboard/investments",
 			Icon: InvestmentIcon,
 			shortcut: shortcuts.menu.investments.shortcut,
 		},
 		{
-			key: 'subscriptions',
-			name: t('navigation.subscriptions'),
-			href: '/dashboard/subscriptions',
+			key: "subscriptions",
+			name: t("navigation.subscriptions"),
+			href: "/dashboard/subscriptions",
 			Icon: SubscriptionsIcon,
 			shortcut: shortcuts.menu.subscriptions.shortcut,
 		},
-		{ key: 'debts', name: 'Hutang Piutang', href: '/dashboard/debts', Icon: DebtsIcon },
-		{ key: 'budgets', name: 'Budgets', href: '/dashboard/budgets', Icon: BudgetsIcon },
-		{ key: 'goals', name: 'Goals', href: '/dashboard/goals', Icon: GoalsIcon },
+		{ key: "debts", name: "Hutang Piutang", href: "/dashboard/debts", Icon: DebtsIcon },
+		{ key: "budgets", name: "Budgets", href: "/dashboard/budgets", Icon: BudgetsIcon },
+		{ key: "goals", name: "Goals", href: "/dashboard/goals", Icon: GoalsIcon },
 	];
 	useHotkeys(
 		menuShortcutList,
 		(_, handler) => {
-			const keys = handler.keys?.join('');
-			if (keys === shortcuts.menu.overview.shortcut) router('/dashboard');
-			if (keys === shortcuts.menu.income.shortcut) router('/dashboard/income');
-			if (keys === shortcuts.menu.expenses.shortcut) router('/dashboard/expenses');
-			if (keys === shortcuts.menu.investments.shortcut) router('/dashboard/investments');
-			if (keys === shortcuts.menu.subscriptions.shortcut) router('/dashboard/subscriptions');
-			if (keys === shortcuts.menu.profile.shortcut) router('/dashboard/profile');
+			const keys = handler.keys?.join("");
+			if (keys === shortcuts.menu.overview.shortcut) router("/dashboard");
+			if (keys === shortcuts.menu.income.shortcut) router("/dashboard/income");
+			if (keys === shortcuts.menu.expenses.shortcut) router("/dashboard/expenses");
+			if (keys === shortcuts.menu.investments.shortcut) router("/dashboard/investments");
+			if (keys === shortcuts.menu.subscriptions.shortcut) router("/dashboard/subscriptions");
+			if (keys === shortcuts.menu.profile.shortcut) router("/dashboard/profile");
 		},
-		options
+		options,
 	);
 
 	async function signOut() {
-		await fetch('/api/auth/signout', { method: 'POST' });
-		window.location.href = '/signin';
+		await fetch("/api/auth/signout", { method: "POST" });
+		window.location.href = "/signin";
 	}
 
 	return (
@@ -129,12 +127,12 @@ export default function Sidebar() {
 			<div
 				onClick={closeSidebar}
 				className={`fixed inset-0 left-0 right-0 z-1 hidden bg-black bg-opacity-10 backdrop-blur-sm ${cn({
-					'block!': show,
+					"block!": show,
 				})}`}
 			/>
 			<nav
 				className={`fixed bottom-0 left-0 top-0 z-1 hidden min-h-full w-[70px] flex-col bg-[#09090b] px-3 py-2 transition-all sm:flex sm:w-[64px] sm:dark:border-r sm:dark:border-border ${cn(
-					{ 'block!': show }
+					{ "block!": show },
 				)}`}
 			>
 				<div className="z-10 mb-[10px] flex h-full w-full flex-col justify-between">
@@ -151,7 +149,7 @@ export default function Sidebar() {
 							{navItems.map((link, index) => {
 								return (
 									<SidebarLink
-										className={index === 0 ? 'mt-0!' : ''}
+										className={index === 0 ? "mt-0!" : ""}
 										onClick={closeSidebar}
 										key={link.key}
 										name={link.name}
@@ -163,11 +161,11 @@ export default function Sidebar() {
 									</SidebarLink>
 								);
 							})}
-							{user?.role === 'ADMIN' && (
+							{user?.role === "ADMIN" && (
 								<SidebarLink
 									onClick={closeSidebar}
 									name="Admin Panel"
-									active={pathname.startsWith('/admin')}
+									active={pathname.startsWith("/admin")}
 									href="/admin"
 								>
 									<SettingsIcon className="text-white" />
@@ -185,7 +183,7 @@ export default function Sidebar() {
 							<button
 								className={`mt-2 flex h-[40px] w-full items-center justify-center rounded-lg p-2 text-base tracking-wide text-white hover:bg-[#27272a]`}
 								onClick={signOut}
-								title={t('common.logout')}
+								title={t("common.logout")}
 							>
 								<div className="flex items-center">
 									<SignoutIcon className="text-white" />

@@ -1,16 +1,14 @@
-import Footer from '~/shared/components/footer';
-import SignUpForm from './signup-form';
-import { useTranslation } from '@i18n/client';
+import Footer from "~/shared/components/footer";
+import SignUpForm from "./signup-form";
 
 export default function SignUpView() {
-	const { t } = useTranslation();
-
 	return (
 		<main
 			className={`relative m-auto flex h-screen w-full flex-col items-center justify-center bg-linear-to-br from-orange-100 via-white to-orange-50 pl-2 pr-2`}
 		>
 			<div className="absolute inset-x-0 top-[-55px] z-10 h-96 overflow-hidden text-gray-900/40 opacity-10 mask-[linear-gradient(to_top,transparent,white)]">
 				<svg className="absolute inset-0 top-0 h-full w-full text-gray-900" xmlns="http://www.w3.org/2000/svg">
+					<title>Background pattern</title>
 					<defs>
 						<pattern
 							id="pattern"
@@ -39,7 +37,7 @@ export default function SignUpView() {
 				</p>
 				<SignUpForm />
 			</div>
-			<Footer className={'absolute bottom-0'} />
+			<Footer className={"absolute bottom-0"} />
 		</main>
 	);
 }

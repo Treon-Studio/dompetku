@@ -1,19 +1,16 @@
-import { useEffect, useState } from 'react';
+import { ChatRoundLine, CheckCircle } from "@solar-icons/react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-import { CheckCircle, ChatRoundLine } from '@solar-icons/react';
-import { toast } from 'sonner';
-
-import { Button } from '~/shared/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '~/shared/components/ui/popover';
-import { Textarea } from '~/shared/components/ui/textarea';
-
-import { apiUrls } from '~/shared/lib/apiUrls';
-import { cn } from '~/shared/lib/utils';
-
-import messages, { emails } from '~/shared/constants/messages';
+import { Button } from "~/shared/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "~/shared/components/ui/popover";
+import { Textarea } from "~/shared/components/ui/textarea";
+import { emails } from "~/shared/constants/messages";
+import { apiUrls } from "~/shared/lib/apiUrls";
+import { cn } from "~/shared/lib/utils";
 
 export default function Feedback({ className, showDatePicker }: { className?: string; showDatePicker: boolean }) {
-	const [state, setState] = useState({ show: false, loading: false, message: '', sent: false });
+	const [state, setState] = useState({ show: false, loading: false, message: "", sent: false });
 
 	useEffect(() => {
 		if (state.sent) {
@@ -29,8 +26,8 @@ export default function Feedback({ className, showDatePicker }: { className?: st
 
 		try {
 			const res = await fetch(apiUrls.feedback.add, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ message: state.message }),
 			});
 
@@ -39,9 +36,9 @@ export default function Feedback({ className, showDatePicker }: { className?: st
 				throw new Error(error.message || res.statusText);
 			}
 
-			setState((prev) => ({ ...prev, sent: true, loading: false, message: '' }));
+			setState((prev) => ({ ...prev, sent: true, loading: false, message: "" }));
 		} catch (e: unknown) {
-			const error = e as Error;
+			const _error = e as Error;
 			setState((prev) => ({ ...prev, loading: false }));
 			toast.error(emails.feedback.failed);
 		}
@@ -50,7 +47,7 @@ export default function Feedback({ className, showDatePicker }: { className?: st
 	return (
 		<Popover>
 			<PopoverTrigger>
-				<Button className={`${className} max-sm:h-9 max-sm:text-sm`} asChild size={'sm'}>
+				<Button className={`${className} max-sm:h-9 max-sm:text-sm`} asChild size={"sm"}>
 					<span>
 						<ChatRoundLine className="mr-[6px] mt-[2px] h-4 w-4" />
 						Feedback
@@ -59,7 +56,7 @@ export default function Feedback({ className, showDatePicker }: { className?: st
 			</PopoverTrigger>
 			<PopoverContent
 				className={`z-10 mr-1 h-[160px] w-[290px] rounded-md border border-border bg-popover p-4 shadow-xs sm:mt-2 ${cn(
-					{ 'mt-[-18px]': showDatePicker, 'mt-[20px]': !showDatePicker }
+					{ "mt-[-18px]": showDatePicker, "mt-[20px]": !showDatePicker },
 				)} `}
 			>
 				{!state.sent ? (
@@ -76,7 +73,7 @@ export default function Feedback({ className, showDatePicker }: { className?: st
 							className="h-[90px] resize-none"
 							required
 						/>
-						<Button disabled={state.loading} size={'sm'} className="float-right mt-[10px]">
+						<Button disabled={state.loading} size={"sm"} className="float-right mt-[10px]">
 							Send
 						</Button>
 					</form>

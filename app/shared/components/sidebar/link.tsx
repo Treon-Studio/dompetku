@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Link } from '@remix-run/react';
+import { Link } from "@remix-run/react";
 
-import { Tooltip, TooltipContent, TooltipTrigger } from '~/shared/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/shared/components/ui/tooltip";
 
 type SidebarLinkProps = {
 	href: string;
@@ -16,10 +16,10 @@ type SidebarLinkProps = {
 
 export default function SidebarLink({
 	href,
-	name = '',
+	name = "",
 	children,
 	active,
-	className = '',
+	className = "",
 	shortcut,
 	onClick,
 }: SidebarLinkProps) {
@@ -35,7 +35,7 @@ export default function SidebarLink({
 								}}
 								to={href}
 								className={`mb-1.5 mt-1.5 flex items-center justify-center rounded-lg p-2 tracking-wide text-white transition-all hover:bg-[#27272a] ${
-									active ? 'bg-[#27272a]' : ''
+									active ? "bg-[#27272a]" : ""
 								} ${className}`}
 							>
 								{children}
@@ -56,7 +56,7 @@ export default function SidebarLink({
 					}}
 					to={href}
 					className={`mb-1.5 mt-1.5 flex items-center justify-center rounded-lg p-2 tracking-wide text-white transition-all hover:bg-[#27272a] ${
-						active ? 'bg-[#27272a]' : ''
+						active ? "bg-[#27272a]" : ""
 					} ${className}`}
 				>
 					{children}

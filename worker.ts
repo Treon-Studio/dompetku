@@ -1,5 +1,5 @@
-import { createRequestHandler, type ServerBuild } from '@remix-run/cloudflare';
-import * as build from './build/server/index.js';
+import { createRequestHandler, type ServerBuild } from "@remix-run/cloudflare";
+import * as build from "./build/server/index.js";
 
 export default {
 	fetch(request: Request, env: unknown, ctx: ExecutionContext) {

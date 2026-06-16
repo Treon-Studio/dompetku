@@ -1,11 +1,11 @@
-import { DataContextProvider } from '~/shared/components/context/data-provider';
-import LayoutHeader from '~/shared/components/layout/header';
+import { DataContextProvider } from "~/shared/components/context/data-provider";
+import LayoutHeader from "~/shared/components/layout/header";
 
-import InvestmentsSummary from './summary';
-import DataTable from './table';
+import InvestmentsSummary from "./summary";
+import DataTable from "./table";
 
-const title = 'Dompetku - Investments';
-const description = 'Effortlessly Track and Manage Expenses.';
+const title = "Dompetku - Investments";
+const description = "Effortlessly Track and Manage Expenses.";
 
 export const metadata = {
 	title,

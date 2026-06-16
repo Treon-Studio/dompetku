@@ -1,5 +1,5 @@
-import { initializeApp } from 'firebase/app';
-import { getAnalytics, logEvent } from 'firebase/analytics';
+import { getAnalytics, logEvent } from "firebase/analytics";
+import { initializeApp } from "firebase/app";
 
 let app: ReturnType<typeof initializeApp> | null = null;
 let analytics: ReturnType<typeof getAnalytics> | null = null;
@@ -26,13 +26,13 @@ export function initFirebase(config: {
 export function logException(description: string, fatal = false) {
 	if (!analytics) return;
 	try {
-		logEvent(analytics, 'exception', { description, fatal });
+		logEvent(analytics, "exception", { description, fatal });
 	} catch {
 		// silently fail
 	}
 }
 
-export function logEventToFirebase(name: string, params?: Record<string, any>) {
+export function logEventToFirebase(name: string, params?: Record<string, unknown>) {
 	if (!analytics) return;
 	try {
 		logEvent(analytics, name, params);
@@ -44,7 +44,7 @@ export function logEventToFirebase(name: string, params?: Record<string, any>) {
 export function setUserId(id: string) {
 	if (!analytics) return;
 	try {
-		const { setUserId } = require('firebase/analytics');
+		const { setUserId } = require("firebase/analytics");
 		setUserId(analytics, id);
 	} catch {
 		// silently fail

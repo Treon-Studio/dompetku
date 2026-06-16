@@ -1,4 +1,4 @@
-export default function CircleLoader({ className = '' }: { className?: string }) {
+export default function CircleLoader({ className = "" }: { className?: string }) {
 	return (
 		<svg
 			className={`dark:text-dark h-5 w-5 animate-spin text-white dark:text-black ${className}`}
@@ -6,6 +6,7 @@ export default function CircleLoader({ className = '' }: { className?: string })
 			fill="none"
 			viewBox="0 0 24 24"
 		>
+			<title>Loading</title>
 			<circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
 			<path
 				className="opacity-75"

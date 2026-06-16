@@ -1,14 +1,14 @@
-import { useLoaderData } from '@remix-run/react';
-import { type LoaderFunctionArgs, redirect } from '@remix-run/cloudflare';
-import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
-import { I18nProvider } from '@i18n/provider';
-import ResetPasswordView from '~/features/auth/components/reset-password-view';
+import { I18nProvider } from "@i18n/provider";
+import { getLocaleFromRequest, loadTranslations } from "@i18n/server";
+import { type LoaderFunctionArgs, redirect } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
+import ResetPasswordView from "~/features/auth/components/reset-password-view";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const urlObj = new URL(request.url);
-	const token = urlObj.searchParams.get('token');
+	const token = urlObj.searchParams.get("token");
 	if (!token) {
-		return redirect('/forgot-password');
+		return redirect("/forgot-password");
 	}
 	const locale = getLocaleFromRequest(request);
 	const translations = await loadTranslations(locale);

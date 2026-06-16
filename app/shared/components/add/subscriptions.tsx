@@ -1,35 +1,29 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useMemo, useRef } from 'react';
-import debounce from 'debounce';
-import { Link } from '@remix-run/react';
-import { addSubscription, editSubscription } from '~/features/subscriptions/api.client';
-import { useResourceForm } from '~/shared/hooks/use-resource-form';
-import { toast } from 'sonner';
-
-import AutoCompleteList from '~/shared/components/autocomplete-list';
-import { useUser } from '~/features/auth/components/auth-provider';
-import CircleLoader from '~/shared/components/loader/circle';
-import Modal from '~/shared/components/modal';
-import { Button } from '~/shared/components/ui/button';
-import { Input } from '~/shared/components/ui/input';
-import { Label } from '~/shared/components/ui/label';
-import { Textarea } from '~/shared/components/ui/textarea';
-import { useTranslation } from '@i18n/client';
-
-import { formatInputPrice, getCurrencySymbol, parseInputPrice } from '~/shared/lib/formatter';
-
-import { subscriptionCategory } from '~/shared/constants/categories';
-import { datePattern } from '~/shared/constants/date';
+import debounce from "debounce";
+import { useEffect, useMemo, useState } from "react";
+import { useUser } from "~/features/auth/components/auth-provider";
+import { addSubscription, editSubscription } from "~/features/subscriptions/api.client";
+import AutoCompleteList from "~/shared/components/autocomplete-list";
+import CircleLoader from "~/shared/components/loader/circle";
+import Modal from "~/shared/components/modal";
+import { Button } from "~/shared/components/ui/button";
+import { Input } from "~/shared/components/ui/input";
+import { Label } from "~/shared/components/ui/label";
+import { Textarea } from "~/shared/components/ui/textarea";
+import { subscriptionCategory } from "~/shared/constants/categories";
+import { datePattern } from "~/shared/constants/date";
+import { useResourceForm } from "~/shared/hooks/use-resource-form";
+import { formatInputPrice, getCurrencySymbol, parseInputPrice } from "~/shared/lib/formatter";
 
 const checkUrl = (urlString: string) => {
-	let url;
+	let url: URL | undefined;
 	try {
 		url = new URL(urlString);
 	} catch (_) {
 		return false;
 	}
-	return url.protocol === 'http:' || url.protocol === 'https:';
+	return url.protocol === "http:" || url.protocol === "https:";
 };
 
 interface AddSubscriptions {
@@ -41,12 +35,12 @@ interface AddSubscriptions {
 }
 
 const initialState = {
-	date: '',
-	name: '',
-	notes: '',
-	url: '',
-	price: '',
-	paid: 'monthly',
+	date: "",
+	name: "",
+	notes: "",
+	url: "",
+	price: "",
+	paid: "monthly",
 };
 
 export default function AddSubscriptions({ show, onHide, mutate, selected, lookup }: AddSubscriptions) {
@@ -67,13 +61,13 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 			setState((prev: any) => ({ ...prev, autocomplete: lookup(value) }));
 		};
 		return debounce(callbackHandler, 500);
-	}, [lookup]);
+	}, [lookup, setState]);
 
 	return (
 		<Modal
 			someRef={inputRef}
 			show={show}
-			title={selected.id ? t('subscriptions.editSubscription') : t('subscriptions.addSubscription')}
+			title={selected.id ? t("subscriptions.editSubscription") : t("subscriptions.addSubscription")}
 			onHide={onHide}
 		>
 			<div className="sm:flex sm:items-start max-sm:pb-6">
@@ -85,7 +79,7 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 					}}
 				>
 					<div className="relative">
-						<Label htmlFor="name">{t('subscriptions.title')}</Label>
+						<Label htmlFor="name">{t("subscriptions.title")}</Label>
 						<Input
 							className="mt-1.5"
 							id="name"
@@ -101,7 +95,7 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 									setState({ ...state, name: value });
 									if (value.length > 2) onLookup(value);
 								} else {
-									setState({ ...state, name: '', paid: 'monthly' });
+									setState({ ...state, name: "", paid: "monthly" });
 								}
 							}}
 							value={state.name}
@@ -111,7 +105,7 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 								setState({ ...state, autocomplete: [] });
 							}}
 							data={state.autocomplete}
-							searchTerm={state.name.length > 2 ? state.name.toLowerCase() : ''}
+							searchTerm={state.name.length > 2 ? state.name.toLowerCase() : ""}
 							onClick={({ name, paid, url }) => {
 								setState({ ...state, name, paid, url, autocomplete: [] });
 							}}
@@ -120,7 +114,7 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 					</div>
 					<div className="grid grid-cols-[100%] gap-1">
 						<Label className="flex grow-0 items-center" htmlFor="website">
-							{t('subscriptions.website')}
+							{t("subscriptions.website")}
 							{hasValidUrl && state.url ? (
 								<img
 									src={`http://www.google.com/s2/favicons?domain=${state.url}&sz=125`}
@@ -147,7 +141,7 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 					<div className="grid grid-cols-[34%_36%_30%] gap-1">
 						<div className="mr-3">
 							<Label htmlFor="price">
-								{t('subscriptions.price')}
+								{t("subscriptions.price")}
 								<span className="ml-2 font-mono text-xs text-muted-foreground">
 									({getCurrencySymbol(user?.currency, user?.locale)})
 								</span>
@@ -164,7 +158,7 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 							/>
 						</div>
 						<div className="mr-3">
-							<Label htmlFor="date">{t('subscriptions.startDate')}</Label>
+							<Label htmlFor="date">{t("subscriptions.startDate")}</Label>
 							<Input
 								className="mt-1.5 appearance-none"
 								id="date"
@@ -179,7 +173,7 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 							/>
 						</div>
 						<div className="mr-3">
-							<Label htmlFor="paying">{t('subscriptions.billingCycle')}</Label>
+							<Label htmlFor="paying">{t("subscriptions.billingCycle")}</Label>
 							<select
 								id="paying"
 								className="mt-1.5 flex h-9 max-sm:h-10 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
@@ -201,8 +195,8 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 					</div>
 					<div>
 						<Label className="block">
-							{t('subscriptions.notes')}{' '}
-							<span className="text-center text-sm text-muted-foreground">{t('common.optional')}</span>
+							{t("subscriptions.notes")}{" "}
+							<span className="text-center text-sm text-muted-foreground">{t("common.optional")}</span>
 						</Label>
 						<Textarea
 							className="mt-2 h-20"
@@ -213,7 +207,7 @@ export default function AddSubscriptions({ show, onHide, mutate, selected, looku
 					</div>
 
 					<Button disabled={loading} className="mt-2" type="submit">
-						{loading ? <CircleLoader /> : selected?.id ? t('common.update') : t('common.submit')}
+						{loading ? <CircleLoader /> : selected?.id ? t("common.update") : t("common.submit")}
 					</Button>
 				</form>
 			</div>

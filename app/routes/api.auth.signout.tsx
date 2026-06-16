@@ -1,7 +1,7 @@
-import type { ActionFunctionArgs } from '@remix-run/cloudflare';
-import { signOut } from '~/features/auth/api.server';
-import { createDbClient } from '~/core/db.server';
-import { getCloudflareEnv } from '~/env';
+import type { ActionFunctionArgs } from "@remix-run/cloudflare";
+import { createDbClient } from "~/core/db.server";
+import { getCloudflareEnv } from "~/env";
+import { signOut } from "~/features/auth/api.server";
 
 export async function action({ request, context }: ActionFunctionArgs) {
 	const db = createDbClient(getCloudflareEnv(context));

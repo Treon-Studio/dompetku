@@ -1,11 +1,10 @@
-import type { ActionFunctionArgs } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
-
-import { login, createSession, isPhone } from '~/features/auth/api.server';
-import { createDbClient } from '~/core/db.server';
-import { SigninSchema } from '~/features/auth/schemas';
-import { logger } from '~/core/logger.server';
-import { getCloudflareEnv } from '~/env';
+import type { ActionFunctionArgs } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { createDbClient } from "~/core/db.server";
+import { logger } from "~/core/logger.server";
+import { getCloudflareEnv } from "~/env";
+import { createSession, login } from "~/features/auth/api.server";
+import { SigninSchema } from "~/features/auth/schemas";
 
 export async function action({ request, context }: ActionFunctionArgs) {
 	try {
@@ -22,13 +21,13 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
 		const user = await login(identity, password, db);
 		if (!user) {
-			return json({ message: 'Invalid credentials' }, { status: 401 });
+			return json({ message: "Invalid credentials" }, { status: 401 });
 		}
 
-		return createSession(user.id, '/dashboard', db, context);
+		return createSession(user.id, "/dashboard", db, context);
 	} catch (e: unknown) {
 		const error = e as Error;
-		logger.error('Signin error', { error: String(error) });
-		return json({ message: 'An error occurred during sign in' }, { status: 500 });
+		logger.error("Signin error", { error: String(error) });
+		return json({ message: "An error occurred during sign in" }, { status: 500 });
 	}
 }

@@ -1,11 +1,8 @@
-import * as React from 'react';
-
-import { AddCircle, CheckCircle } from '@solar-icons/react';
-import { Column } from '@tanstack/react-table';
-
-import { useData } from '~/shared/components/context/data-provider';
-import { Badge } from '~/shared/components/ui/badge';
-import { Button } from '~/shared/components/ui/button';
+import { AddCircle, CheckCircle } from "@solar-icons/react";
+import type { Column } from "@tanstack/react-table";
+import type * as React from "react";
+import { Badge } from "~/shared/components/ui/badge";
+import { Button } from "~/shared/components/ui/button";
 import {
 	Command,
 	CommandEmpty,
@@ -14,11 +11,11 @@ import {
 	CommandItem,
 	CommandList,
 	CommandSeparator,
-} from '~/shared/components/ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '~/shared/components/ui/popover';
-import { Separator } from '~/shared/components/ui/separator';
+} from "~/shared/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "~/shared/components/ui/popover";
+import { Separator } from "~/shared/components/ui/separator";
 
-import { cn } from '~/shared/lib/utils';
+import { cn } from "~/shared/lib/utils";
 
 interface DataTableFacetedFilter<TData, TValue> {
 	column?: Column<TData, TValue>;
@@ -48,8 +45,8 @@ export default function DataTableFacetedFilter<TData, TValue>({
 				<Button
 					variant="outline"
 					className={`h-8 border-dashed ${cn({
-						'pointer-events-none opacity-50': disabled,
-						'max:sm:w-full': selectedValues.size < 1,
+						"pointer-events-none opacity-50": disabled,
+						"max:sm:w-full": selectedValues.size < 1,
 					})}`}
 				>
 					<AddCircle className="mr-2 h-4 w-4" />
@@ -107,11 +104,11 @@ export default function DataTableFacetedFilter<TData, TValue>({
 									>
 										<div
 											className={cn(
-												'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
-												isSelected ? 'bg-primary text-primary-foreground' : 'opacity-50 [&_svg]:invisible'
+												"mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+												isSelected ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible",
 											)}
 										>
-											<CheckCircle className={cn('h-4 w-4')} />
+											<CheckCircle className={cn("h-4 w-4")} />
 										</div>
 										{option.icon && <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
 										<span>{option.label}</span>

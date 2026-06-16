@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import { useShallow } from 'zustand/react/shallow';
+import { create } from "zustand";
+import { useShallow } from "zustand/react/shallow";
 
-export type TTheme = 'light' | 'dark' | 'system';
+export type TTheme = "light" | "dark" | "system";
 
 export type TUiState = {
 	readonly isSidebarOpen: boolean;
@@ -18,7 +18,7 @@ export type TUiActions = {
 export const useUiStore = create<TUiState & TUiActions>()((set) => ({
 	// Initial state
 	isSidebarOpen: false,
-	theme: 'system',
+	theme: "system",
 
 	// Actions
 	toggleSidebar: () => set((s) => ({ isSidebarOpen: !s.isSidebarOpen })),
@@ -37,5 +37,5 @@ export const useUiActions = () =>
 			openSidebar: s.openSidebar,
 			closeSidebar: s.closeSidebar,
 			setTheme: s.setTheme,
-		}))
+		})),
 	);

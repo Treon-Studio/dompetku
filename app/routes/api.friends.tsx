@@ -1,1 +1,1 @@
-export { friendsAction as action } from '~/features/debts/api.server';
+export { friendsAction as action } from "~/features/debts/api.server";

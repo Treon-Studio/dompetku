@@ -1,29 +1,28 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { AddCircle } from "@solar-icons/react";
+import { useEffect, useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 
-import { AddCircle } from '@solar-icons/react';
-import { useHotkeys } from 'react-hotkeys-hook';
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/shared/components/ui/tooltip";
 
-import { Tooltip, TooltipContent, TooltipTrigger } from '~/shared/components/ui/tooltip';
+import shortcuts from "~/shared/constants/shortcuts";
 
-import shortcuts from '~/shared/constants/shortcuts';
-
-import AddExpense from './add/expenses';
-import AddIncome from './add/income';
-import AddInvestments from './add/investments';
-import AddSubscriptions from './add/subscriptions';
+import AddExpense from "./add/expenses";
+import AddIncome from "./add/income";
+import AddInvestments from "./add/investments";
+import AddSubscriptions from "./add/subscriptions";
 
 const openShortcutKey = Object.values(shortcuts.modal.open.shortcut);
 
-type TypeProps = 'expenses' | 'income' | 'investments' | 'subscriptions';
+type TypeProps = "expenses" | "income" | "investments" | "subscriptions";
 
 type AddProps = {
-	mutate?: any;
+	mutate?: () => void;
 	type?: TypeProps;
-	selected?: any;
+	selected?: Record<string, unknown>;
 	onHide?: () => void;
-	onLookup?: (name: string) => void;
+	onLookup?: (name: string) => Record<string, unknown>[];
 };
 
 const options = {
@@ -39,6 +38,11 @@ export default function Add({ mutate, type, selected = {}, onHide, onLookup }: A
 			setShow(true);
 		}
 	}, [selected.id]);
+
+	const lookupHandler = (value: string) => {
+		if (onLookup) return onLookup(value);
+		return [];
+	};
 
 	return (
 		<>
@@ -60,11 +64,9 @@ export default function Add({ mutate, type, selected = {}, onHide, onLookup }: A
 					</kbd>
 				</TooltipContent>
 			</Tooltip>
-			{type === 'expenses' ? (
+			{type === "expenses" ? (
 				<AddExpense
-					lookup={(value: string) => {
-						if (onLookup) return onLookup(value);
-					}}
+					lookup={lookupHandler}
 					show={show}
 					selected={selected}
 					mutate={mutate}
@@ -74,11 +76,9 @@ export default function Add({ mutate, type, selected = {}, onHide, onLookup }: A
 					}}
 				/>
 			) : null}
-			{type === 'income' ? (
+			{type === "income" ? (
 				<AddIncome
-					lookup={(value: string) => {
-						if (onLookup) return onLookup(value);
-					}}
+					lookup={lookupHandler}
 					show={show}
 					selected={selected}
 					mutate={mutate}
@@ -88,11 +88,9 @@ export default function Add({ mutate, type, selected = {}, onHide, onLookup }: A
 					}}
 				/>
 			) : null}
-			{type === 'investments' ? (
+			{type === "investments" ? (
 				<AddInvestments
-					lookup={(value: string) => {
-						if (onLookup) return onLookup(value);
-					}}
+					lookup={lookupHandler}
 					show={show}
 					selected={selected}
 					mutate={mutate}
@@ -102,11 +100,9 @@ export default function Add({ mutate, type, selected = {}, onHide, onLookup }: A
 					}}
 				/>
 			) : null}
-			{type === 'subscriptions' ? (
+			{type === "subscriptions" ? (
 				<AddSubscriptions
-					lookup={(value: string) => {
-						if (onLookup) return onLookup(value);
-					}}
+					lookup={lookupHandler}
 					show={show}
 					selected={selected}
 					mutate={mutate}

@@ -25,13 +25,13 @@ export function isPhone(value: string): boolean {
 export function isValidDate(value: string): boolean {
 	if (!DATE_REGEX.test(value)) return false;
 	const date = new Date(value);
-	return !isNaN(date.getTime()) && value === date.toISOString().substring(0, 10);
+	return !Number.isNaN(date.getTime()) && value === date.toISOString().substring(0, 10);
 }
 
 export function isValidUrl(value: string): boolean {
 	try {
 		const u = new URL(value);
-		return u.protocol === 'http:' || u.protocol === 'https:';
+		return u.protocol === "http:" || u.protocol === "https:";
 	} catch {
 		return false;
 	}
@@ -39,9 +39,9 @@ export function isValidUrl(value: string): boolean {
 
 export function isValidPrice(value: string): boolean {
 	const num = parseFloat(value);
-	return !isNaN(num) && isFinite(num) && num >= 0 && num <= PRICE_MAX_VALUE;
+	return !Number.isNaN(num) && Number.isFinite(num) && num >= 0 && num <= PRICE_MAX_VALUE;
 }
 
 export function isRequired(value: unknown): value is string {
-	return typeof value === 'string' && value.trim().length > 0;
+	return typeof value === "string" && value.trim().length > 0;
 }

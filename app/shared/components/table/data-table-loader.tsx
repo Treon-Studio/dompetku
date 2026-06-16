@@ -1,5 +1,5 @@
-import { Skeleton } from '~/shared/components/ui/skeleton';
-import { TableCell, TableRow } from '~/shared/components/ui/table';
+import { Skeleton } from "~/shared/components/ui/skeleton";
+import { TableCell, TableRow } from "~/shared/components/ui/table";
 
 export default function TableLoader({ rows = 5, columns = 6 }: { rows: number; columns: number }) {
 	return (

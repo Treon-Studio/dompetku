@@ -1,10 +1,9 @@
-import { endOfMonth, endOfWeek, startOfMonth, startOfWeek, sub, subMonths, subWeeks } from 'date-fns';
-import { format } from 'date-fns';
+import { endOfMonth, endOfWeek, format, startOfMonth, startOfWeek, subMonths, subWeeks } from "date-fns";
 
-import { views } from './table';
+import { views } from "./table";
 
-export const dateFormat: string = 'yyyy-MM-dd';
-export const datePattern: string = 'd{2}-d{2}-d{4}';
+export const dateFormat: string = "yyyy-MM-dd";
+export const datePattern: string = "d{2}-d{2}-d{4}";
 
 export const getRangeDateForFilter = (filter: any) => {
 	const dateObj = new Date();

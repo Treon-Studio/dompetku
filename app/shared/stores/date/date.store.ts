@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import { useShallow } from 'zustand/react/shallow';
-import { addDays, startOfMonth } from 'date-fns';
+import { addDays, startOfMonth } from "date-fns";
+import { create } from "zustand";
+import { useShallow } from "zustand/react/shallow";
 
 export type TDateRange = {
 	readonly from: Date;
@@ -21,7 +21,7 @@ export const useDateStore = create<TDateState & TDateActions>()((set) => ({
 	date: {
 		from: startOfMonth(new Date()),
 		to: addDays(new Date(), 0),
-		selected: 'm',
+		selected: "m",
 	},
 
 	// Actions

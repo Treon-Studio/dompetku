@@ -1,15 +1,14 @@
-import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
-import { useLoaderData, Link } from '@remix-run/react';
-
-import { createDbClient } from '~/core/db.server';
-import { users, feedbacks } from '~/core/db/schema';
-import { sql, eq } from 'drizzle-orm';
-import { requireAdmin } from '~/features/auth/api.server';
-import LayoutHeader from '~/shared/components/layout/header';
-import { Button } from '~/shared/components/ui/button';
-import { DonutChart, Legend } from '@tremor/react';
-import { getCloudflareEnv } from '~/env';
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { Link, useLoaderData } from "@remix-run/react";
+import { DonutChart, Legend } from "@tremor/react";
+import { eq, sql } from "drizzle-orm";
+import { feedbacks, users } from "~/core/db/schema";
+import { createDbClient } from "~/core/db.server";
+import { getCloudflareEnv } from "~/env";
+import { requireAdmin } from "~/features/auth/api.server";
+import LayoutHeader from "~/shared/components/layout/header";
+import { Button } from "~/shared/components/ui/button";
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
 	const db = createDbClient(getCloudflareEnv(context));
@@ -20,7 +19,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 	const [{ count: pUsers }] = await db
 		.select({ count: sql<number>`count(*)` })
 		.from(users)
-		.where(eq(users.plan_status, 'premium'));
+		.where(eq(users.plan_status, "premium"));
 	const premiumUsers = Number(pUsers);
 	const basicUsers = totalUsers - premiumUsers;
 
@@ -34,8 +33,8 @@ export default function AdminDashboard() {
 	const { totalUsers, premiumUsers, basicUsers, totalFeedbacks } = useLoaderData<typeof loader>();
 
 	const userPlanData = [
-		{ name: 'Premium Users', value: premiumUsers },
-		{ name: 'Basic Users', value: basicUsers },
+		{ name: "Premium Users", value: premiumUsers },
+		{ name: "Basic Users", value: basicUsers },
 	];
 
 	return (
@@ -79,10 +78,10 @@ export default function AdminDashboard() {
 								category="value"
 								index="name"
 								valueFormatter={(num) => `${num} Users`}
-								colors={['emerald', 'slate']}
+								colors={["emerald", "slate"]}
 								className="h-72 mt-4"
 							/>
-							<Legend className="mt-3" categories={['Premium Users', 'Basic Users']} colors={['emerald', 'slate']} />
+							<Legend className="mt-3" categories={["Premium Users", "Basic Users"]} colors={["emerald", "slate"]} />
 						</div>
 					</div>
 				</div>

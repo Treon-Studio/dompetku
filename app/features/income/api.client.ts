@@ -1,8 +1,8 @@
-import { createResourceApi } from '~/shared/lib/api-client';
+import { createResourceApi } from "~/shared/lib/api-client";
 
-const api = createResourceApi('/api/income');
+const api = createResourceApi("/api/income");
 
 export const addIncome = api.add;
 export const editIncome = api.edit;
 export const deleteIncome = api.delete;
-export type IncomeData = any;
+export type IncomeData = unknown;

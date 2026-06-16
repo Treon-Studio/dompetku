@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import ExpesenseChart from '~/shared/components/chart/bar';
-import TopSpentExpenses from '~/shared/components/chart/bar-list';
-import DonutChart from '~/shared/components/chart/donut';
-import { useUser } from '~/features/auth/components/auth-provider';
-import RecentActivitiesTable from '~/shared/components/recent-activities/table';
-import { Card, CardContent, CardHeader } from '~/shared/components/ui/card';
+import { useUser } from "~/features/auth/components/auth-provider";
+import ExpesenseChart from "~/shared/components/chart/bar";
+import TopSpentExpenses from "~/shared/components/chart/bar-list";
+import DonutChart from "~/shared/components/chart/donut";
+import RecentActivitiesTable from "~/shared/components/recent-activities/table";
+import { Card, CardContent, CardHeader } from "~/shared/components/ui/card";
 
 export default function Charts() {
 	const user = useUser();

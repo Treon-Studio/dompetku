@@ -1,26 +1,24 @@
-'use client';
+"use client";
 
-import { Table } from '@tanstack/react-table';
-import { format } from 'date-fns';
-import { Download, CloseCircle } from '@solar-icons/react';
-import { toast } from 'sonner';
+import { CloseCircle, Download } from "@solar-icons/react";
+import type { Table } from "@tanstack/react-table";
+import { format } from "date-fns";
+import { toast } from "sonner";
 
-import { Button } from '~/shared/components/ui/button';
-import { Input } from '~/shared/components/ui/input';
+import { Button } from "~/shared/components/ui/button";
+import { Input } from "~/shared/components/ui/input";
+import { dateFormat } from "~/shared/constants/date";
+import messages from "~/shared/constants/messages";
+import { exportTableToCsv } from "~/shared/lib/export";
+import { formatDate } from "~/shared/lib/formatter";
 
-import { exportTableToCsv } from '~/shared/lib/export';
-import { formatDate } from '~/shared/lib/formatter';
-
-import { dateFormat } from '~/shared/constants/date';
-import messages from '~/shared/constants/messages';
-
-import DataTableFacetedFilter from './data-table-faceted-filter';
-import DataTableFilterOptions from './data-table-filter-options';
-import DataTableViewOptions from './data-table-view-options';
+import DataTableFacetedFilter from "./data-table-faceted-filter";
+import DataTableFilterOptions from "./data-table-filter-options";
+import DataTableViewOptions from "./data-table-view-options";
 
 interface DataTableToolbarProps<TData> {
 	table: Table<TData>;
-	className?: String;
+	className?: string;
 	loading: boolean;
 	hideViewOptions?: boolean | undefined;
 	user: { locale: string; currency: string; isPremium: boolean };
@@ -39,14 +37,14 @@ export default function DataTableToolbar<TData>(props: DataTableToolbarProps<TDa
 				<Input
 					disabled={loading}
 					placeholder="Filter by name"
-					value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-					onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
+					value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+					onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
 					className="mr-1.5 h-8 w-full sm:w-[200px] md:w-[300px]"
 				/>
-				{categories?.length && table.getColumn('category') ? (
+				{categories?.length && table.getColumn("category") ? (
 					<DataTableFacetedFilter
 						disabled={loading}
-						column={table.getColumn('category')}
+						column={table.getColumn("category")}
 						title="Category"
 						onFilter={filter.onFilter}
 						options={categories}
@@ -66,7 +64,7 @@ export default function DataTableToolbar<TData>(props: DataTableToolbarProps<TDa
 					</Button>
 				)}
 			</div>
-			<div className={`${loading ? 'pointer-events-none opacity-50' : ''} grid w-full grid-flow-col gap-3 sm:w-auto`}>
+			<div className={`${loading ? "pointer-events-none opacity-50" : ""} grid w-full grid-flow-col gap-3 sm:w-auto`}>
 				{!hideViewOptions ? <DataTableFilterOptions setFilter={filter?.setFilter} filter={filter.name} /> : null}
 				<DataTableViewOptions table={table} />
 				{user.isPremium ? (
@@ -75,7 +73,7 @@ export default function DataTableToolbar<TData>(props: DataTableToolbarProps<TDa
 						onClick={() => {
 							toast.info(messages.export);
 							exportTableToCsv(
-								`${filename} ${formatDate({ date: format(new Date(), dateFormat), locale: user?.locale })}.csv`
+								`${filename} ${formatDate({ date: format(new Date(), dateFormat), locale: user?.locale })}.csv`,
 							);
 						}}
 						size="sm"

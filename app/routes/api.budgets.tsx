@@ -1,16 +1,16 @@
-import { json, type ActionFunctionArgs, type LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { createDbClient } from '~/core/db.server';
-import { requireUser } from '~/features/auth/api.server';
-import { getBudgets, createBudget, updateBudget, deleteBudget } from '~/features/budgets/api.server';
-import { expenses as expensesTable } from '~/core/db/schema';
-import { and, eq, like } from 'drizzle-orm';
-import { getCloudflareEnv } from '~/env';
+import { type ActionFunctionArgs, json, type LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { and, eq, like } from "drizzle-orm";
+import { expenses as expensesTable } from "~/core/db/schema";
+import { createDbClient } from "~/core/db.server";
+import { getCloudflareEnv } from "~/env";
+import { requireUser } from "~/features/auth/api.server";
+import { createBudget, deleteBudget, getBudgets, updateBudget } from "~/features/budgets/api.server";
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
 	const db = createDbClient(getCloudflareEnv(context));
 	const user = await requireUser(request, db, context);
 	const url = new URL(request.url);
-	const month = url.searchParams.get('month') || new Date().toISOString().slice(0, 7);
+	const month = url.searchParams.get("month") || new Date().toISOString().slice(0, 7);
 
 	const budgets = await getBudgets(db, user.id, month);
 
@@ -20,7 +20,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 		.from(expensesTable)
 		.where(and(eq(expensesTable.user_id, user.id), like(expensesTable.date, `${month}%`)));
 
-	const budgetsWithSpent = budgets.map((budget: any) => {
+	const budgetsWithSpent = budgets.map((budget: Record<string, string>) => {
 		const spent = expenses
 			.filter((exp) => exp.category === budget.category)
 			.reduce((total, exp) => total + parseFloat(exp.price), 0);
@@ -35,28 +35,28 @@ export async function action({ request, context }: ActionFunctionArgs) {
 	const user = await requireUser(request, db, context);
 	const method = request.method.toUpperCase();
 
-	if (method === 'POST') {
+	if (method === "POST") {
 		const formData = await request.formData();
 		const result = await createBudget(db, user.id, formData);
 		if (!result.success) return json(result, { status: 400 });
 		return json(result);
 	}
 
-	if (method === 'PUT') {
+	if (method === "PUT") {
 		const formData = await request.formData();
 		const result = await updateBudget(db, user.id, formData);
 		if (!result.success) return json(result, { status: 400 });
 		return json(result);
 	}
 
-	if (method === 'DELETE') {
+	if (method === "DELETE") {
 		const formData = await request.formData();
-		const id = formData.get('id') as string;
-		if (!id) return json({ success: false, error: 'ID is required' }, { status: 400 });
+		const id = formData.get("id") as string;
+		if (!id) return json({ success: false, error: "ID is required" }, { status: 400 });
 		const result = await deleteBudget(db, user.id, id);
 		if (!result.success) return json(result, { status: 400 });
 		return json(result);
 	}
 
-	return json({ success: false, error: 'Method not allowed' }, { status: 405 });
+	return json({ success: false, error: "Method not allowed" }, { status: 405 });
 }

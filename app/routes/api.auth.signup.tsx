@@ -1,11 +1,10 @@
-import type { ActionFunctionArgs } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
-
-import { createUser, findUserByIdentity, createSession, isPhone, normalizePhone } from '~/features/auth/api.server';
-import { createDbClient } from '~/core/db.server';
-import { SignupSchema } from '~/features/auth/schemas';
-import { logger } from '~/core/logger.server';
-import { getCloudflareEnv } from '~/env';
+import type { ActionFunctionArgs } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { createDbClient } from "~/core/db.server";
+import { logger } from "~/core/logger.server";
+import { getCloudflareEnv } from "~/env";
+import { createSession, createUser, findUserByIdentity, isPhone } from "~/features/auth/api.server";
+import { SignupSchema } from "~/features/auth/schemas";
 
 export async function action({ request, context }: ActionFunctionArgs) {
 	try {
@@ -22,7 +21,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
 		const existingUser = await findUserByIdentity(identity, db);
 		if (existingUser) {
-			return json({ message: 'Account already exists' }, { status: 400 });
+			return json({ message: "Account already exists" }, { status: 400 });
 		}
 
 		if (isPhone(identity)) {
@@ -30,10 +29,10 @@ export async function action({ request, context }: ActionFunctionArgs) {
 		}
 
 		const user = await createUser(identity, password, db);
-		return createSession(user.id, '/', db, context);
+		return createSession(user.id, "/", db, context);
 	} catch (e: unknown) {
 		const error = e as Error;
-		logger.error('Signup error', { error: String(error) });
-		return json({ message: 'An error occurred during sign up' }, { status: 500 });
+		logger.error("Signup error", { error: String(error) });
+		return json({ message: "An error occurred during sign up" }, { status: 500 });
 	}
 }

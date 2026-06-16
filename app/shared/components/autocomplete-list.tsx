@@ -1,35 +1,34 @@
-import { useEffect, useRef } from 'react';
+import { Transition } from "@headlessui/react";
+import { useEffect, useRef } from "react";
 
-import { Transition } from '@headlessui/react';
-
-import { Button } from './ui/button';
+import { Button } from "./ui/button";
 
 type AutoCompleteListProps = {
 	searchTerm?: string;
 	show: boolean;
 	onHide: () => void;
-	data: any[];
-	onClick: (datum: any) => void;
+	data: Record<string, unknown>[];
+	onClick: (datum: Record<string, unknown>) => void;
 };
 
-export default function AutoCompleteList({ searchTerm = '', show, onHide, data = [], onClick }: AutoCompleteListProps) {
-	const ref = useRef<any>();
+export default function AutoCompleteList({ searchTerm = "", show, onHide, data = [], onClick }: AutoCompleteListProps) {
+	const ref = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		const handleClickOutside = (event: any) => {
+		const handleClickOutside = (event: MouseEvent) => {
 			if (ref.current && !ref.current?.contains(event.target)) {
 				onHide();
 			}
 		};
-		document.addEventListener('click', handleClickOutside, true);
+		document.addEventListener("click", handleClickOutside, true);
 		return () => {
-			document.removeEventListener('click', handleClickOutside, true);
+			document.removeEventListener("click", handleClickOutside, true);
 		};
 	}, [onHide]);
 
 	return (
 		<Transition
-			as={'div'}
+			as={"div"}
 			enter="transition ease-out duration-200"
 			enterFrom="opacity-0 -translate-y-1"
 			enterTo="opacity-100 translate-y-0"
@@ -46,7 +45,9 @@ export default function AutoCompleteList({ searchTerm = '', show, onHide, data =
 					{data.map((datum) => {
 						const { name: datumName, id } = datum;
 						const name = datumName.toLowerCase();
-						let string, highlightedText, endString;
+						let string = "",
+							highlightedText = "",
+							endString = "";
 						const nameIndex = name.indexOf(searchTerm);
 						if (searchTerm.length) {
 							string = datumName.substr(0, nameIndex);
@@ -56,7 +57,7 @@ export default function AutoCompleteList({ searchTerm = '', show, onHide, data =
 						return (
 							<Button
 								className="w-full justify-start rounded-none border-border px-3 py-2 not-last:border-b"
-								variant={'ghost'}
+								variant={"ghost"}
 								key={id}
 								onClick={() => onClick(datum)}
 							>

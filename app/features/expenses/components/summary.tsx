@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import SummaryCard from '~/shared/components/card/summary-card';
-import { useUser } from '~/features/auth/components/auth-provider';
-import { useData } from '~/shared/components/context/data-provider';
-import CardLoader from '~/shared/components/loader/card';
+import { useUser } from "~/features/auth/components/auth-provider";
+import SummaryCard from "~/shared/components/card/summary-card";
+import { useData } from "~/shared/components/context/data-provider";
+import CardLoader from "~/shared/components/loader/card";
 
-import { formatCurrency } from '~/shared/lib/formatter';
+import { formatCurrency } from "~/shared/lib/formatter";
 
 export default function ExpensesSummary() {
 	const user = useUser();
@@ -22,7 +22,7 @@ export default function ExpensesSummary() {
 					<SummaryCard
 						title="total amount"
 						data={formatCurrency({
-							value: data.reduce((acc: any, datum: any) => Number(datum.price) + acc, 0),
+							value: data.reduce((acc: number, datum: { price: string }) => Number(datum.price) + acc, 0),
 							currency: user?.currency,
 							locale: user?.locale,
 						})}

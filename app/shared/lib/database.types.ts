@@ -1,1 +1,1 @@
-export interface Database {}
+export type Database = Record<string, unknown>;

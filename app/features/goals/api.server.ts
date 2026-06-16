@@ -1,7 +1,7 @@
-import { eq, and, desc } from 'drizzle-orm';
-import type { DB } from '~/core/db.server';
-import { goals } from '~/core/db/schema';
-import { GoalSchema } from './schemas';
+import { and, desc, eq } from "drizzle-orm";
+import { goals } from "~/core/db/schema";
+import type { DB } from "~/core/db.server";
+import { GoalSchema } from "./schemas";
 
 export async function getGoals(db: DB, userId: string) {
 	return await db.select().from(goals).where(eq(goals.user_id, userId)).orderBy(desc(goals.created_at));
@@ -12,7 +12,7 @@ export async function createGoal(db: DB, userId: string, formData: FormData) {
 	const parsed = GoalSchema.safeParse(data);
 
 	if (!parsed.success) {
-		return { success: false, error: parsed.error.issues[0]?.message || 'Validation error' };
+		return { success: false, error: parsed.error.issues[0]?.message || "Validation error" };
 	}
 
 	try {
@@ -22,9 +22,9 @@ export async function createGoal(db: DB, userId: string, formData: FormData) {
 				user_id: userId,
 				name: parsed.data.name,
 				target_amount: parsed.data.target_amount,
-				current_amount: parsed.data.current_amount || '0',
+				current_amount: parsed.data.current_amount || "0",
 				deadline: parsed.data.deadline || null,
-				status: parsed.data.status || 'IN_PROGRESS',
+				status: parsed.data.status || "IN_PROGRESS",
 			})
 			.returning();
 		return { success: true, data: goal };
@@ -39,11 +39,11 @@ export async function updateGoal(db: DB, userId: string, formData: FormData) {
 	const parsed = GoalSchema.safeParse(data);
 
 	if (!parsed.success) {
-		return { success: false, error: parsed.error.issues[0]?.message || 'Validation error' };
+		return { success: false, error: parsed.error.issues[0]?.message || "Validation error" };
 	}
 
 	if (!parsed.data.id) {
-		return { success: false, error: 'ID is required for updating' };
+		return { success: false, error: "ID is required for updating" };
 	}
 
 	try {

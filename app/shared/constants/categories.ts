@@ -6,23 +6,23 @@ interface ExpensesCategory {
 }
 
 export const expensesCategory: ExpensesCategory = {
-	'': { name: 'Select', emoji: ' ' },
-	education: { name: 'Education', emoji: '📚' },
-	entertainment: { name: 'Entertainment', emoji: '🍿' },
-	bills: { name: 'Bills', emoji: '🧾' },
-	food: { name: 'Food', emoji: '🍔' },
-	grocery: { name: 'Grocery', emoji: '🛒' },
-	order: { name: 'Online Order', emoji: '📦' },
-	other: { name: 'Others', emoji: '🤷' },
-	emi: { name: 'EMI', emoji: '🤑' },
-	sports: { name: 'Sports', emoji: '⚽' },
-	savings: { name: 'Savings', emoji: '💰' },
-	debt: { name: 'Debt', emoji: '💸' },
-	loan: { name: 'Loan', emoji: '🤫' },
-	medical: { name: 'Medical', emoji: '🏥' },
-	rent: { name: 'Rent', emoji: '🏠' },
-	shopping: { name: 'Shopping', emoji: '🛍️' },
-	travel: { name: 'Travel', emoji: '✈️' },
+	"": { name: "Select", emoji: " " },
+	education: { name: "Education", emoji: "📚" },
+	entertainment: { name: "Entertainment", emoji: "🍿" },
+	bills: { name: "Bills", emoji: "🧾" },
+	food: { name: "Food", emoji: "🍔" },
+	grocery: { name: "Grocery", emoji: "🛒" },
+	order: { name: "Online Order", emoji: "📦" },
+	other: { name: "Others", emoji: "🤷" },
+	emi: { name: "EMI", emoji: "🤑" },
+	sports: { name: "Sports", emoji: "⚽" },
+	savings: { name: "Savings", emoji: "💰" },
+	debt: { name: "Debt", emoji: "💸" },
+	loan: { name: "Loan", emoji: "🤫" },
+	medical: { name: "Medical", emoji: "🏥" },
+	rent: { name: "Rent", emoji: "🏠" },
+	shopping: { name: "Shopping", emoji: "🛍️" },
+	travel: { name: "Travel", emoji: "✈️" },
 };
 
 interface ExpensesPay {
@@ -33,12 +33,12 @@ interface ExpensesPay {
 }
 
 export const expensesPay: ExpensesPay = {
-	cash: { name: 'Cash', emoji: '💵' },
-	creditcard: { name: 'Credit Card', emoji: '💳' },
-	debitcard: { name: 'Debit Card', emoji: '💳' },
-	ewallet: { name: 'E-Wallet', emoji: '🪪' },
-	netbanking: { name: 'NetBanking', emoji: '🏦' },
-	upi: { name: 'UPI', emoji: '📲' },
+	cash: { name: "Cash", emoji: "💵" },
+	creditcard: { name: "Credit Card", emoji: "💳" },
+	debitcard: { name: "Debit Card", emoji: "💳" },
+	ewallet: { name: "E-Wallet", emoji: "🪪" },
+	netbanking: { name: "NetBanking", emoji: "🏦" },
+	upi: { name: "UPI", emoji: "📲" },
 };
 
 interface GroupedExpensesCategory {
@@ -54,7 +54,7 @@ interface GroupedExpensesCategory {
 
 export const groupedExpenses: GroupedExpensesCategory = {
 	dailyessentials: {
-		name: 'Essentials',
+		name: "Essentials",
 		list: {
 			food: expensesCategory.food,
 			grocery: expensesCategory.grocery,
@@ -62,7 +62,7 @@ export const groupedExpenses: GroupedExpensesCategory = {
 		},
 	},
 	expenses: {
-		name: 'Expenses',
+		name: "Expenses",
 		list: {
 			bills: expensesCategory.bills,
 			education: expensesCategory.education,
@@ -71,7 +71,7 @@ export const groupedExpenses: GroupedExpensesCategory = {
 		},
 	},
 	leisure: {
-		name: 'Leisure',
+		name: "Leisure",
 		list: {
 			entertainment: expensesCategory.entertainment,
 			shopping: expensesCategory.shopping,
@@ -80,7 +80,7 @@ export const groupedExpenses: GroupedExpensesCategory = {
 		},
 	},
 	payments: {
-		name: 'Payments',
+		name: "Payments",
 		list: {
 			emi: expensesCategory.emi,
 			savings: expensesCategory.savings,
@@ -95,12 +95,12 @@ interface Income {
 }
 
 export const incomeCategory: Income = {
-	'': 'Select',
-	ads: 'Ads',
-	other: 'Other',
-	passiveincome: 'Passive Income',
-	salary: 'Salary',
-	youtube: 'Youtube',
+	"": "Select",
+	ads: "Ads",
+	other: "Other",
+	passiveincome: "Passive Income",
+	salary: "Salary",
+	youtube: "Youtube",
 };
 
 interface Investments {
@@ -108,12 +108,12 @@ interface Investments {
 }
 
 export const investmentCategory: Investments = {
-	'': 'Select',
-	crypto: 'Crypto Currency',
-	indianstock: 'Indian Stock',
-	mutualfunds: 'Mutual Funds',
-	other: 'Other',
-	usstock: 'US Stock',
+	"": "Select",
+	crypto: "Crypto Currency",
+	indianstock: "Indian Stock",
+	mutualfunds: "Mutual Funds",
+	other: "Other",
+	usstock: "US Stock",
 };
 
 interface Subscriptions {
@@ -125,11 +125,11 @@ interface Subscriptions {
 
 export const subscriptionCategory: Subscriptions = {
 	monthly: {
-		name: 'Monthly',
-		key: 'monthly',
+		name: "Monthly",
+		key: "monthly",
 	},
 	yearly: {
-		name: 'Yearly',
-		key: 'yearly',
+		name: "Yearly",
+		key: "yearly",
 	},
 };

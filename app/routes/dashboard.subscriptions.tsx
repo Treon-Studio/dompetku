@@ -1,18 +1,17 @@
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
-import { useLoaderData } from '@remix-run/react';
-
-import { DataContextProvider } from '~/shared/components/context/data-provider';
-import LayoutHeader from '~/shared/components/layout/header';
-import SubscriptionsSummary from '~/features/subscriptions/components/summary';
-import SubscriptionsTable from '~/features/subscriptions/components/table';
-import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
-import { I18nProvider } from '@i18n/provider';
+import { I18nProvider } from "@i18n/provider";
+import { getLocaleFromRequest, loadTranslations } from "@i18n/server";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
+import SubscriptionsSummary from "~/features/subscriptions/components/summary";
+import SubscriptionsTable from "~/features/subscriptions/components/table";
+import { DataContextProvider } from "~/shared/components/context/data-provider";
+import LayoutHeader from "~/shared/components/layout/header";
 
 export const meta: MetaFunction = () => {
 	return [
-		{ title: 'Dompetku - Subscriptions' },
-		{ name: 'description', content: 'Effortlessly Track and Manage Subscriptions.' },
+		{ title: "Dompetku - Subscriptions" },
+		{ name: "description", content: "Effortlessly Track and Manage Subscriptions." },
 	];
 };
 

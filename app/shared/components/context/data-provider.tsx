@@ -1,18 +1,13 @@
-'use client';
+"use client";
 
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { useQuery } from "@tanstack/react-query";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 
-import { useQuery } from '@tanstack/react-query';
-
-import { views } from '~/shared/constants/table';
-import { getApiUrl } from '~/shared/constants/url';
-import fetcher from '~/shared/lib/fetcher';
+import { views } from "~/shared/constants/table";
+import { getApiUrl } from "~/shared/constants/url";
+import fetcher from "~/shared/lib/fetcher";
 
 const DataContext = createContext(null);
-
-interface Data {
-	Data: Array<any>;
-}
 
 type Props = {
 	children: React.ReactNode;
@@ -41,7 +36,7 @@ export const DataContextProvider = (props: Props) => {
 
 	const value = useMemo(
 		() => ({ data, loading: isLoading, filter: { name: filter, setFilter, onFilter }, mutate }),
-		[data, isLoading, filter, mutate, onFilter]
+		[data, isLoading, filter, mutate, onFilter],
 	);
 
 	return <DataContext.Provider value={value as any}>{children}</DataContext.Provider>;

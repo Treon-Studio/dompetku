@@ -1,51 +1,51 @@
-import { createCookieSessionStorage, redirect } from '@remix-run/cloudflare';
-import bcrypt from 'bcryptjs';
-import { eq } from 'drizzle-orm';
-import type { AppLoadContext } from '@remix-run/cloudflare';
-import type { CloudflareEnv } from '~/env';
-import { getCloudflareEnv } from '~/env';
+import type { AppLoadContext } from "@remix-run/cloudflare";
+import { createCookieSessionStorage, redirect } from "@remix-run/cloudflare";
+import bcrypt from "bcryptjs";
+import { eq } from "drizzle-orm";
+import { sessions, users } from "~/core/db/schema";
+import type { DB } from "~/core/db.server";
+import type { CloudflareEnv } from "~/env";
+import { getCloudflareEnv } from "~/env";
+import { BCRYPT_SALT_ROUNDS, SESSION_COOKIE_NAME, SESSION_DURATION_MS } from "~/shared/constants/app";
 import {
-	isEmail,
 	isPhone as checkPhone,
-	PASSWORD_MIN_LENGTH,
+	isEmail,
 	PASSWORD_MAX_LENGTH,
-} from '~/shared/constants/validation';
-import { SESSION_COOKIE_NAME, BCRYPT_SALT_ROUNDS, SESSION_DURATION_MS } from '~/shared/constants/app';
-import type { DB } from '~/core/db.server';
-import { users, sessions, password_resets } from '~/core/db/schema';
+	PASSWORD_MIN_LENGTH,
+} from "~/shared/constants/validation";
 
-export { isEmail } from '~/shared/constants/validation';
+export { isEmail } from "~/shared/constants/validation";
 
 export function isPhone(identity: string): boolean {
-	return checkPhone(identity.replace(/[\s\-()]/g, ''));
+	return checkPhone(identity.replace(/[\s\-()]/g, ""));
 }
 
 export function normalizePhone(phone: string): string {
-	return phone.replace(/[\s\-()]/g, '');
+	return phone.replace(/[\s\-()]/g, "");
 }
 
 function getEnv(context: AppLoadContext): CloudflareEnv {
 	const cfEnv = getCloudflareEnv(context) as Partial<CloudflareEnv>;
 	return {
-		TURSO_DATABASE_URL: cfEnv.TURSO_DATABASE_URL || process.env.TURSO_DATABASE_URL || '',
-		TURSO_AUTH_TOKEN: cfEnv.TURSO_AUTH_TOKEN || process.env.TURSO_AUTH_TOKEN || '',
-		SESSION_SECRET: cfEnv.SESSION_SECRET || process.env.SESSION_SECRET || '',
-		RESEND_API_KEY: cfEnv.RESEND_API_KEY || process.env.RESEND_API_KEY || '',
-		NODE_ENV: cfEnv.NODE_ENV || process.env.NODE_ENV || 'development',
+		TURSO_DATABASE_URL: cfEnv.TURSO_DATABASE_URL || process.env.TURSO_DATABASE_URL || "",
+		TURSO_AUTH_TOKEN: cfEnv.TURSO_AUTH_TOKEN || process.env.TURSO_AUTH_TOKEN || "",
+		SESSION_SECRET: cfEnv.SESSION_SECRET || process.env.SESSION_SECRET || "",
+		RESEND_API_KEY: cfEnv.RESEND_API_KEY || process.env.RESEND_API_KEY || "",
+		NODE_ENV: cfEnv.NODE_ENV || process.env.NODE_ENV || "development",
 		GA4_ANALYTICS_ID: cfEnv.GA4_ANALYTICS_ID || process.env.GA4_ANALYTICS_ID,
 	} as CloudflareEnv;
 }
 
 function getSessionStorage(context: AppLoadContext) {
 	const env = getEnv(context);
-	if (!env.SESSION_SECRET) throw new Error('SESSION_SECRET environment variable is required');
+	if (!env.SESSION_SECRET) throw new Error("SESSION_SECRET environment variable is required");
 	return createCookieSessionStorage({
 		cookie: {
 			name: SESSION_COOKIE_NAME,
-			sameSite: 'lax',
-			path: '/',
+			sameSite: "lax",
+			path: "/",
 			httpOnly: true,
-			secure: env.NODE_ENV === 'production',
+			secure: env.NODE_ENV === "production",
 			secrets: [env.SESSION_SECRET],
 			maxAge: SESSION_DURATION_MS,
 		},
@@ -61,18 +61,18 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
 }
 
 export function validateIdentity(identity: string): { valid: boolean; message?: string } {
-	if (!identity || !identity.trim()) {
-		return { valid: false, message: 'Email or phone number is required' };
+	if (!identity?.trim()) {
+		return { valid: false, message: "Email or phone number is required" };
 	}
 	if (!isEmail(identity) && !isPhone(identity)) {
-		return { valid: false, message: 'Please enter a valid email or phone number' };
+		return { valid: false, message: "Please enter a valid email or phone number" };
 	}
 	return { valid: true };
 }
 
 export function validatePassword(password: string): { valid: boolean; message?: string } {
 	if (!password) {
-		return { valid: false, message: 'Password is required' };
+		return { valid: false, message: "Password is required" };
 	}
 	if (password.length < PASSWORD_MIN_LENGTH) {
 		return { valid: false, message: `Password must be at least ${PASSWORD_MIN_LENGTH} characters` };
@@ -91,23 +91,23 @@ export async function createSession(userId: string, redirectTo: string, db: DB, 
 
 	const sessionStorage = getSessionStorage(context);
 	const session = await sessionStorage.getSession();
-	session.set('token', token);
+	session.set("token", token);
 
 	return redirect(redirectTo, {
 		headers: {
-			'Set-Cookie': await sessionStorage.commitSession(session),
+			"Set-Cookie": await sessionStorage.commitSession(session),
 		},
 	});
 }
 
 export async function getSession(request: Request, context: AppLoadContext) {
 	const sessionStorage = getSessionStorage(context);
-	return sessionStorage.getSession(request.headers.get('Cookie'));
+	return sessionStorage.getSession(request.headers.get("Cookie"));
 }
 
 export async function getUserFromSession(request: Request, db: DB, context: AppLoadContext) {
 	const session = await getSession(request, context);
-	const token = session.get('token');
+	const token = session.get("token");
 
 	if (!token) return null;
 
@@ -132,31 +132,31 @@ export async function getUserFromSession(request: Request, db: DB, context: AppL
 export async function requireUser(request: Request, db: DB, context: AppLoadContext) {
 	const user = await getUserFromSession(request, db, context);
 	if (!user) {
-		throw redirect('/signin');
+		throw redirect("/signin");
 	}
 	return user;
 }
 
 export async function requireAdmin(request: Request, db: DB, context: AppLoadContext) {
 	const user = await requireUser(request, db, context);
-	if (user.role !== 'ADMIN') {
-		throw redirect('/dashboard');
+	if (user.role !== "ADMIN") {
+		throw redirect("/dashboard");
 	}
 	return user;
 }
 
 export async function signOut(request: Request, db: DB, context: AppLoadContext) {
 	const session = await getSession(request, context);
-	const token = session.get('token');
+	const token = session.get("token");
 	const sessionStorage = getSessionStorage(context);
 
 	if (token) {
 		await db.delete(sessions).where(eq(sessions.token, token));
 	}
 
-	return redirect('/signin', {
+	return redirect("/signin", {
 		headers: {
-			'Set-Cookie': await sessionStorage.destroySession(session),
+			"Set-Cookie": await sessionStorage.destroySession(session),
 		},
 	});
 }
@@ -167,7 +167,7 @@ export async function createUser(identity: string, password: string, db: DB) {
 	const email = !isPhone(identity) && isEmail(identity) ? identity : undefined;
 
 	if (!email && !phone) {
-		throw new Error('Must provide a valid email or phone number');
+		throw new Error("Must provide a valid email or phone number");
 	}
 
 	const [user] = await db

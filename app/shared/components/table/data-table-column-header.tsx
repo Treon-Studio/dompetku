@@ -1,15 +1,15 @@
-import { ArrowDown, ArrowUp, SortVertical, EyeClosed } from '@solar-icons/react';
-import { Column } from '@tanstack/react-table';
+import { ArrowDown, ArrowUp, SortVertical } from "@solar-icons/react";
+import type { Column } from "@tanstack/react-table";
 
-import { Button } from '~/shared/components/ui/button';
+import { Button } from "~/shared/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from '~/shared/components/ui/dropdown-menu';
+} from "~/shared/components/ui/dropdown-menu";
 
-import { cn } from '~/shared/lib/utils';
+import { cn } from "~/shared/lib/utils";
 
 interface DataTableColumnHeaderProps<TData, TValue> extends React.HTMLAttributes<HTMLDivElement> {
 	column: Column<TData, TValue>;
@@ -19,14 +19,14 @@ interface DataTableColumnHeaderProps<TData, TValue> extends React.HTMLAttributes
 export default function DataTableColumnHeader<TData, TValue>({
 	column,
 	title,
-	className = '',
+	className = "",
 }: DataTableColumnHeaderProps<TData, TValue>) {
 	if (!column.getCanSort()) {
 		return <div className={cn(className)}>{title}</div>;
 	}
 
 	return (
-		<div className={cn('flex items-center space-x-2', className)}>
+		<div className={cn("flex items-center space-x-2", className)}>
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
 					<Button
@@ -35,9 +35,9 @@ export default function DataTableColumnHeader<TData, TValue>({
 						className="-ml-3 h-10 whitespace-nowrap hover:opacity-80 focus-visible:ring-0 data-[state=open]:bg-accent"
 					>
 						<span className="text-sm capitalize">{title}</span>
-						{column.getIsSorted() === 'desc' ? (
+						{column.getIsSorted() === "desc" ? (
 							<ArrowDown className="ml-1 h-3.5 w-3.5" />
-						) : column.getIsSorted() === 'asc' ? (
+						) : column.getIsSorted() === "asc" ? (
 							<ArrowUp className="ml-1 -mt-px h-3.5 w-3.5" />
 						) : (
 							<SortVertical className="ml-1 mt-px h-3.5 w-3.5" />

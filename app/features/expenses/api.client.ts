@@ -1,8 +1,8 @@
-import { createResourceApi } from '~/shared/lib/api-client';
+import { createResourceApi } from "~/shared/lib/api-client";
 
-const api = createResourceApi('/api/expenses');
+const api = createResourceApi("/api/expenses");
 
 export const addExpense = api.add;
 export const editExpense = api.edit;
 export const deleteExpense = api.delete;
-export type ExpenseData = any;
+export type ExpenseData = unknown;

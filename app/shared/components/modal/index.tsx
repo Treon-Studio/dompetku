@@ -1,12 +1,9 @@
-'use client';
+"use client";
 
-import { Fragment } from 'react';
-
-import { Dialog, Transition } from '@headlessui/react';
-import { useMediaQuery } from '~/shared/hooks/useMediaQuery';
-import { CloseCircle } from '@solar-icons/react';
-
-import { Drawer, DrawerContent, DrawerHeader, DrawerOverlay, DrawerTitle } from '~/shared/components/ui/drawer';
+import { Dialog, Transition } from "@headlessui/react";
+import { CloseCircle } from "@solar-icons/react";
+import { Fragment } from "react";
+import { Drawer, DrawerContent, DrawerHeader, DrawerOverlay, DrawerTitle } from "~/shared/components/ui/drawer";
 
 interface ModalProps {
 	show: boolean;

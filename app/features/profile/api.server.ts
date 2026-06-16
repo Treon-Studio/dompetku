@@ -1,16 +1,15 @@
-import { addYears } from 'date-fns';
-import { eq } from 'drizzle-orm';
-import { hashPassword, verifyPassword, isPhone, normalizePhone } from '~/features/auth/api.server';
-import { isEmail, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from '~/shared/constants/validation';
-import type { DB } from '~/core/db.server';
-import { users, sessions, feedbacks, expenses, income, investments, subscriptions } from '~/core/db/schema';
-import { sql } from 'drizzle-orm';
+import { addYears } from "date-fns";
+import { eq, sql } from "drizzle-orm";
+import { expenses, feedbacks, income, investments, sessions, subscriptions, users } from "~/core/db/schema";
+import type { DB } from "~/core/db.server";
+import { hashPassword, isPhone, normalizePhone, verifyPassword } from "~/features/auth/api.server";
+import { isEmail, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "~/shared/constants/validation";
 
 export async function getUserProfile(userId: string, db: DB) {
 	const [data] = await db.select().from(users).where(eq(users.id, userId)).limit(1);
 	if (!data) return null;
 
-	const isPremiumPlan = data.order_status === 'paid' && data.plan_status === 'premium';
+	const isPremiumPlan = data.order_status === "paid" && data.plan_status === "premium";
 	const isPremiumPlanEnded =
 		isPremiumPlan && data.billing_start_date && new Date() > addYears(new Date(data.billing_start_date), 1);
 	const isPremium = isPremiumPlan && !isPremiumPlanEnded;
@@ -18,22 +17,27 @@ export async function getUserProfile(userId: string, db: DB) {
 	return { ...data, isPremium, isPremiumPlanEnded };
 }
 
-export async function updateUserProfile(userId: string, body: any, currentUserPasswordHash: string, db: DB) {
-	const updateData: Record<string, any> = {};
+export async function updateUserProfile(
+	userId: string,
+	body: Record<string, string | undefined>,
+	currentUserPasswordHash: string,
+	db: DB,
+) {
+	const updateData: Record<string, string | boolean | null> = {};
 
 	if (body.currency !== undefined) updateData.currency = body.currency;
 	if (body.locale !== undefined) updateData.locale = body.locale;
 
 	if (body.email !== undefined) {
 		if (body.email && !isEmail(body.email)) {
-			throw new Error('Please enter a valid email address');
+			throw new Error("Please enter a valid email address");
 		}
 		updateData.email = body.email || null;
 	}
 
 	if (body.phone !== undefined) {
 		if (body.phone && !isPhone(body.phone)) {
-			throw new Error('Please enter a valid phone number');
+			throw new Error("Please enter a valid phone number");
 		}
 		updateData.phone = body.phone ? normalizePhone(body.phone) : null;
 	}
@@ -41,7 +45,7 @@ export async function updateUserProfile(userId: string, body: any, currentUserPa
 	if (body.currentPassword && body.newPassword) {
 		const valid = await verifyPassword(body.currentPassword, currentUserPasswordHash);
 		if (!valid) {
-			throw new Error('Current password is incorrect');
+			throw new Error("Current password is incorrect");
 		}
 		if (body.newPassword.length < PASSWORD_MIN_LENGTH || body.newPassword.length > PASSWORD_MAX_LENGTH) {
 			throw new Error(`Password must be ${PASSWORD_MIN_LENGTH}-${PASSWORD_MAX_LENGTH} characters`);
@@ -50,7 +54,7 @@ export async function updateUserProfile(userId: string, body: any, currentUserPa
 	}
 
 	if (Object.keys(updateData).length === 0) {
-		throw new Error('No fields to update');
+		throw new Error("No fields to update");
 	}
 
 	await db.update(users).set(updateData).where(eq(users.id, userId));
@@ -66,7 +70,7 @@ export async function deleteUserAndData(userId: string, db: DB) {
 	await db.delete(users).where(eq(users.id, userId));
 }
 
-export async function upgradeUserPlan(userId: string, body: any, db: DB) {
+export async function upgradeUserPlan(userId: string, body: Record<string, string | undefined>, db: DB) {
 	const { order_identifier, billing_start_date, plan_status, order_status, order_store_id, order_number } = body;
 
 	const requiredFields = {
@@ -78,15 +82,16 @@ export async function upgradeUserPlan(userId: string, body: any, db: DB) {
 		order_number,
 	};
 	for (const [key, value] of Object.entries(requiredFields)) {
-		if (typeof value !== 'string' || value.length === 0) {
+		if (typeof value !== "string" || value.length === 0) {
 			throw new Error(`Invalid or missing field: ${key}`);
 		}
 	}
 
-	const validPlanStatuses = ['basic', 'premium'] as const;
-	const validOrderStatuses = ['pending', 'paid', 'failed'] as const;
-	if (!validPlanStatuses.includes(plan_status as any)) throw new Error('Invalid plan_status');
-	if (!validOrderStatuses.includes(order_status as any)) throw new Error('Invalid order_status');
+	const validPlanStatuses = ["basic", "premium"] as const;
+	const validOrderStatuses = ["pending", "paid", "failed"] as const;
+	if (!validPlanStatuses.includes(plan_status as "basic" | "premium")) throw new Error("Invalid plan_status");
+	if (!validOrderStatuses.includes(order_status as "pending" | "paid" | "failed"))
+		throw new Error("Invalid order_status");
 
 	await db
 		.update(users)

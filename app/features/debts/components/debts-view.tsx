@@ -1,159 +1,157 @@
-import { useState } from 'react';
-import { formatInputPrice, parseInputPrice } from '~/shared/lib/formatter';
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
-import { useLoaderData } from '@remix-run/react';
-import { useQuery } from '@tanstack/react-query';
-import { toast } from 'sonner';
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "sonner";
+import LayoutHeader from "~/shared/components/layout/header";
+import { Button } from "~/shared/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "~/shared/components/ui/dialog";
+import { Input } from "~/shared/components/ui/input";
+import { Label } from "~/shared/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/shared/components/ui/select";
+import { Switch } from "~/shared/components/ui/switch";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/shared/components/ui/table";
+import { formatInputPrice, parseInputPrice } from "~/shared/lib/formatter";
 
-import LayoutHeader from '~/shared/components/layout/header';
-import { Button } from '~/shared/components/ui/button';
-import { Input } from '~/shared/components/ui/input';
-import { Label } from '~/shared/components/ui/label';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '~/shared/components/ui/dialog';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/shared/components/ui/table';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/shared/components/ui/select';
-import { Switch } from '~/shared/components/ui/switch';
+type DebtItem = { id: string; name: string; amount: string; status: string; type: string; date: string };
+type FriendItem = { id: string; name: string; slug: string; is_public: boolean; debts: DebtItem[] };
 
 const formatCurrency = (value: number) => {
-	return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' })
+	return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" })
 		.format(value)
-		.replace(/\s+/g, ' ')
-		.replace(/\u00A0/g, ' ');
+		.replace(/\s+/g, " ")
+		.replace(/\u00A0/g, " ");
 };
-import url from '~/shared/constants/url';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function DebtsView() {
 	const { data: friendsData = [], refetch: mutate } = useQuery({
-		queryKey: ['debts'],
-		queryFn: () => fetcher('/api/debts'),
+		queryKey: ["debts"],
+		queryFn: () => fetcher("/api/debts"),
 	});
-	const friends = friendsData as any[];
+	const friends = friendsData as FriendItem[];
 	const [isOpen, setIsOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 
 	// Form state
-	const [friendName, setFriendName] = useState('');
-	const [name, setName] = useState('');
-	const [type, setType] = useState('I_OWE'); // I_OWE or OWES_ME
-	const [amount, setAmount] = useState('');
-	const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-	const [linkedDebtId, setLinkedDebtId] = useState('none');
+	const [friendName, setFriendName] = useState("");
+	const [name, setName] = useState("");
+	const [type, setType] = useState("I_OWE"); // I_OWE or OWES_ME
+	const [amount, setAmount] = useState("");
+	const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+	const [linkedDebtId, setLinkedDebtId] = useState("none");
 
-	const selectedFriend = friends.find((f: any) => f.name.toLowerCase() === friendName.toLowerCase());
-	const unpaidDebts = selectedFriend ? selectedFriend.debts.filter((d: any) => d.status === 'UNPAID') : [];
+	const selectedFriend = friends.find((f: FriendItem) => f.name.toLowerCase() === friendName.toLowerCase());
+	const unpaidDebts = selectedFriend ? selectedFriend.debts.filter((d: DebtItem) => d.status === "UNPAID") : [];
 
 	const handleLinkedDebtChange = (val: string) => {
 		setLinkedDebtId(val);
-		if (val !== 'none') {
-			const debt = unpaidDebts.find((d: any) => d.id === val);
+		if (val !== "none") {
+			const debt = unpaidDebts.find((d: DebtItem) => d.id === val);
 			if (debt) {
 				setName(`Pembayaran: ${debt.name}`);
-				setType(debt.type === 'I_OWE' ? 'OWES_ME' : 'I_OWE');
+				setType(debt.type === "I_OWE" ? "OWES_ME" : "I_OWE");
 				setAmount(debt.amount);
 			}
 		}
 	};
 
 	// Settings state
-	const [editingFriend, setEditingFriend] = useState<any>(null);
-	const [editSlug, setEditSlug] = useState('');
+	const [editingFriend, setEditingFriend] = useState<FriendItem | null>(null);
+	const [editSlug, setEditSlug] = useState("");
 	const [editIsPublic, setEditIsPublic] = useState(true);
 
 	const handleAddDebt = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (!friendName) return toast.error('Nama Teman harus diisi');
+		if (!friendName) return toast.error("Nama Teman harus diisi");
 		setIsLoading(true);
 
 		const payload: Record<string, string | number> = { friend_name: friendName, name, type, amount, date };
-		if (linkedDebtId !== 'none') {
+		if (linkedDebtId !== "none") {
 			payload.linked_debt_id = linkedDebtId;
 		}
 
-		const res = await fetch('/api/debts', {
-			method: 'POST',
+		const res = await fetch("/api/debts", {
+			method: "POST",
 			body: JSON.stringify(payload),
-			headers: { 'Content-Type': 'application/json' },
+			headers: { "Content-Type": "application/json" },
 		});
 
 		setIsLoading(false);
 		if (res.ok) {
-			toast.success('Debt added successfully');
+			toast.success("Debt added successfully");
 			setIsOpen(false);
-			setFriendName('');
-			setName('');
-			setAmount('');
-			setLinkedDebtId('none');
+			setFriendName("");
+			setName("");
+			setAmount("");
+			setLinkedDebtId("none");
 			mutate();
 		} else {
-			toast.error('Failed to add debt');
+			toast.error("Failed to add debt");
 		}
 	};
 
 	const handleDeleteDebt = async (id: string) => {
-		if (!confirm('Apakah Anda yakin ingin menghapus data ini?')) return;
-		const res = await fetch('/api/debts', {
-			method: 'DELETE',
+		if (!confirm("Apakah Anda yakin ingin menghapus data ini?")) return;
+		const res = await fetch("/api/debts", {
+			method: "DELETE",
 			body: JSON.stringify({ id }),
-			headers: { 'Content-Type': 'application/json' },
+			headers: { "Content-Type": "application/json" },
 		});
 		if (res.ok) {
-			toast.success('Debt deleted');
+			toast.success("Debt deleted");
 			mutate();
 		}
 	};
 
 	const handleMarkPaid = async (id: string, currentStatus: string) => {
-		const newStatus = currentStatus === 'PAID' ? 'UNPAID' : 'PAID';
-		const res = await fetch('/api/debts', {
-			method: 'PUT',
+		const newStatus = currentStatus === "PAID" ? "UNPAID" : "PAID";
+		const res = await fetch("/api/debts", {
+			method: "PUT",
 			body: JSON.stringify({ id, status: newStatus }),
-			headers: { 'Content-Type': 'application/json' },
+			headers: { "Content-Type": "application/json" },
 		});
 		if (res.ok) {
 			toast.success(`Marked as ${newStatus}`);
 			mutate();
 		} else {
-			toast.error('Gagal memperbarui status lunas');
+			toast.error("Gagal memperbarui status lunas");
 		}
 	};
 
 	const copyLink = (slug: string) => {
 		const shareUrl = `${window.location.origin}/share/${slug}`;
 		navigator.clipboard.writeText(shareUrl);
-		toast.success('Public link copied to clipboard!');
+		toast.success("Public link copied to clipboard!");
 	};
 
 	const handleUpdateSettings = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!editingFriend) return;
 		setIsLoading(true);
-		const res = await fetch('/api/friends', {
-			method: 'PUT',
+		const res = await fetch("/api/friends", {
+			method: "PUT",
 			body: JSON.stringify({ id: editingFriend.id, slug: editSlug, is_public: editIsPublic }),
-			headers: { 'Content-Type': 'application/json' },
+			headers: { "Content-Type": "application/json" },
 		});
 		setIsLoading(false);
 		if (res.ok) {
-			toast.success('Link settings updated');
+			toast.success("Link settings updated");
 			setEditingFriend(null);
 			mutate();
 		} else {
 			const data = (await res.json()) as { message?: string };
-			toast.error(data.message || 'Failed to update settings');
+			toast.error(data.message || "Failed to update settings");
 		}
 	};
 
 	let totalIOwe = 0;
 	let totalOwesMe = 0;
 
-	friends.forEach((friend: any) => {
-		friend.debts.forEach((debt: any) => {
-			if (debt.status === 'UNPAID') {
-				if (debt.type === 'I_OWE') totalIOwe += parseFloat(debt.amount);
-				if (debt.type === 'OWES_ME') totalOwesMe += parseFloat(debt.amount);
+	friends.forEach((friend: FriendRecord) => {
+		friend.debts.forEach((debt: DebtRecord) => {
+			if (debt.status === "UNPAID") {
+				if (debt.type === "I_OWE") totalIOwe += parseFloat(debt.amount);
+				if (debt.type === "OWES_ME") totalOwesMe += parseFloat(debt.amount);
 			}
 		});
 	});
@@ -197,7 +195,7 @@ export default function DebtsView() {
 										maxLength={60}
 									/>
 									<datalist id="friends-list">
-										{friends.map((f: any) => (
+										{friends.map((f: FriendItem) => (
 											<option key={f.id} value={f.name} />
 										))}
 									</datalist>
@@ -211,9 +209,9 @@ export default function DebtsView() {
 											</SelectTrigger>
 											<SelectContent>
 												<SelectItem value="none">Tidak ada / Buat Hutang Baru</SelectItem>
-												{unpaidDebts.map((d: any) => (
+												{unpaidDebts.map((d: DebtItem) => (
 													<SelectItem key={d.id} value={d.id}>
-														{new Date(d.date).toLocaleDateString('id-ID')} - {d.name} (
+														{new Date(d.date).toLocaleDateString("id-ID")} - {d.name} (
 														{formatCurrency(parseFloat(d.amount))})
 													</SelectItem>
 												))}
@@ -259,7 +257,7 @@ export default function DebtsView() {
 									<Input required type="date" value={date} onChange={(e) => setDate(e.target.value)} />
 								</div>
 								<Button type="submit" disabled={isLoading} className="w-full">
-									{isLoading ? 'Menyimpan...' : 'Simpan'}
+									{isLoading ? "Menyimpan..." : "Simpan"}
 								</Button>
 							</form>
 						</DialogContent>
@@ -285,11 +283,11 @@ export default function DebtsView() {
 									<Label>Custom Slug (URL Belakang)</Label>
 									<Input required value={editSlug} onChange={(e) => setEditSlug(e.target.value)} />
 									<p suppressHydrationWarning className="text-sm text-gray-500">
-										Preview: {typeof window !== 'undefined' ? window.location.origin : ''}/share/{editSlug}
+										Preview: {typeof window !== "undefined" ? window.location.origin : ""}/share/{editSlug}
 									</p>
 								</div>
 								<Button type="submit" disabled={isLoading} className="w-full">
-									{isLoading ? 'Menyimpan...' : 'Simpan Pengaturan'}
+									{isLoading ? "Menyimpan..." : "Simpan Pengaturan"}
 								</Button>
 							</form>
 						)}
@@ -301,12 +299,12 @@ export default function DebtsView() {
 					<div className="text-center text-gray-500 py-10">Belum ada catatan hutang/piutang.</div>
 				) : (
 					<div className="space-y-8">
-						{friends.map((friend: any) => {
+						{friends.map((friend: FriendItem) => {
 							let friendTotal = 0;
-							friend.debts.forEach((debt: any) => {
-								if (debt.status === 'UNPAID') {
-									if (debt.type === 'I_OWE') friendTotal -= parseFloat(debt.amount);
-									if (debt.type === 'OWES_ME') friendTotal += parseFloat(debt.amount);
+							friend.debts.forEach((debt: DebtItem) => {
+								if (debt.status === "UNPAID") {
+									if (debt.type === "I_OWE") friendTotal -= parseFloat(debt.amount);
+									if (debt.type === "OWES_ME") friendTotal += parseFloat(debt.amount);
 								}
 							});
 
@@ -319,11 +317,11 @@ export default function DebtsView() {
 										<div>
 											<h3 className="text-xl font-bold">{friend.name}</h3>
 											<p className="text-sm text-gray-500">
-												{isOwesYou ? `${friend.name} berhutang ${formatCurrency(Math.abs(friendTotal))} kepadamu` : ''}
+												{isOwesYou ? `${friend.name} berhutang ${formatCurrency(Math.abs(friendTotal))} kepadamu` : ""}
 												{isYouOwe
 													? `Kamu berhutang ${formatCurrency(Math.abs(friendTotal))} kepada ${friend.name}`
-													: ''}
-												{friendTotal === 0 ? 'Tidak ada hutang aktif.' : ''}
+													: ""}
+												{friendTotal === 0 ? "Tidak ada hutang aktif." : ""}
 											</p>
 										</div>
 										<div className="space-x-2">
@@ -356,22 +354,22 @@ export default function DebtsView() {
 											</TableRow>
 										</TableHeader>
 										<TableBody>
-											{friend.debts.map((debt: any) => (
-												<TableRow key={debt.id} className={debt.status === 'PAID' ? 'opacity-50' : ''}>
+											{friend.debts.map((debt: DebtItem) => (
+												<TableRow key={debt.id} className={debt.status === "PAID" ? "opacity-50" : ""}>
 													<TableCell suppressHydrationWarning className="py-2 px-3 sm:py-4 sm:px-4 text-xs sm:text-sm">
-														{new Date(debt.date).toLocaleDateString('id-ID')}
+														{new Date(debt.date).toLocaleDateString("id-ID")}
 													</TableCell>
 													<TableCell>{debt.name}</TableCell>
 													<TableCell>
-														<span className={debt.type === 'I_OWE' ? 'text-red-500' : 'text-green-500'}>
-															{debt.type === 'I_OWE' ? 'Saya Hutang' : 'Dihutangi'}
+														<span className={debt.type === "I_OWE" ? "text-red-500" : "text-green-500"}>
+															{debt.type === "I_OWE" ? "Saya Hutang" : "Dihutangi"}
 														</span>
 													</TableCell>
 													<TableCell>{formatCurrency(parseFloat(debt.amount))}</TableCell>
 													<TableCell>
 														<span
 															className={
-																debt.status === 'PAID' ? 'text-gray-500 font-bold' : 'text-orange-500 font-bold'
+																debt.status === "PAID" ? "text-gray-500 font-bold" : "text-orange-500 font-bold"
 															}
 														>
 															{debt.status}
@@ -379,7 +377,7 @@ export default function DebtsView() {
 													</TableCell>
 													<TableCell className="text-right space-x-2">
 														<Button size="sm" variant="secondary" onClick={() => handleMarkPaid(debt.id, debt.status)}>
-															{debt.status === 'PAID' ? 'Unmark' : 'Lunas'}
+															{debt.status === "PAID" ? "Unmark" : "Lunas"}
 														</Button>
 														<Button size="sm" variant="destructive" onClick={() => handleDeleteDebt(debt.id)}>
 															Hapus

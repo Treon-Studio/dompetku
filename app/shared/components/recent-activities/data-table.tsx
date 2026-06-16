@@ -1,12 +1,11 @@
-'use client';
+"use client";
 
-import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { type ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import StateDisplay from "~/shared/components/state-display";
+import { Skeleton } from "~/shared/components/ui/skeleton";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/shared/components/ui/table";
 
-import { Skeleton } from '~/shared/components/ui/skeleton';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/shared/components/ui/table';
-import StateDisplay from '~/shared/components/state-display';
-
-import { cn } from '~/shared/lib/utils';
+import { cn } from "~/shared/lib/utils";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -34,7 +33,7 @@ export function DataTable<TData, TValue>({ columns, data, className, loading = f
 						<TableRow key={headerGroup.id}>
 							{headerGroup.headers.map((header) => {
 								return (
-									<TableHead className={cn({ 'border-b border-muted': loading })} key={header.id}>
+									<TableHead className={cn({ "border-b border-muted": loading })} key={header.id}>
 										{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
 									</TableHead>
 								);
@@ -46,12 +45,12 @@ export function DataTable<TData, TValue>({ columns, data, className, loading = f
 					{table.getRowModel().rows?.length ? (
 						table.getRowModel().rows.map((row) => (
 							<TableRow
-								className={cn({ 'dark:border-muted': loading })}
+								className={cn({ "dark:border-muted": loading })}
 								key={row.id}
-								data-state={row.getIsSelected() && 'selected'}
+								data-state={row.getIsSelected() && "selected"}
 							>
 								{row.getVisibleCells().map((cell) => (
-									<TableCell className={cn({ 'not:last:border-b': loading }, 'py-3.5')} key={cell.id}>
+									<TableCell className={cn({ "not:last:border-b": loading }, "py-3.5")} key={cell.id}>
 										{loading ? <TableLoadingCell /> : flexRender(cell.column.columnDef.cell, cell.getContext())}
 									</TableCell>
 								))}

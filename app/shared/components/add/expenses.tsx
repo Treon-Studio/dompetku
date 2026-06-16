@@ -1,47 +1,54 @@
-'use client';
+"use client";
 
-import { useMemo, useState, useEffect, useRef } from 'react';
-import { addExpense, editExpense } from '~/features/expenses/api.client';
-import { useResourceForm } from '~/shared/hooks/use-resource-form';
-import debounce from 'debounce';
+import debounce from "debounce";
+import { useMemo } from "react";
+import { useUser } from "~/features/auth/components/auth-provider";
+import { addExpense, editExpense } from "~/features/expenses/api.client";
+import AutoCompleteList from "~/shared/components/autocomplete-list";
+import CircleLoader from "~/shared/components/loader/circle";
+import Modal from "~/shared/components/modal";
+import { Button } from "~/shared/components/ui/button";
+import { Input } from "~/shared/components/ui/input";
+import { Label } from "~/shared/components/ui/label";
+import { Textarea } from "~/shared/components/ui/textarea";
+import { expensesCategory, expensesPay, groupedExpenses } from "~/shared/constants/categories";
+import { datePattern } from "~/shared/constants/date";
+import { useResourceForm } from "~/shared/hooks/use-resource-form";
+import { formatInputPrice, getCurrencySymbol, parseInputPrice } from "~/shared/lib/formatter";
 
-import AutoCompleteList from '~/shared/components/autocomplete-list';
-import { useUser } from '~/features/auth/components/auth-provider';
-import CircleLoader from '~/shared/components/loader/circle';
-import Modal from '~/shared/components/modal';
-import { Button } from '~/shared/components/ui/button';
-import { Input } from '~/shared/components/ui/input';
-import { Label } from '~/shared/components/ui/label';
-import { Textarea } from '~/shared/components/ui/textarea';
-import { useTranslation } from '@i18n/client';
-
-import { formatInputPrice, getCurrencySymbol, parseInputPrice } from '~/shared/lib/formatter';
-
-import { expensesCategory, expensesPay, groupedExpenses } from '~/shared/constants/categories';
-import { datePattern } from '~/shared/constants/date';
+interface ExpenseState {
+	category: string;
+	paid_via: string;
+	name: string;
+	notes: string;
+	price: string;
+	date: string;
+	id?: string | null;
+	autocomplete?: Record<string, unknown>[];
+}
 
 interface AddExpenseProps {
 	show: boolean;
-	selected: any;
+	selected: Partial<ExpenseState> & { id?: string | null };
 	onHide: () => void;
 	mutate: () => void;
-	lookup: (value: any) => void;
+	lookup: (value: string) => Record<string, unknown>[];
 }
 
-const initialState = {
-	category: 'food',
-	paid_via: 'upi',
-	name: '',
-	notes: '',
-	price: '',
-	date: '',
+const initialState: ExpenseState = {
+	category: "food",
+	paid_via: "upi",
+	name: "",
+	notes: "",
+	price: "",
+	date: "",
 	id: null,
 	autocomplete: [],
 };
 
 export default function AddExpense({ show, onHide, mutate, selected, lookup }: AddExpenseProps) {
 	const user = useUser();
-	const { state, setState, loading, errors, inputRef, onSubmit, todayDate, t } = useResourceForm({
+	const { state, setState, loading, errors, inputRef, onSubmit, todayDate, t } = useResourceForm<ExpenseState>({
 		initialState,
 		selected,
 		onHide,
@@ -51,7 +58,7 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 
 	const onLookup = useMemo(() => {
 		const callbackHandler = (value: string) => {
-			setState((prev: any) => ({ ...prev, autocomplete: lookup(value) }));
+			setState((prev) => ({ ...prev, autocomplete: lookup(value) }));
 		};
 
 		return debounce(callbackHandler, 500);
@@ -61,7 +68,7 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 		<Modal
 			someRef={inputRef}
 			show={show}
-			title={selected.id ? t('expenses.editExpense') : t('expenses.addExpense')}
+			title={selected.id ? t("expenses.editExpense") : t("expenses.addExpense")}
 			onHide={onHide}
 		>
 			<div className="sm:flex sm:items-start max-sm:pb-6">
@@ -73,11 +80,11 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 					}}
 				>
 					<div className="relative">
-						<Label htmlFor="name" className={errors.name ? 'text-destructive' : ''}>
-							{t('expenses.name')}
+						<Label htmlFor="name" className={errors.name ? "text-destructive" : ""}>
+							{t("expenses.name")}
 						</Label>
 						<Input
-							className={`mt-1.5 ${errors.name ? 'border-destructive focus-visible:ring-destructive' : ''}`}
+							className={`mt-1.5 ${errors.name ? "border-destructive focus-visible:ring-destructive" : ""}`}
 							id="name"
 							placeholder="Swiggy - Biriyani"
 							maxLength={30}
@@ -91,7 +98,7 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 									setState({ ...state, name: value, autocomplete: [] });
 									if (value.length > 2) onLookup(value);
 								} else {
-									setState({ ...state, name: '', category: 'food', paid_via: 'upi' });
+									setState({ ...state, name: "", category: "food", paid_via: "upi" });
 								}
 							}}
 							value={state.name}
@@ -101,8 +108,8 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 							onHide={() => {
 								setState({ ...state, autocomplete: [] });
 							}}
-							data={state.autocomplete}
-							searchTerm={state.name.length > 2 ? state.name.toLowerCase() : ''}
+							data={state.autocomplete || []}
+							searchTerm={state.name.length > 2 ? state.name.toLowerCase() : ""}
 							onClick={({ name, category, paid_via }) => {
 								setState({ ...state, name, category, paid_via, autocomplete: [] });
 							}}
@@ -111,14 +118,14 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 					</div>
 					<div className="grid grid-cols-[50%_50%] gap-3">
 						<div className="mr-3">
-							<Label htmlFor="price" className={errors.price ? 'text-destructive' : ''}>
-								{t('expenses.price')}
+							<Label htmlFor="price" className={errors.price ? "text-destructive" : ""}>
+								{t("expenses.price")}
 								<span className="ml-2 font-mono text-xs text-muted-foreground">
 									({getCurrencySymbol(user?.currency, user?.locale)})
 								</span>
 							</Label>
 							<Input
-								className={`mt-1.5 ${errors.price ? 'border-destructive focus-visible:ring-destructive' : ''}`}
+								className={`mt-1.5 ${errors.price ? "border-destructive focus-visible:ring-destructive" : ""}`}
 								id="price"
 								type="text"
 								placeholder="199"
@@ -130,12 +137,12 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 							{errors.price && <p className="mt-1 text-xs text-destructive">{errors.price[0]}</p>}
 						</div>
 						<div className="mr-3">
-							<Label htmlFor="date" className={errors.date ? 'text-destructive' : ''}>
-								{t('expenses.spentDate')}
+							<Label htmlFor="date" className={errors.date ? "text-destructive" : ""}>
+								{t("expenses.spentDate")}
 							</Label>
 							<Input
 								className={`mt-1.5 appearance-none ${
-									errors.date ? 'border-destructive focus-visible:ring-destructive' : ''
+									errors.date ? "border-destructive focus-visible:ring-destructive" : ""
 								}`}
 								id="date"
 								type="date"
@@ -152,15 +159,15 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 					</div>
 					<div className="grid grid-cols-[50%_50%] gap-3">
 						<div className="mr-3">
-							<Label htmlFor="category" className={errors.category ? 'text-destructive' : ''}>
-								{t('expenses.category')}
+							<Label htmlFor="category" className={errors.category ? "text-destructive" : ""}>
+								{t("expenses.category")}
 							</Label>
 							<select
 								id="category"
 								className={`mt-1.5 flex h-9 max-sm:h-10 w-full rounded-md border bg-background px-3 py-1 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 ${
 									errors.category
-										? 'border-destructive focus-visible:ring-destructive'
-										: 'border-input focus-visible:ring-ring'
+										? "border-destructive focus-visible:ring-destructive"
+										: "border-input focus-visible:ring-ring"
 								}`}
 								onChange={(event) => {
 									setState({ ...state, category: event.target.value });
@@ -181,22 +188,22 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 										</optgroup>
 									);
 								})}
-								<option key={'other'} value={'other'}>
+								<option key={"other"} value={"other"}>
 									{expensesCategory.other.name}
 								</option>
 							</select>
 							{errors.category && <p className="mt-1 text-xs text-destructive">{errors.category[0]}</p>}
 						</div>
 						<div className="mr-3">
-							<Label htmlFor="paid" className={errors.paid_via ? 'text-destructive' : ''}>
-								{t('expenses.paidVia')}
+							<Label htmlFor="paid" className={errors.paid_via ? "text-destructive" : ""}>
+								{t("expenses.paidVia")}
 							</Label>
 							<select
 								id="paid"
 								className={`mt-1.5 flex h-9 max-sm:h-10 w-full rounded-md border bg-background px-3 py-1 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 ${
 									errors.paid_via
-										? 'border-destructive focus-visible:ring-destructive'
-										: 'border-input focus-visible:ring-ring'
+										? "border-destructive focus-visible:ring-destructive"
+										: "border-input focus-visible:ring-ring"
 								}`}
 								onChange={(event) => {
 									setState({ ...state, paid_via: event.target.value });
@@ -216,12 +223,12 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 						</div>
 					</div>
 					<div>
-						<Label className={`block ${errors.notes ? 'text-destructive' : ''}`}>
-							{t('expenses.notes')}{' '}
-							<span className="text-center text-sm text-muted-foreground">{t('common.optional')}</span>
+						<Label className={`block ${errors.notes ? "text-destructive" : ""}`}>
+							{t("expenses.notes")}{" "}
+							<span className="text-center text-sm text-muted-foreground">{t("common.optional")}</span>
 						</Label>
 						<Textarea
-							className={`mt-2 h-20 ${errors.notes ? 'border-destructive focus-visible:ring-destructive' : ''}`}
+							className={`mt-2 h-20 ${errors.notes ? "border-destructive focus-visible:ring-destructive" : ""}`}
 							onChange={(event) => setState({ ...state, notes: event.target.value })}
 							value={state.notes}
 							maxLength={60}
@@ -230,7 +237,7 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 					</div>
 
 					<Button disabled={loading} className="mt-1.5" type="submit">
-						{loading ? <CircleLoader /> : selected?.id ? t('common.update') : t('common.submit')}
+						{loading ? <CircleLoader /> : selected?.id ? t("common.update") : t("common.submit")}
 					</Button>
 				</form>
 			</div>

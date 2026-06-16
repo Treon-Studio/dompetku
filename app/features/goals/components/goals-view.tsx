@@ -1,25 +1,23 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { toast } from 'sonner';
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "sonner";
+import { useUser } from "~/features/auth/components/auth-provider";
+import LayoutHeader from "~/shared/components/layout/header";
+import { Button } from "~/shared/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "~/shared/components/ui/dialog";
+import { Input } from "~/shared/components/ui/input";
+import { Label } from "~/shared/components/ui/label";
+import { Progress } from "~/shared/components/ui/progress";
+import { formatInputPrice, parseInputPrice } from "~/shared/lib/formatter";
 
-import LayoutHeader from '~/shared/components/layout/header';
-import { Button } from '~/shared/components/ui/button';
-import { Input } from '~/shared/components/ui/input';
-import { Label } from '~/shared/components/ui/label';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '~/shared/components/ui/dialog';
-import { Progress } from '~/shared/components/ui/progress';
-
-import { formatInputPrice, parseInputPrice } from '~/shared/lib/formatter';
-import { useUser } from '~/features/auth/components/auth-provider';
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json() as Promise<{ goals: any[] }>);
+const fetcher = (url: string) => fetch(url).then((res) => res.json() as Promise<{ goals: Record<string, string>[] }>);
 
 export default function GoalsView() {
 	const user = useUser();
 	const { data, refetch, isLoading } = useQuery({
-		queryKey: ['goals'],
+		queryKey: ["goals"],
 		queryFn: () => fetcher(`/api/goals`),
 	});
 
@@ -28,105 +26,105 @@ export default function GoalsView() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isAddingFunds, setIsAddingFunds] = useState<string | null>(null);
 
-	const [name, setName] = useState('');
-	const [targetAmount, setTargetAmount] = useState('');
-	const [deadline, setDeadline] = useState('');
-	const [fundAmount, setFundAmount] = useState('');
+	const [name, setName] = useState("");
+	const [targetAmount, setTargetAmount] = useState("");
+	const [deadline, setDeadline] = useState("");
+	const [fundAmount, setFundAmount] = useState("");
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!name || !targetAmount) {
-			toast.error('Name and target amount are required');
+			toast.error("Name and target amount are required");
 			return;
 		}
 
 		setIsSubmitting(true);
 		const formData = new FormData();
-		formData.append('name', name);
-		formData.append('target_amount', parseInputPrice(targetAmount).toString());
-		if (deadline) formData.append('deadline', deadline);
+		formData.append("name", name);
+		formData.append("target_amount", parseInputPrice(targetAmount).toString());
+		if (deadline) formData.append("deadline", deadline);
 
 		try {
-			const res = await fetch('/api/goals', {
-				method: 'POST',
+			const res = await fetch("/api/goals", {
+				method: "POST",
 				body: formData,
 			});
 			const result = (await res.json()) as { success: boolean; error?: string };
 
 			if (result.success) {
-				toast.success('Goal saved successfully');
+				toast.success("Goal saved successfully");
 				setIsOpen(false);
-				setName('');
-				setTargetAmount('');
-				setDeadline('');
+				setName("");
+				setTargetAmount("");
+				setDeadline("");
 				refetch();
 			} else {
-				toast.error(result.error || 'Failed to save goal');
+				toast.error(result.error || "Failed to save goal");
 			}
-		} catch (error) {
-			toast.error('An unexpected error occurred');
+		} catch (_error) {
+			toast.error("An unexpected error occurred");
 		} finally {
 			setIsSubmitting(false);
 		}
 	};
 
-	const handleAddFunds = async (e: React.FormEvent, goal: any) => {
+	const handleAddFunds = async (e: React.FormEvent, goal: Record<string, unknown>) => {
 		e.preventDefault();
 		const amountToAdd = Number(parseInputPrice(fundAmount));
-		if (isNaN(amountToAdd) || amountToAdd <= 0) return;
+		if (Number.isNaN(amountToAdd) || amountToAdd <= 0) return;
 
 		const current = parseFloat(goal.current_amount);
 		const newTotal = current + amountToAdd;
 		const target = parseFloat(goal.target_amount);
-		const newStatus = newTotal >= target ? 'ACHIEVED' : 'IN_PROGRESS';
+		const newStatus = newTotal >= target ? "ACHIEVED" : "IN_PROGRESS";
 
 		const formData = new FormData();
-		formData.append('id', goal.id);
-		formData.append('name', goal.name);
-		formData.append('target_amount', goal.target_amount);
-		formData.append('current_amount', newTotal.toString());
-		if (goal.deadline) formData.append('deadline', goal.deadline);
-		formData.append('status', newStatus);
+		formData.append("id", goal.id);
+		formData.append("name", goal.name);
+		formData.append("target_amount", goal.target_amount);
+		formData.append("current_amount", newTotal.toString());
+		if (goal.deadline) formData.append("deadline", goal.deadline);
+		formData.append("status", newStatus);
 
 		try {
-			const res = await fetch('/api/goals', { method: 'PUT', body: formData });
+			const res = await fetch("/api/goals", { method: "PUT", body: formData });
 			const result = (await res.json()) as { success: boolean; error?: string };
 			if (result.success) {
-				toast.success('Funds added successfully!');
+				toast.success("Funds added successfully!");
 				setIsAddingFunds(null);
-				setFundAmount('');
+				setFundAmount("");
 				refetch();
 			} else {
-				toast.error(result.error || 'Failed to add funds');
+				toast.error(result.error || "Failed to add funds");
 			}
-		} catch (error) {
-			toast.error('An unexpected error occurred');
+		} catch (_error) {
+			toast.error("An unexpected error occurred");
 		}
 	};
 
 	const handleDelete = async (id: string) => {
-		if (!confirm('Are you sure you want to delete this goal?')) return;
+		if (!confirm("Are you sure you want to delete this goal?")) return;
 		const formData = new FormData();
-		formData.append('id', id);
+		formData.append("id", id);
 
 		try {
-			const res = await fetch('/api/goals', { method: 'DELETE', body: formData });
+			const res = await fetch("/api/goals", { method: "DELETE", body: formData });
 			const result = (await res.json()) as { success: boolean; error?: string };
 			if (result.success) {
-				toast.success('Goal deleted');
+				toast.success("Goal deleted");
 				refetch();
 			} else {
-				toast.error(result.error || 'Failed to delete goal');
+				toast.error(result.error || "Failed to delete goal");
 			}
-		} catch (error) {
-			toast.error('An unexpected error occurred');
+		} catch (_error) {
+			toast.error("An unexpected error occurred");
 		}
 	};
 
 	const formatCurrency = (value: number) => {
-		return new Intl.NumberFormat(user?.locale || 'en-US', {
-			style: 'currency',
-			currency: user?.currency || 'USD',
+		return new Intl.NumberFormat(user?.locale || "en-US", {
+			style: "currency",
+			currency: user?.currency || "USD",
 		}).format(value);
 	};
 
@@ -155,7 +153,7 @@ export default function GoalsView() {
 							</Button>
 						</div>
 					) : (
-						goals.map((goal: any) => {
+						goals.map((goal: Record<string, string>) => {
 							const target = parseFloat(goal.target_amount);
 							const current = parseFloat(goal.current_amount);
 							const percentage = Math.min(100, Math.round((current / target) * 100));
@@ -163,7 +161,7 @@ export default function GoalsView() {
 							return (
 								<div
 									key={goal.id}
-									className={`p-4 border rounded-xl bg-card shadow-sm space-y-4 ${goal.status === 'ACHIEVED' ? 'border-green-500' : ''}`}
+									className={`p-4 border rounded-xl bg-card shadow-sm space-y-4 ${goal.status === "ACHIEVED" ? "border-green-500" : ""}`}
 								>
 									<div className="flex justify-between items-start">
 										<div>
@@ -185,12 +183,12 @@ export default function GoalsView() {
 										<Progress
 											value={percentage}
 											className="h-2"
-											indicatorColor={percentage >= 100 ? 'bg-green-500' : 'bg-primary'}
+											indicatorColor={percentage >= 100 ? "bg-green-500" : "bg-primary"}
 										/>
 										<p className="text-xs text-right font-medium text-muted-foreground">{percentage}% completed</p>
 									</div>
 
-									{goal.status !== 'ACHIEVED' && (
+									{goal.status !== "ACHIEVED" && (
 										<div className="pt-2">
 											{isAddingFunds === goal.id ? (
 												<form onSubmit={(e) => handleAddFunds(e, goal)} className="flex gap-2">
@@ -226,7 +224,7 @@ export default function GoalsView() {
 											)}
 										</div>
 									)}
-									{goal.status === 'ACHIEVED' && (
+									{goal.status === "ACHIEVED" && (
 										<div className="pt-2 text-center text-sm font-semibold text-green-600 bg-green-50 rounded p-1">
 											🎉 Goal Achieved!
 										</div>
@@ -269,7 +267,7 @@ export default function GoalsView() {
 								Cancel
 							</Button>
 							<Button type="submit" disabled={isSubmitting}>
-								{isSubmitting ? 'Saving...' : 'Save Goal'}
+								{isSubmitting ? "Saving..." : "Save Goal"}
 							</Button>
 						</div>
 					</form>

@@ -2,7 +2,7 @@ input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"] {
 	-webkit-appearance: none;
-	-moz-appearance: textfield !important;
+	-moz-appearance: textfield;
 }
 
 select {
@@ -23,7 +23,7 @@ textarea {
 }
 
 .dark .fill-tremor-content-emphasis {
-	fill: #fff !important;
+	fill: #fff;
 }
 
 .tremor-BarList-labelText,
@@ -32,11 +32,11 @@ textarea {
 }
 
 .dark .tremor-BarList-labelText {
-	color: #fff !important;
+	color: #fff;
 }
 
 .dark .recharts-tooltip-wrapper .text-tremor-content {
-	color: #000 !important;
+	color: #000;
 }
 
 .tremor-BarList-labelText {

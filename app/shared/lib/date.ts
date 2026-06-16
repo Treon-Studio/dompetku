@@ -9,7 +9,7 @@ import {
 	isValid,
 	subMonths,
 	subYears,
-} from 'date-fns';
+} from "date-fns";
 
 export const calculateRenewalDate = (date: string, paid: string) => {
 	const startDate = new Date(date);
@@ -19,7 +19,7 @@ export const calculateRenewalDate = (date: string, paid: string) => {
 		return startDate;
 	}
 
-	if (paid === 'monthly') {
+	if (paid === "monthly") {
 		const monthlyDate = addMonths(startDate, differenceInMonths(today, startDate));
 		if (isToday(monthlyDate) && !isToday(startDate)) return today;
 		return addMonths(monthlyDate, 1);
@@ -38,7 +38,7 @@ export const calculatePrevRenewalDate = (date: Date, paid: string) => {
 		return startDate;
 	}
 
-	if (paid === 'monthly') {
+	if (paid === "monthly") {
 		previousRenewalDate = subMonths(date, 1);
 		return previousRenewalDate > startDate ? previousRenewalDate : startDate;
 	}
@@ -54,14 +54,14 @@ export const calculatePaidDates = (datum: any, start: string, end: string): Arra
 	const startDate = new Date(datum.date);
 	const rangeStartDate = new Date(start);
 	const rangeEndDate = hasValidCancelledAt ? new Date(datum.cancelled_at) : new Date(end);
-	let startDateCount = 1;
+	const startDateCount = 1;
 	let noOfPaidDurations = 0;
 
 	if (isAfter(startDate, rangeStartDate) && isAfter(startDate, new Date(end))) {
 		return [];
 	}
 
-	if (datum.paid === 'monthly') {
+	if (datum.paid === "monthly") {
 		if (!isFuture(startDate)) {
 			noOfPaidDurations = differenceInMonths(rangeEndDate, startDate) + startDateCount;
 		}

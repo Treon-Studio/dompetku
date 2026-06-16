@@ -1,9 +1,8 @@
-import { Link, useLoaderData } from '@remix-run/react';
-
-import Footer from '~/shared/components/footer';
-import { type LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
-import { I18nProvider } from '@i18n/provider';
+import { I18nProvider } from "@i18n/provider";
+import { getLocaleFromRequest, loadTranslations } from "@i18n/server";
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { Link, useLoaderData } from "@remix-run/react";
+import Footer from "~/shared/components/footer";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const locale = getLocaleFromRequest(request);
@@ -28,6 +27,7 @@ export default function Privacy() {
 				<div className="absolute inset-x-0 top-0 z-10 h-40 overflow-hidden text-slate-600/40 opacity-10 mask-[linear-gradient(to_top,transparent,white)]">
 					<div className="">
 						<svg className="absolute inset-0 top-0 h-full w-full text-gray-800" xmlns="http://www.w3.org/2000/svg">
+							<title>Background pattern</title>
 							<defs>
 								<pattern
 									id="pricing-pattern"
@@ -166,7 +166,7 @@ export default function Privacy() {
 				<div className="relative m-4 mb-10 mt-3 max-w-3xl pt-3 sm:m-4 sm:mb-10 lg:m-auto lg:mb-10">
 					<h2 className="mb-3 mt-2 text-2xl font-extrabold leading-6">Contact Us</h2>
 					<p className="mt-2">
-						If you have any questions or suggestions about my Privacy Policy, do not hesitate to contact me at{' '}
+						If you have any questions or suggestions about my Privacy Policy, do not hesitate to contact me at{" "}
 						<a className="border-b border-black pb-px" href="mailto:hello@dompetku.">
 							hello@dompetku.
 						</a>

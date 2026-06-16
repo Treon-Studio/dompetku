@@ -1,28 +1,25 @@
-'use client';
-
-import { useState } from 'react';
+"use client";
 
 import {
-	ColumnFiltersState,
-	RowData,
-	SortingState,
-	VisibilityState,
+	type ColumnFiltersState,
 	flexRender,
 	getCoreRowModel,
 	getFacetedRowModel,
 	getFacetedUniqueValues,
 	getFilteredRowModel,
 	getSortedRowModel,
+	type RowData,
+	type SortingState,
 	useReactTable,
-} from '@tanstack/react-table';
+	type VisibilityState,
+} from "@tanstack/react-table";
+import { useState } from "react";
+import StateDisplay from "~/shared/components/state-display";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/shared/components/ui/table";
+import TableLoader from "./data-table-loader";
+import DataTableToolbar from "./data-table-toolbar";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/shared/components/ui/table';
-
-import TableLoader from './data-table-loader';
-import DataTableToolbar from './data-table-toolbar';
-import StateDisplay from '~/shared/components/state-display';
-
-declare module '@tanstack/react-table' {
+declare module "@tanstack/react-table" {
 	interface TableMeta<TData extends RowData> {
 		user: any;
 		onDelete: (id: any) => void;
@@ -46,7 +43,7 @@ type DataTableProps = {
 	}[];
 };
 
-export default function DataTable<TData, TValue>(props: DataTableProps) {
+export default function DataTable<_TData, _TValue>(props: DataTableProps) {
 	const { data, columns, loading, categories, filter, options, filename, hideViewOptions } = props;
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -96,7 +93,7 @@ export default function DataTable<TData, TValue>(props: DataTableProps) {
 					<TableBody>
 						{table.getRowModel().rows?.length ? (
 							table.getRowModel().rows.map((row) => (
-								<TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+								<TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
 									))}

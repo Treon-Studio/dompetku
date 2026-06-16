@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { DropdownMenuRadioGroup, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
-import { Filter } from '@solar-icons/react';
+import { DropdownMenuRadioGroup, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { Filter } from "@solar-icons/react";
 
-import { Button } from '~/shared/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioItem } from '~/shared/components/ui/dropdown-menu';
+import { Button } from "~/shared/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioItem } from "~/shared/components/ui/dropdown-menu";
 
-import { views } from '~/shared/constants/table';
+import { views } from "~/shared/constants/table";
 
-export default function DataTableFilterOptions<TData>({
+export default function DataTableFilterOptions<_TData>({
 	filter,
 	setFilter,
 }: {

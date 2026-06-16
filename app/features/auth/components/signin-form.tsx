@@ -1,16 +1,14 @@
-import { Link } from '@remix-run/react';
-import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from "@i18n/client";
+import { Link } from "@remix-run/react";
+import { useEffect, useRef, useState } from "react";
+import CircleLoader from "~/shared/components/loader/circle";
+import { Button } from "~/shared/components/ui/button";
 
-import CircleLoader from '~/shared/components/loader/circle';
-import { Button } from '~/shared/components/ui/button';
+import url from "~/shared/constants/url";
+import { isEmail, isPhone } from "~/shared/constants/validation";
+import { apiUrls } from "~/shared/lib/apiUrls";
 
-import { apiUrls } from '~/shared/lib/apiUrls';
-
-import url from '~/shared/constants/url';
-import { isEmail, isPhone } from '~/shared/constants/validation';
-import { useTranslation } from '@i18n/client';
-
-const initialState = { loading: false, identity: '', password: '', success: false, error: '' };
+const initialState = { loading: false, identity: "", password: "", success: false, error: "" };
 
 export default function Form() {
 	const { t } = useTranslation();
@@ -24,22 +22,22 @@ export default function Form() {
 	const handleSignIn = async () => {
 		const identity = state.identity.trim();
 		if (!isEmail(identity) && !isPhone(identity)) {
-			setState((prev) => ({ ...prev, error: 'Please enter a valid email or phone number', loading: false }));
+			setState((prev) => ({ ...prev, error: "Please enter a valid email or phone number", loading: false }));
 			return;
 		}
 
-		setState((prev) => ({ ...prev, loading: true, error: '', success: false }));
+		setState((prev) => ({ ...prev, loading: true, error: "", success: false }));
 
 		try {
 			const res = await fetch(apiUrls.auth.signin, {
-				method: 'POST',
+				method: "POST",
 				body: JSON.stringify({ identity: identity, password: state.password }),
-				headers: { 'Content-Type': 'application/json' },
-				redirect: 'manual',
+				headers: { "Content-Type": "application/json" },
+				redirect: "manual",
 			});
 
-			if (res.type === 'opaqueredirect' || res.ok) {
-				window.location.href = '/dashboard';
+			if (res.type === "opaqueredirect" || res.ok) {
+				window.location.href = "/dashboard";
 				return;
 			}
 
@@ -60,10 +58,9 @@ export default function Form() {
 			}}
 		>
 			<label className="mb-1 block">
-				<span className="mb-2 block text-sm font-semibold leading-6">{t('auth.identity')}</span>
+				<span className="mb-2 block text-sm font-semibold leading-6">{t("auth.identity")}</span>
 				<input
 					className="mt-2 block h-10 w-full appearance-none rounded-md bg-white px-3 text-sm text-black shadow-xs ring-1 ring-gray-300 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-gray-900"
-					autoFocus
 					type="text"
 					inputMode="text"
 					autoComplete="username"
@@ -77,7 +74,7 @@ export default function Form() {
 				/>
 			</label>
 			<label className="mb-1 block">
-				<span className="mb-2 block text-sm font-semibold leading-6">{t('auth.password')}</span>
+				<span className="mb-2 block text-sm font-semibold leading-6">{t("auth.password")}</span>
 				<input
 					className="mt-2 block h-10 w-full appearance-none rounded-md bg-white px-3 text-sm text-black shadow-xs ring-1 ring-gray-300 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-gray-900"
 					type="password"
@@ -93,26 +90,26 @@ export default function Form() {
 			</label>
 			<div className="flex items-center justify-end">
 				<Link to={url.app.forgotPassword} className="text-sm font-medium text-gray-600 hover:text-gray-900">
-					{t('auth.forgotPassword')}
+					{t("auth.forgotPassword")}
 				</Link>
 			</div>
-			<Button size={'lg'} type="submit" disabled={state.loading}>
-				{state.loading ? <CircleLoader /> : t('auth.signin')}
+			<Button size={"lg"} type="submit" disabled={state.loading}>
+				{state.loading ? <CircleLoader /> : t("auth.signin")}
 			</Button>
 
 			<p className="text-center text-sm font-medium text-gray-700">
-				{t('auth.noAccount')}{' '}
+				{t("auth.noAccount")}{" "}
 				<Link
 					to={url.app.signup}
 					className="border-b border-gray-700 pb-px font-bold hover:border-gray-500 hover:text-gray-600"
 				>
-					{t('auth.signup')}
+					{t("auth.signup")}
 				</Link>
 			</p>
 
 			<p
 				className={`mb-6 h-[50px] text-center text-sm font-medium ${
-					(state.success && !state.error) || (!state.success && state.error) ? '' : 'invisible'
+					(state.success && !state.error) || (!state.success && state.error) ? "" : "invisible"
 				}`}
 			>
 				{state.error ? <span className="text-red-500">{state.error}</span> : null}

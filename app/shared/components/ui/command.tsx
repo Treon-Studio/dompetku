@@ -1,14 +1,13 @@
-'use client';
+"use client";
 
-import * as React from 'react';
+import type { DialogProps } from "@radix-ui/react-dialog";
+import { Magnifer } from "@solar-icons/react";
+import { Command as CommandPrimitive } from "cmdk";
+import * as React from "react";
 
-import { DialogProps } from '@radix-ui/react-dialog';
-import { Magnifer } from '@solar-icons/react';
-import { Command as CommandPrimitive } from 'cmdk';
+import { Dialog, DialogContent } from "~/shared/components/ui/dialog";
 
-import { Dialog, DialogContent } from '~/shared/components/ui/dialog';
-
-import { cn } from '~/shared/lib/utils';
+import { cn } from "~/shared/lib/utils";
 
 const Command = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive>,
@@ -17,8 +16,8 @@ const Command = React.forwardRef<
 	<CommandPrimitive
 		ref={ref}
 		className={cn(
-			'flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground',
-			className
+			"flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground",
+			className,
 		)}
 		{...props}
 	/>
@@ -48,8 +47,8 @@ const CommandInput = React.forwardRef<
 		<CommandPrimitive.Input
 			ref={ref}
 			className={cn(
-				'flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
-				className
+				"flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+				className,
 			)}
 			{...props}
 		/>
@@ -64,7 +63,7 @@ const CommandList = React.forwardRef<
 >(({ className, ...props }, ref) => (
 	<CommandPrimitive.List
 		ref={ref}
-		className={cn('max-h-[300px] overflow-y-auto overflow-x-hidden', className)}
+		className={cn("max-h-[300px] overflow-y-auto overflow-x-hidden", className)}
 		{...props}
 	/>
 ));
@@ -85,8 +84,8 @@ const CommandGroup = React.forwardRef<
 	<CommandPrimitive.Group
 		ref={ref}
 		className={cn(
-			'overflow-hidden p-1 text-foreground **:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-xs **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground',
-			className
+			"overflow-hidden p-1 text-foreground **:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-xs **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground",
+			className,
 		)}
 		{...props}
 	/>
@@ -98,7 +97,7 @@ const CommandSeparator = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive.Separator>,
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive.Separator>
 >(({ className, ...props }, ref) => (
-	<CommandPrimitive.Separator ref={ref} className={cn('-mx-1 h-px bg-border', className)} {...props} />
+	<CommandPrimitive.Separator ref={ref} className={cn("-mx-1 h-px bg-border", className)} {...props} />
 ));
 CommandSeparator.displayName = CommandPrimitive.Separator.displayName;
 
@@ -109,8 +108,8 @@ const CommandItem = React.forwardRef<
 	<CommandPrimitive.Item
 		ref={ref}
 		className={cn(
-			'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-hidden aria-selected:bg-accent aria-selected:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50',
-			className
+			"relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-hidden aria-selected:bg-accent aria-selected:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
+			className,
 		)}
 		{...props}
 	/>
@@ -119,18 +118,18 @@ const CommandItem = React.forwardRef<
 CommandItem.displayName = CommandPrimitive.Item.displayName;
 
 const CommandShortcut = ({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) => {
-	return <span className={cn('ml-auto text-xs tracking-widest text-muted-foreground', className)} {...props} />;
+	return <span className={cn("ml-auto text-xs tracking-widest text-muted-foreground", className)} {...props} />;
 };
-CommandShortcut.displayName = 'CommandShortcut';
+CommandShortcut.displayName = "CommandShortcut";
 
 export {
 	Command,
 	CommandDialog,
-	CommandInput,
-	CommandList,
 	CommandEmpty,
 	CommandGroup,
+	CommandInput,
 	CommandItem,
-	CommandShortcut,
+	CommandList,
 	CommandSeparator,
+	CommandShortcut,
 };

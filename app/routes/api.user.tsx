@@ -1,10 +1,10 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
-import { requireUser } from '~/features/auth/api.server';
-import { createDbClient } from '~/core/db.server';
-import { getUserProfile, updateUserProfile, deleteUserAndData } from '~/features/profile/api.server';
-import { logger } from '~/core/logger.server';
-import { getCloudflareEnv } from '~/env';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { createDbClient } from "~/core/db.server";
+import { logger } from "~/core/logger.server";
+import { getCloudflareEnv } from "~/env";
+import { requireUser } from "~/features/auth/api.server";
+import { deleteUserAndData, getUserProfile, updateUserProfile } from "~/features/profile/api.server";
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
 	const db = createDbClient(getCloudflareEnv(context));
@@ -14,8 +14,8 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 		const profile = await getUserProfile(user.id, db);
 		return json(profile, { status: 200 });
 	} catch (error) {
-		logger.error('Request failed', { error: String(error) });
-		return json({ message: 'Request failed' }, { status: 500 });
+		logger.error("Request failed", { error: String(error) });
+		return json({ message: "Request failed" }, { status: 500 });
 	}
 }
 
@@ -24,30 +24,30 @@ export async function action({ request, context }: ActionFunctionArgs) {
 	const user = await requireUser(request, db, context);
 	const method = request.method.toUpperCase();
 
-	if (method === 'PATCH') {
+	if (method === "PATCH") {
 		const body = await request.json();
 		try {
 			await updateUserProfile(user.id, body, user.password, db);
-			return json({ message: 'Updated' });
+			return json({ message: "Updated" });
 		} catch (e: unknown) {
 			const error = e as Error;
-			if (error.message === 'Request failed') {
-				logger.error('Request failed', { error: String(error) });
-				return json({ message: 'Request failed' }, { status: 500 });
+			if (error.message === "Request failed") {
+				logger.error("Request failed", { error: String(error) });
+				return json({ message: "Request failed" }, { status: 500 });
 			}
 			return json({ message: error.message }, { status: 400 });
 		}
 	}
 
-	if (method === 'DELETE') {
+	if (method === "DELETE") {
 		try {
 			await deleteUserAndData(user.id, db);
-			return json({ message: 'Deleted' });
+			return json({ message: "Deleted" });
 		} catch (error) {
-			logger.error('Request failed', { error: String(error) });
-			return json({ message: 'Request failed' }, { status: 500 });
+			logger.error("Request failed", { error: String(error) });
+			return json({ message: "Request failed" }, { status: 500 });
 		}
 	}
 
-	return json({ message: 'Method not allowed' }, { status: 405 });
+	return json({ message: "Method not allowed" }, { status: 405 });
 }

@@ -1,18 +1,25 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
+import { DonutChart, Legend } from "@tremor/react";
+import { useMemo } from "react";
 
-import { DonutChart, Legend } from '@tremor/react';
+import { useUser } from "~/features/auth/components/auth-provider";
+import { useOverview } from "~/shared/components/context/overview-provider";
+import ChartLoader from "~/shared/components/loader/chart";
+import StateDisplay from "~/shared/components/state-display";
 
-import { useUser } from '~/features/auth/components/auth-provider';
-import { useOverview } from '~/shared/components/context/overview-provider';
-import ChartLoader from '~/shared/components/loader/chart';
-import StateDisplay from '~/shared/components/state-display';
+import { extractSubscriptions, extractSubscriptionsCategories } from "~/shared/lib/extractor";
+import { formatCurrency } from "~/shared/lib/formatter";
 
-import { extractSubscriptions, extractSubscriptionsCategories } from '~/shared/lib/extractor';
-import { formatCurrency } from '~/shared/lib/formatter';
-
-const customTooltip = ({ payload, active, user }: { payload?: any; active?: boolean; user: any }) => {
+const customTooltip = ({
+	payload,
+	active,
+	user,
+}: {
+	payload?: Record<string, unknown>[];
+	active?: boolean;
+	user: Record<string, unknown>;
+}) => {
 	if (!active || !payload) return null;
 	const categoryPayload = payload?.[0];
 	if (!categoryPayload) return null;
@@ -36,11 +43,11 @@ const customTooltip = ({ payload, active, user }: { payload?: any; active?: bool
 export default function Donut() {
 	const user = useUser();
 	const { data, loading } = useOverview();
-	const chartData = useMemo<Array<any>>(() => extractSubscriptions(data.subscriptions), [data.subscriptions]);
-	const categories = useMemo<Array<any>>(
-		() => extractSubscriptionsCategories(data.subscriptions),
-		[data.subscriptions]
+	const chartData = useMemo<Record<string, unknown>[]>(
+		() => extractSubscriptions(data.subscriptions),
+		[data.subscriptions],
 	);
+	const categories = useMemo<string[]>(() => extractSubscriptionsCategories(data.subscriptions), [data.subscriptions]);
 
 	if (loading) {
 		return <ChartLoader className="h-[340px]" type="donut" />;
@@ -57,7 +64,7 @@ export default function Donut() {
 			</div>
 			<DonutChart
 				data={chartData}
-				category={'price'}
+				category={"price"}
 				index="name"
 				valueFormatter={(value) => {
 					return formatCurrency({ value, currency: user?.currency, locale: user?.locale });

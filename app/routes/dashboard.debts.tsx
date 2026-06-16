@@ -1,15 +1,15 @@
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
-import { useLoaderData } from '@remix-run/react';
-import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
-import { I18nProvider } from '@i18n/provider';
+import { I18nProvider } from "@i18n/provider";
+import { getLocaleFromRequest, loadTranslations } from "@i18n/server";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
 
-import DebtsView from '~/features/debts/components/debts-view';
+import DebtsView from "~/features/debts/components/debts-view";
 
 export const meta: MetaFunction = () => {
 	return [
-		{ title: 'Dompetku - Debts (Hutang / Piutang)' },
-		{ name: 'description', content: 'Track debts with your friends.' },
+		{ title: "Dompetku - Debts (Hutang / Piutang)" },
+		{ name: "description", content: "Track debts with your friends." },
 	];
 };
 

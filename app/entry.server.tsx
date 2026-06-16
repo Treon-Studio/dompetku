@@ -1,16 +1,16 @@
-import type { AppLoadContext, EntryContext } from '@remix-run/cloudflare';
-import { RemixServer } from '@remix-run/react';
-import { isbot } from 'isbot';
-import { renderToReadableStream } from 'react-dom/server';
-import { logger, configureLogger } from '~/core/logger.server';
-import { getCloudflareEnv } from '~/env';
+import type { AppLoadContext, EntryContext } from "@remix-run/cloudflare";
+import { RemixServer } from "@remix-run/react";
+import { isbot } from "isbot";
+import { renderToReadableStream } from "react-dom/server";
+import { configureLogger, logger } from "~/core/logger.server";
+import { getCloudflareEnv } from "~/env";
 
 export default async function handleRequest(
 	request: Request,
 	responseStatusCode: number,
 	responseHeaders: Headers,
 	remixContext: EntryContext,
-	loadContext: AppLoadContext
+	loadContext: AppLoadContext,
 ) {
 	try {
 		const env = getCloudflareEnv(loadContext);
@@ -28,19 +28,19 @@ export default async function handleRequest(
 	const body = await renderToReadableStream(<RemixServer context={remixContext} url={request.url} />, {
 		signal: request.signal,
 		onError(error: unknown) {
-			if (error instanceof Error && error.message.includes('Controller is already closed')) {
+			if (error instanceof Error && error.message.includes("Controller is already closed")) {
 				return;
 			}
-			logger.error('SSR render error', { error: String(error) });
+			logger.error("SSR render error", { error: String(error) });
 			responseStatusCode = 500;
 		},
 	});
 
-	if (isbot(request.headers.get('user-agent') || '')) {
+	if (isbot(request.headers.get("user-agent") || "")) {
 		await body.allReady;
 	}
 
-	responseHeaders.set('Content-Type', 'text/html');
+	responseHeaders.set("Content-Type", "text/html");
 	return new Response(body, {
 		headers: responseHeaders,
 		status: responseStatusCode,

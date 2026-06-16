@@ -1,21 +1,18 @@
-'use client';
+"use client";
 
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react";
 
-import { toast } from 'sonner';
+import { toast } from "sonner";
+import { useUser } from "~/features/auth/components/auth-provider";
+import Add from "~/shared/components/add-button";
+import { useData } from "~/shared/components/context/data-provider";
+import DataTable from "~/shared/components/table/data-table";
+import { investmentCategory } from "~/shared/constants/categories";
+import messages from "~/shared/constants/messages";
+import { lookup } from "~/shared/lib/lookup";
 
-import Add from '~/shared/components/add-button';
-import { useUser } from '~/features/auth/components/auth-provider';
-import { useData } from '~/shared/components/context/data-provider';
-import DataTable from '~/shared/components/table/data-table';
-
-import { lookup } from '~/shared/lib/lookup';
-
-import { investmentCategory } from '~/shared/constants/categories';
-import messages from '~/shared/constants/messages';
-
-import { InvestmentData, deleteInvestment } from '../api.client';
-import { columns } from './columns';
+import { deleteInvestment, type InvestmentData } from "../api.client";
+import { columns } from "./columns";
 
 const categories = Object.keys(investmentCategory)
 	.filter(Boolean)
@@ -31,7 +28,7 @@ export default function InvestmentsTable() {
 
 	const onDelete = useCallback(
 		async (id: string) => {
-			if (!confirm('Apakah Anda yakin ingin menghapus data ini?')) return;
+			if (!confirm("Apakah Anda yakin ingin menghapus data ini?")) return;
 			try {
 				await deleteInvestment(id);
 				toast.success(messages.deleted);
@@ -40,10 +37,10 @@ export default function InvestmentsTable() {
 				toast.error(messages.error);
 			}
 		},
-		[mutate]
+		[mutate],
 	);
 
-	const onEdit = useCallback(async (data: InvestmentData | any) => {
+	const onEdit = useCallback(async (data: InvestmentData | unknown) => {
 		setSelected(data);
 	}, []);
 

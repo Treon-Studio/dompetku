@@ -1,29 +1,35 @@
-import { useState, useEffect, useRef } from 'react';
-import { toast } from 'sonner';
-import { format } from 'date-fns';
-import { useTranslation } from '@i18n/client';
-import { dateFormat } from '~/shared/constants/date';
-import messages from '~/shared/constants/messages';
-import { incrementUsage } from '~/shared/components/dashboard/apis';
+import { useTranslation } from "@i18n/client";
+import { format } from "date-fns";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { incrementUsage } from "~/shared/components/dashboard/apis";
+import { dateFormat } from "~/shared/constants/date";
+import messages from "~/shared/constants/messages";
 
-interface UseResourceFormOptions {
-	initialState: any;
-	selected: any;
+interface UseResourceFormOptions<T> {
+	initialState: T;
+	selected: Partial<T> & { id?: string | null };
 	onHide: () => void;
 	mutate?: () => void;
 	api: {
-		add: (data: any) => Promise<any>;
-		edit: (data: any) => Promise<any>;
+		add: (data: T) => Promise<any>;
+		edit: (data: T) => Promise<any>;
 	};
 }
 
-export function useResourceForm({ initialState, selected, onHide, mutate, api }: UseResourceFormOptions) {
+export function useResourceForm<T extends Record<string, any>>({
+	initialState,
+	selected,
+	onHide,
+	mutate,
+	api,
+}: UseResourceFormOptions<T>) {
 	const { t } = useTranslation();
 	const todayDate = format(new Date(), dateFormat);
-	const [state, setState] = useState<any>({ ...initialState, date: todayDate });
+	const [state, setState] = useState<T>({ ...initialState, date: todayDate } as T);
 	const [loading, setLoading] = useState(false);
 	const [errors, setErrors] = useState<Record<string, string[]>>({});
-	const inputRef = useRef<any>(null);
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
 		inputRef.current?.focus();
@@ -32,8 +38,12 @@ export function useResourceForm({ initialState, selected, onHide, mutate, api }:
 	useEffect(() => {
 		setState(
 			selected?.id
-				? { ...initialState, ...selected, paid_via: selected.paid_via || initialState.paid_via }
-				: { ...initialState, date: todayDate }
+				? ({
+						...initialState,
+						...selected,
+						paid_via: (selected as any).paid_via || (initialState as any).paid_via,
+					} as T)
+				: ({ ...initialState, date: todayDate } as T),
 		);
 		setErrors({});
 	}, [selected, todayDate, initialState]);
@@ -53,7 +63,7 @@ export function useResourceForm({ initialState, selected, onHide, mutate, api }:
 			toast.success(isEditing ? messages.updated : messages.success);
 			if (mutate) mutate();
 			onHide();
-			setState({ ...initialState });
+			setState({ ...initialState, date: todayDate } as T);
 		} catch (error: any) {
 			setLoading(false);
 			if (error.data?.errors) {

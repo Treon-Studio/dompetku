@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext } from "react";
 
 interface User {
 	currency: string;
@@ -20,8 +20,6 @@ interface User {
 	role: string;
 }
 
-interface Session {}
-
 interface AuthContextValue {
 	user: User;
 	signOut: () => Promise<void>;
@@ -33,8 +31,8 @@ export const AuthProvider = ({ user, children }: { user: User; children: React.R
 	const value = {
 		user,
 		signOut: async () => {
-			await fetch('/api/auth/signout', { method: 'POST' });
-			window.location.href = '/signin';
+			await fetch("/api/auth/signout", { method: "POST" });
+			window.location.href = "/signin";
 		},
 	};
 

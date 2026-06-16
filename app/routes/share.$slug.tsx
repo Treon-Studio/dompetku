@@ -1,38 +1,37 @@
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
-import { useLoaderData } from '@remix-run/react';
-
-import { createDbClient } from '~/core/db.server';
-import { friends, debts, users } from '~/core/db/schema';
-import { eq, desc } from 'drizzle-orm';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/shared/components/ui/table';
-import { getCloudflareEnv } from '~/env';
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
+import { desc, eq } from "drizzle-orm";
+import { debts, friends, users } from "~/core/db/schema";
+import { createDbClient } from "~/core/db.server";
+import { getCloudflareEnv } from "~/env";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/shared/components/ui/table";
 
 const formatCurrency = (value: number) => {
-	return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' })
+	return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" })
 		.format(value)
-		.replace(/\s+/g, ' ')
-		.replace(/\u00A0/g, ' ');
+		.replace(/\s+/g, " ")
+		.replace(/\u00A0/g, " ");
 };
 
 export const meta: MetaFunction = () => {
 	return [
-		{ title: 'Catatan Hutang Piutang (Shared)' },
-		{ name: 'description', content: 'Rincian transaksi yang dibagikan.' },
+		{ title: "Catatan Hutang Piutang (Shared)" },
+		{ name: "description", content: "Rincian transaksi yang dibagikan." },
 	];
 };
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
 	const slug = params.slug;
 	if (!slug) {
-		throw new Response('Not Found', { status: 404 });
+		throw new Response("Not Found", { status: 404 });
 	}
 
 	const db = createDbClient(getCloudflareEnv(context));
 	const [friendRecord] = await db.select().from(friends).where(eq(friends.slug, slug)).limit(1);
 
-	if (!friendRecord || !friendRecord.is_public) {
-		throw new Response('Halaman ini bersifat privat atau tidak ditemukan.', { status: 404 });
+	if (!friendRecord?.is_public) {
+		throw new Response("Halaman ini bersifat privat atau tidak ditemukan.", { status: 404 });
 	}
 
 	const friendDebts = await db
@@ -53,15 +52,15 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 
 export default function SharedDebtPage() {
 	const { friend } = useLoaderData<typeof loader>();
-	const unpaidDebts = friend.debts.filter((debt: any) => debt.status === 'UNPAID');
-	const paidDebts = friend.debts.filter((debt: any) => debt.status === 'PAID');
+	const unpaidDebts = friend.debts.filter((debt: any) => debt.status === "UNPAID");
+	const paidDebts = friend.debts.filter((debt: any) => debt.status === "PAID");
 
 	let netAmount = 0;
 
 	friend.debts.forEach((debt: any) => {
-		if (debt.status === 'UNPAID') {
-			if (debt.type === 'I_OWE') netAmount -= parseFloat(debt.amount);
-			if (debt.type === 'OWES_ME') netAmount += parseFloat(debt.amount);
+		if (debt.status === "UNPAID") {
+			if (debt.type === "I_OWE") netAmount -= parseFloat(debt.amount);
+			if (debt.type === "OWES_ME") netAmount += parseFloat(debt.amount);
 		}
 	});
 
@@ -79,20 +78,20 @@ export default function SharedDebtPage() {
 				<div
 					className={`p-6 rounded-xl border text-center space-y-2 shadow-sm ${
 						netAmount === 0
-							? 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+							? "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
 							: viewerOwesUser
-								? 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-900'
-								: 'bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-900'
+								? "bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-900"
+								: "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-900"
 					}`}
 				>
 					<h2 className="text-xl font-semibold">
-						{netAmount === 0 && 'Semua tagihan sudah lunas. 🎉'}
-						{viewerOwesUser && 'Sisa hutangmu:'}
-						{userOwesViewer && 'Sisa uangmu yang dipinjam:'}
+						{netAmount === 0 && "Semua tagihan sudah lunas. 🎉"}
+						{viewerOwesUser && "Sisa hutangmu:"}
+						{userOwesViewer && "Sisa uangmu yang dipinjam:"}
 					</h2>
 					{netAmount !== 0 && (
 						<p
-							className={`text-4xl font-bold ${viewerOwesUser ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}
+							className={`text-4xl font-bold ${viewerOwesUser ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`}
 						>
 							{formatCurrency(Math.abs(netAmount))}
 						</p>
@@ -116,16 +115,16 @@ export default function SharedDebtPage() {
 							{unpaidDebts.map((debt: any) => (
 								<TableRow key={debt.id} className="bg-red-50/40 dark:bg-red-900/10">
 									<TableCell suppressHydrationWarning className="whitespace-nowrap">
-										{new Date(debt.date).toLocaleDateString('id-ID', {
-											day: 'numeric',
-											month: 'long',
-											year: 'numeric',
+										{new Date(debt.date).toLocaleDateString("id-ID", {
+											day: "numeric",
+											month: "long",
+											year: "numeric",
 										})}
 									</TableCell>
-									<TableCell>{debt.name.replace(/^(Pembayaran:\s*|Sisa:\s*)/i, '').split(' - ')[0]}</TableCell>
+									<TableCell>{debt.name.replace(/^(Pembayaran:\s*|Sisa:\s*)/i, "").split(" - ")[0]}</TableCell>
 									<TableCell className="text-right">
 										<div className="font-medium">{formatCurrency(parseFloat(debt.amount))}</div>
-										{debt.name.startsWith('Sisa: ') && (
+										{debt.name.startsWith("Sisa: ") && (
 											<span className="text-[10px] sm:text-xs text-gray-500">Sisa Tagihan</span>
 										)}
 									</TableCell>
@@ -151,6 +150,7 @@ export default function SharedDebtPage() {
 								viewBox="0 0 24 24"
 								stroke="currentColor"
 							>
+								<title>Toggle details</title>
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
 							</svg>
 							<span>Riwayat Lunas ({paidDebts.length})</span>
@@ -164,15 +164,15 @@ export default function SharedDebtPage() {
 												suppressHydrationWarning
 												className="whitespace-nowrap text-gray-400 dark:text-gray-500 text-xs sm:text-sm"
 											>
-												{new Date(debt.date).toLocaleDateString('id-ID', {
-													day: 'numeric',
-													month: 'short',
-													year: 'numeric',
+												{new Date(debt.date).toLocaleDateString("id-ID", {
+													day: "numeric",
+													month: "short",
+													year: "numeric",
 												})}
 											</TableCell>
 											<TableCell className="text-gray-400 dark:text-gray-500 text-xs sm:text-sm">
 												<s className="opacity-80">
-													{debt.name.replace(/^(Pembayaran:\s*|Sisa:\s*)/i, '').split(' - ')[0]}
+													{debt.name.replace(/^(Pembayaran:\s*|Sisa:\s*)/i, "").split(" - ")[0]}
 												</s>
 											</TableCell>
 											<TableCell className="text-right text-gray-400 dark:text-gray-500 text-xs sm:text-sm">

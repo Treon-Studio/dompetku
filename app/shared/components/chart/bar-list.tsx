@@ -1,16 +1,15 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
+import { BarList } from "@tremor/react";
+import { useMemo } from "react";
 
-import { BarList } from '@tremor/react';
+import { useUser } from "~/features/auth/components/auth-provider";
+import { useOverview } from "~/shared/components/context/overview-provider";
+import ChartLoader from "~/shared/components/loader/chart";
+import StateDisplay from "~/shared/components/state-display";
 
-import { useUser } from '~/features/auth/components/auth-provider';
-import { useOverview } from '~/shared/components/context/overview-provider';
-import ChartLoader from '~/shared/components/loader/chart';
-import StateDisplay from '~/shared/components/state-display';
-
-import { extractTopExpenseCategories } from '~/shared/lib/extractor';
-import { formatCurrency } from '~/shared/lib/formatter';
+import { extractTopExpenseCategories } from "~/shared/lib/extractor";
+import { formatCurrency } from "~/shared/lib/formatter";
 
 export default function TopSpentExpenses() {
 	const user = useUser();

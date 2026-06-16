@@ -1,19 +1,18 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
+import { BarChart } from "@tremor/react";
+import { useMemo } from "react";
 
-import { BarChart } from '@tremor/react';
+import { useUser } from "~/features/auth/components/auth-provider";
+import { useOverview } from "~/shared/components/context/overview-provider";
+import ChartLoader from "~/shared/components/loader/chart";
+import StateDisplay from "~/shared/components/state-display";
 
-import { useUser } from '~/features/auth/components/auth-provider';
-import { useOverview } from '~/shared/components/context/overview-provider';
-import ChartLoader from '~/shared/components/loader/chart';
-import StateDisplay from '~/shared/components/state-display';
+import { extractChartAxis, extractExpenses, extractExpensesCategory } from "~/shared/lib/extractor";
+import { formatCurrency } from "~/shared/lib/formatter";
 
-import { extractChartAxis, extractExpenses, extractExpensesCategory } from '~/shared/lib/extractor';
-import { formatCurrency } from '~/shared/lib/formatter';
-
-const dataFormatter = (number: number) => {
-	return '$ ' + Intl.NumberFormat('us').format(number).toString();
+const _dataFormatter = (number: number) => {
+	return `$ ${Intl.NumberFormat("us").format(number).toString()}`;
 };
 
 const customTooltip = ({ payload, active, user }: { payload?: any; active?: boolean; user: any }) => {
@@ -27,7 +26,7 @@ const customTooltip = ({ payload, active, user }: { payload?: any; active?: bool
 						<span className="text-black ml-2 capitalize ">{category.dataKey}</span>
 					</div>
 					<span className="text-black flex ml-2">
-						{formatCurrency({ value: category.value, currency: user?.currency, locale: user?.locale || 'en-US' })}
+						{formatCurrency({ value: category.value, currency: user?.currency, locale: user?.locale || "en-US" })}
 					</span>
 				</div>
 			))}
@@ -39,8 +38,8 @@ export default function ExpesenseChart() {
 	const user = useUser();
 	const { data, loading } = useOverview();
 	const chartData = useMemo<Array<any>>(
-		() => extractExpenses(data.expenses, user?.locale || 'en-US'),
-		[data.expenses, user?.locale || 'en-US']
+		() => extractExpenses(data.expenses, user?.locale || "en-US"),
+		[data.expenses, user?.locale],
 	);
 	const categoriesData = useMemo<Array<string>>(() => extractExpensesCategory(data.expenses), [data.expenses]);
 	const [maxXAxisValue] = useMemo<Array<any>>(() => extractChartAxis(data.expenses), [data.expenses]);
@@ -60,7 +59,7 @@ export default function ExpesenseChart() {
 			index="date"
 			categories={categoriesData}
 			valueFormatter={(value) => {
-				return formatCurrency({ value, currency: user?.currency, locale: user?.locale || 'en-US' });
+				return formatCurrency({ value, currency: user?.currency, locale: user?.locale || "en-US" });
 			}}
 			yAxisWidth={84}
 			maxValue={maxXAxisValue?.value}

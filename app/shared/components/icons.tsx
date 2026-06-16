@@ -1,15 +1,15 @@
 import {
-	Widget5,
 	BillList,
-	WalletMoney,
 	CalendarMinimalistic,
-	Settings,
 	ChatRoundDots,
 	GraphUp,
 	Logout,
+	Settings,
 	UserCircle,
 	UsersGroupTwoRounded,
-} from '@solar-icons/react';
+	WalletMoney,
+	Widget5,
+} from "@solar-icons/react";
 
 export const OverviewIcon = ({ className }: { className?: string }) => <Widget5 className={className} />;
 export const ExpensesIcon = ({ className }: { className?: string }) => <BillList className={className} />;

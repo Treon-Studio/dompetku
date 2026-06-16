@@ -1,25 +1,16 @@
-'use client';
+"use client";
 
-import { createContext, useContext } from 'react';
+import { useQuery } from "@tanstack/react-query";
 
-import { format } from 'date-fns';
-import { useQuery } from '@tanstack/react-query';
+import { format } from "date-fns";
+import { createContext, useContext } from "react";
+import { dateFormat } from "~/shared/constants/date";
+import { apiUrls } from "~/shared/lib/apiUrls";
+import fetcher from "~/shared/lib/fetcher";
 
-import { apiUrls } from '~/shared/lib/apiUrls';
-import fetcher from '~/shared/lib/fetcher';
-
-import { dateFormat } from '~/shared/constants/date';
-
-import { useDateRange } from '~/shared/stores/date/date.store';
+import { useDateRange } from "~/shared/stores/date/date.store";
 
 const OverviewContext = createContext(null);
-
-interface Data {
-	expenses: Array<any>;
-	income: Array<any>;
-	subscriptions: Array<any>;
-	investments: Array<any>;
-}
 
 export const OverviewContextProvider = (props: any) => {
 	const date = useDateRange();
@@ -31,23 +22,23 @@ export const OverviewContextProvider = (props: any) => {
 		data: expensesData = [],
 		isLoading: isExpenseLoading,
 		refetch: mutateExpenses,
-	} = useQuery({ queryKey: ['overview-expenses', expensesUrl], queryFn: () => fetcher(expensesUrl) });
+	} = useQuery({ queryKey: ["overview-expenses", expensesUrl], queryFn: () => fetcher(expensesUrl) });
 
 	const investmentsUrl = apiUrls.investments.getInvestments({ from, to });
 	const { data: investmentsData = [], isLoading: isInvestmentsLoading } = useQuery({
-		queryKey: ['overview-investments', investmentsUrl],
+		queryKey: ["overview-investments", investmentsUrl],
 		queryFn: () => fetcher(investmentsUrl),
 	});
 
 	const incomeUrl = apiUrls.income.getIncome({ from, to });
 	const { data: incomeData = [], isLoading: isIncomeLoading } = useQuery({
-		queryKey: ['overview-income', incomeUrl],
+		queryKey: ["overview-income", incomeUrl],
 		queryFn: () => fetcher(incomeUrl),
 	});
 
 	const subscriptionsUrl = apiUrls.subscriptions.getSubscriptions({ from, to });
 	const { data: subscriptionsData = [], isLoading: isSubscriptionsLoading } = useQuery({
-		queryKey: ['overview-subscriptions', subscriptionsUrl],
+		queryKey: ["overview-subscriptions", subscriptionsUrl],
 		queryFn: () => fetcher(subscriptionsUrl),
 	});
 

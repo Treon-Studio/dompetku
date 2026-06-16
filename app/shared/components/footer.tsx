@@ -1,8 +1,8 @@
-import url from '~/shared/constants/url';
-import pkg from '../../../package.json';
+import url from "~/shared/constants/url";
+import pkg from "../../../package.json";
 
-const Footer = ({ className }: { className?: String }) => {
-	const commitHash = 'b69af37';
+const Footer = ({ className }: { className?: string }) => {
+	const commitHash = "b69af37";
 	return (
 		<footer className={`className flex h-14 w-full items-center border-t pl-6 pr-6 font-medium ${className}`}>
 			<div className="xs:mb-0 flex w-full justify-center">

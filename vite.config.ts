@@ -1,11 +1,11 @@
-import { vitePlugin as remix, cloudflareDevProxyVitePlugin } from '@remix-run/dev';
-import { defineConfig } from 'vite';
-import { remixPWA } from '@remix-pwa/dev';
-import tailwindcss from '@tailwindcss/vite';
-import path from 'path';
+import path from "node:path";
+import { remixPWA } from "@remix-pwa/dev";
+import { cloudflareDevProxyVitePlugin, vitePlugin as remix } from "@remix-run/dev";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vite";
 
 export default defineConfig(async () => {
-	const { default: tsconfigPaths } = await import('vite-tsconfig-paths');
+	const { default: tsconfigPaths } = await import("vite-tsconfig-paths");
 
 	return {
 		plugins: [
@@ -16,7 +16,7 @@ export default defineConfig(async () => {
 				},
 			}),
 			remix({
-				ignoredRouteFiles: ['**/*.test.{js,jsx,ts,tsx}'],
+				ignoredRouteFiles: ["**/*.test.{js,jsx,ts,tsx}"],
 				future: {
 					v3_fetcherPersist: true,
 					v3_lazyRouteDiscovery: true,
@@ -33,18 +33,18 @@ export default defineConfig(async () => {
 		},
 		ssr: {
 			resolve: {
-				externalConditions: ['workerd', 'worker'],
+				externalConditions: ["workerd", "worker"],
 			},
 		},
 		resolve: {
-			dedupe: ['react', 'react-dom'],
+			dedupe: ["react", "react-dom"],
 			alias: {
-				'~': path.resolve(__dirname, 'app'),
-				emails: path.resolve(__dirname, 'emails'),
+				"~": path.resolve(__dirname, "app"),
+				emails: path.resolve(__dirname, "emails"),
 			},
 		},
 		optimizeDeps: {
-			include: ['sonner', '@radix-ui/react-tooltip'],
+			include: ["sonner", "@radix-ui/react-tooltip"],
 		},
 		build: {
 			chunkSizeWarningLimit: 1000,

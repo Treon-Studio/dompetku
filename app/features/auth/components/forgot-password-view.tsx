@@ -1,41 +1,41 @@
-import { useState } from 'react';
-import { Link } from '@remix-run/react';
-import { useTranslation } from '@i18n/client';
+import { useTranslation } from "@i18n/client";
+import { Link } from "@remix-run/react";
+import { useState } from "react";
 
-import Footer from '~/shared/components/footer';
-import CircleLoader from '~/shared/components/loader/circle';
-import { Button } from '~/shared/components/ui/button';
-import { apiUrls } from '~/shared/lib/apiUrls';
-import url from '~/shared/constants/url';
+import Footer from "~/shared/components/footer";
+import CircleLoader from "~/shared/components/loader/circle";
+import { Button } from "~/shared/components/ui/button";
+import url from "~/shared/constants/url";
+import { apiUrls } from "~/shared/lib/apiUrls";
 
 export default function ForgotPasswordView() {
 	const { t } = useTranslation();
-	const [identity, setIdentity] = useState('');
+	const [identity, setIdentity] = useState("");
 	const [loading, setLoading] = useState(false);
-	const [message, setMessage] = useState('');
-	const [error, setError] = useState('');
+	const [message, setMessage] = useState("");
+	const [error, setError] = useState("");
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setLoading(true);
-		setError('');
-		setMessage('');
+		setError("");
+		setMessage("");
 
 		try {
 			const res = await fetch(apiUrls.auth.forgotPassword, {
-				method: 'POST',
+				method: "POST",
 				body: JSON.stringify({ identity }),
-				headers: { 'Content-Type': 'application/json' },
+				headers: { "Content-Type": "application/json" },
 			});
 
 			const data = (await res.json()) as { message?: string };
 			if (res.ok) {
-				setMessage(data.message || '');
+				setMessage(data.message || "");
 			} else {
-				setError(data.message || '');
+				setError(data.message || "");
 			}
 		} catch {
-			setError('An error occurred. Please try again.');
+			setError("An error occurred. Please try again.");
 		} finally {
 			setLoading(false);
 		}
@@ -45,6 +45,7 @@ export default function ForgotPasswordView() {
 		<main className="relative m-auto flex h-screen w-full flex-col items-center justify-center bg-linear-to-br from-sky-100 via-white to-sky-50 pl-2 pr-2">
 			<div className="absolute inset-x-0 top-[-55px] z-10 h-96 overflow-hidden text-gray-900/40 opacity-10 mask-[linear-gradient(to_top,transparent,white)]">
 				<svg className="absolute inset-0 top-0 h-full w-full text-gray-900" xmlns="http://www.w3.org/2000/svg">
+					<title>Background pattern</title>
 					<defs>
 						<pattern
 							id="pattern"
@@ -68,13 +69,13 @@ export default function ForgotPasswordView() {
 						<span className="mt-2 font-black text-gray-900">Dompetku</span>
 					</h1>
 				</a>
-				<p className="mb-6 mt-3 text-center text-sm font-medium text-zinc-600">{t('auth.forgotPasswordDesc')}</p>
+				<p className="mb-6 mt-3 text-center text-sm font-medium text-zinc-600">{t("auth.forgotPasswordDesc")}</p>
 				{message ? (
 					<div className="mb-4 rounded-md bg-green-50 p-4 text-center text-sm text-green-700">{message}</div>
 				) : (
 					<form className="grid w-full grid-cols-1 items-center gap-4 text-gray-800" onSubmit={handleSubmit}>
 						<label className="mb-1 block">
-							<span className="mb-2 block text-sm font-semibold leading-6">{t('auth.identity')}</span>
+							<span className="mb-2 block text-sm font-semibold leading-6">{t("auth.identity")}</span>
 							<input
 								className="mt-2 block h-10 w-full appearance-none rounded-md bg-white px-3 text-sm text-black shadow-xs ring-1 ring-gray-300 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-gray-900"
 								type="text"
@@ -87,7 +88,7 @@ export default function ForgotPasswordView() {
 							/>
 						</label>
 						<Button size="lg" type="submit" disabled={loading}>
-							{loading ? <CircleLoader /> : t('auth.sendResetLink')}
+							{loading ? <CircleLoader /> : t("auth.sendResetLink")}
 						</Button>
 						{error && <p className="text-center text-sm text-red-500">{error}</p>}
 					</form>
@@ -97,7 +98,7 @@ export default function ForgotPasswordView() {
 						to={url.app.signin}
 						className="border-b border-gray-700 pb-px font-bold hover:border-gray-500 hover:text-gray-600"
 					>
-						{t('auth.backToSignin')}
+						{t("auth.backToSignin")}
 					</Link>
 				</p>
 			</div>

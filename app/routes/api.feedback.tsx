@@ -1,14 +1,12 @@
-import type { ActionFunctionArgs } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
-
-import { feedbackEmailHtml } from '~/shared/lib/email-templates';
-import { feedbacks } from '~/core/db/schema';
-import { requireUser } from '~/features/auth/api.server';
-import { getResend } from '~/shared/lib/email';
-import { createDbClient } from '~/core/db.server';
-import { getCloudflareEnv } from '~/env';
-
-import { emails } from '~/shared/constants/messages';
+import type { ActionFunctionArgs } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { feedbacks } from "~/core/db/schema";
+import { createDbClient } from "~/core/db.server";
+import { getCloudflareEnv } from "~/env";
+import { requireUser } from "~/features/auth/api.server";
+import { emails } from "~/shared/constants/messages";
+import { getResend } from "~/shared/lib/email";
+import { feedbackEmailHtml } from "~/shared/lib/email-templates";
 
 export async function action({ request, context }: ActionFunctionArgs) {
 	const db = createDbClient(getCloudflareEnv(context));
@@ -22,11 +20,11 @@ export async function action({ request, context }: ActionFunctionArgs) {
 			subject: emails.feedback.subject,
 			to: emails.email,
 			reply_to: user.email || user.phone || undefined,
-			html: feedbackEmailHtml(message, user.email || user.phone || ''),
+			html: feedbackEmailHtml(message, user.email || user.phone || ""),
 		});
 		return json({ message: emails.feedback.sent }, { status: 201 });
 	} catch (e: unknown) {
-		const error = e as Error;
+		const _error = e as Error;
 		return json({ message: emails.feedback.failed }, { status: 500 });
 	}
 }

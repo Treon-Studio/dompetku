@@ -1,46 +1,54 @@
-'use client';
+"use client";
 
-import { useMemo, useState, useEffect, useRef } from 'react';
-import { addInvestment, editInvestment } from '~/features/investments/api.client';
-import { useResourceForm } from '~/shared/hooks/use-resource-form';
-import debounce from 'debounce';
+import debounce from "debounce";
+import { useMemo } from "react";
+import { useUser } from "~/features/auth/components/auth-provider";
+import { addInvestment, editInvestment } from "~/features/investments/api.client";
+import AutoCompleteList from "~/shared/components/autocomplete-list";
+import CircleLoader from "~/shared/components/loader/circle";
+import Modal from "~/shared/components/modal";
+import { Button } from "~/shared/components/ui/button";
+import { Input } from "~/shared/components/ui/input";
+import { Label } from "~/shared/components/ui/label";
+import { Textarea } from "~/shared/components/ui/textarea";
+import { investmentCategory } from "~/shared/constants/categories";
+import { datePattern } from "~/shared/constants/date";
+import { useResourceForm } from "~/shared/hooks/use-resource-form";
+import { formatInputPrice, getCurrencySymbol, parseInputPrice } from "~/shared/lib/formatter";
 
-import AutoCompleteList from '~/shared/components/autocomplete-list';
-import { useUser } from '~/features/auth/components/auth-provider';
-import CircleLoader from '~/shared/components/loader/circle';
-import Modal from '~/shared/components/modal';
-import { Button } from '~/shared/components/ui/button';
-import { Input } from '~/shared/components/ui/input';
-import { Label } from '~/shared/components/ui/label';
-import { Textarea } from '~/shared/components/ui/textarea';
-import { useTranslation } from '@i18n/client';
-
-import { formatInputPrice, getCurrencySymbol, parseInputPrice } from '~/shared/lib/formatter';
-
-import { investmentCategory } from '~/shared/constants/categories';
-import { datePattern } from '~/shared/constants/date';
+interface InvestmentState {
+	category: string;
+	date: string;
+	name: string;
+	notes: string;
+	price: string;
+	units: string;
+	id?: string | null;
+	autocomplete?: Record<string, unknown>[];
+}
 
 interface AddInvestments {
 	show: boolean;
-	selected: any;
+	selected: Partial<InvestmentState> & { id?: string | null };
 	onHide: () => void;
 	mutate: () => void;
-	lookup: (value: any) => void;
+	lookup: (value: string) => Record<string, unknown>[];
 }
 
-const initialState = {
-	category: '',
-	date: '',
-	name: '',
-	notes: '',
-	price: '',
-	units: '',
+const initialState: InvestmentState = {
+	category: "",
+	date: "",
+	name: "",
+	notes: "",
+	price: "",
+	units: "",
+	id: null,
 	autocomplete: [],
 };
 
 export default function AddInvestments({ show, onHide, mutate, selected, lookup }: AddInvestments) {
 	const user = useUser();
-	const { state, setState, loading, errors, inputRef, onSubmit, todayDate, t } = useResourceForm({
+	const { state, setState, loading, errors, inputRef, onSubmit, todayDate, t } = useResourceForm<InvestmentState>({
 		initialState,
 		selected,
 		onHide,
@@ -50,7 +58,7 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 
 	const onLookup = useMemo(() => {
 		const callbackHandler = (value: string) => {
-			setState((prev: any) => ({ ...prev, autocomplete: lookup(value) }));
+			setState((prev) => ({ ...prev, autocomplete: lookup(value) }));
 		};
 		return debounce(callbackHandler, 500);
 	}, [lookup, setState]);
@@ -59,7 +67,7 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 		<Modal
 			someRef={inputRef}
 			show={show}
-			title={selected.id ? t('investments.editInvestment') : t('investments.addInvestment')}
+			title={selected.id ? t("investments.editInvestment") : t("investments.addInvestment")}
 			onHide={onHide}
 		>
 			<div className="sm:flex sm:items-start max-sm:pb-6">
@@ -71,11 +79,11 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 					}}
 				>
 					<div className="relative">
-						<Label htmlFor="name" className={errors.name ? 'text-destructive' : ''}>
-							{t('investments.title')}
+						<Label htmlFor="name" className={errors.name ? "text-destructive" : ""}>
+							{t("investments.title")}
 						</Label>
 						<Input
-							className={`mt-1.5 ${errors.name ? 'border-destructive focus-visible:ring-destructive' : ''}`}
+							className={`mt-1.5 ${errors.name ? "border-destructive focus-visible:ring-destructive" : ""}`}
 							id="name"
 							placeholder="Name or $TSLA"
 							maxLength={30}
@@ -89,7 +97,7 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 									setState({ ...state, name: value, autocomplete: [] });
 									if (value.length > 2) onLookup(value);
 								} else {
-									setState({ ...state, name: '', category: '', autocomplete: [] });
+									setState({ ...state, name: "", category: "", autocomplete: [] });
 								}
 							}}
 							value={state.name}
@@ -99,8 +107,8 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 							onHide={() => {
 								setState({ ...state, autocomplete: [] });
 							}}
-							data={state.autocomplete}
-							searchTerm={state.name.length > 2 ? state.name.toLowerCase() : ''}
+							data={state.autocomplete || []}
+							searchTerm={state.name.length > 2 ? state.name.toLowerCase() : ""}
 							onClick={({ name, category }) => {
 								setState({ ...state, name, category, autocomplete: [] });
 							}}
@@ -110,7 +118,7 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 					<div className="grid grid-cols-[50%_50%] gap-1">
 						<div className="mr-3">
 							<Label htmlFor="price">
-								{t('investments.price')}
+								{t("investments.price")}
 								<span className="ml-2 font-mono text-xs text-muted-foreground">
 									({getCurrencySymbol(user?.currency, user?.locale)})
 								</span>
@@ -127,7 +135,7 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 							/>
 						</div>
 						<div className="mr-3">
-							<Label htmlFor="units">{t('investments.units')}</Label>
+							<Label htmlFor="units">{t("investments.units")}</Label>
 							<Input
 								className="mt-1.5"
 								id="units"
@@ -142,7 +150,7 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 					</div>
 					<div className="grid grid-cols-[50%_50%] gap-1">
 						<div className="mr-3">
-							<Label htmlFor="date">{t('investments.date')}</Label>
+							<Label htmlFor="date">{t("investments.date")}</Label>
 							<Input
 								className="mt-1.5 appearance-none"
 								id="date"
@@ -157,7 +165,7 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 							/>
 						</div>
 						<div className="mr-3">
-							<Label htmlFor="category">{t('investments.type')}</Label>
+							<Label htmlFor="category">{t("investments.type")}</Label>
 							<select
 								id="category"
 								className="mt-1.5 flex h-9 max-sm:h-10 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
@@ -179,8 +187,8 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 					</div>
 					<div>
 						<Label className="mt-1 block">
-							{t('investments.notes')}{' '}
-							<span className="mb-6 text-center text-sm text-muted-foreground">{t('common.optional')}</span>
+							{t("investments.notes")}{" "}
+							<span className="mb-6 text-center text-sm text-muted-foreground">{t("common.optional")}</span>
 						</Label>
 						<Textarea
 							className="mt-2 h-20"
@@ -191,7 +199,7 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 					</div>
 
 					<Button disabled={loading} className="mt-1.5" type="submit">
-						{loading ? <CircleLoader /> : selected?.id ? t('common.update') : t('common.submit')}
+						{loading ? <CircleLoader /> : selected?.id ? t("common.update") : t("common.submit")}
 					</Button>
 				</form>
 			</div>

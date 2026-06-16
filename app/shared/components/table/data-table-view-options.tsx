@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
-import { Tuning } from '@solar-icons/react';
-import { Table } from '@tanstack/react-table';
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { Tuning } from "@solar-icons/react";
+import type { Table } from "@tanstack/react-table";
 
-import { Button } from '~/shared/components/ui/button';
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent } from '~/shared/components/ui/dropdown-menu';
+import { Button } from "~/shared/components/ui/button";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent } from "~/shared/components/ui/dropdown-menu";
 
 interface DataTableViewOptionsProps<TData> {
 	table: Table<TData>;
@@ -25,7 +25,7 @@ export default function DataTableViewOptions<TData>({ table }: DataTableViewOpti
 					.getAllColumns()
 					.filter((column) => {
 						return (
-							typeof column.accessorFn !== 'undefined' &&
+							typeof column.accessorFn !== "undefined" &&
 							column.getCanHide() &&
 							column.columnDef.meta?.isTogglable !== false
 						);
@@ -38,7 +38,7 @@ export default function DataTableViewOptions<TData>({ table }: DataTableViewOpti
 								checked={column.getIsVisible()}
 								onCheckedChange={(value) => column.toggleVisibility(!!value)}
 							>
-								{column.id.replace(/_/g, ' ')}
+								{column.id.replace(/_/g, " ")}
 							</DropdownMenuCheckboxItem>
 						);
 					})}

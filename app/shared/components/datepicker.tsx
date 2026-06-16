@@ -1,15 +1,15 @@
-import { Calendar } from '@solar-icons/react';
-import { addDays, format, startOfMonth, startOfYear, subDays } from 'date-fns';
-import { DateRange } from 'react-day-picker';
-import * as React from 'react';
+import { Calendar } from "@solar-icons/react";
+import { addDays, format, startOfMonth, startOfYear, subDays } from "date-fns";
+import * as React from "react";
+import type { DateRange } from "react-day-picker";
 
-import { Button } from '~/shared/components/ui/button';
-import { Calendar as CalendarUI } from '~/shared/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '~/shared/components/ui/popover';
-import { cn } from '~/shared/lib/utils';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/shared/components/ui/select';
+import { Button } from "~/shared/components/ui/button";
+import { Calendar as CalendarUI } from "~/shared/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "~/shared/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/shared/components/ui/select";
+import { cn } from "~/shared/lib/utils";
 
-import { useDateRange, useDateActions } from '~/shared/stores/date/date.store';
+import { useDateActions, useDateRange } from "~/shared/stores/date/date.store";
 
 export default function DatePicker() {
 	const date = useDateRange();
@@ -39,25 +39,25 @@ export default function DatePicker() {
 
 function DatePickerWithRange({ className, date, onChange }: { className?: string; date: DateRange; onChange: any }) {
 	return (
-		<div className={cn('grid gap-2', className)}>
+		<div className={cn("grid gap-2", className)}>
 			<Popover>
 				<PopoverTrigger asChild>
 					<Button
 						id="date"
-						variant={'outline'}
+						variant={"outline"}
 						className={cn(
-							'mr-px h-[32px] w-[200px] justify-start rounded-br-none rounded-tr-none border-r border-border! border-gray-100 p-2 text-left font-normal hover:bg-accent focus:bg-accent focus-visible:ring-1! focus-visible:ring-gray-400! dark:bg-muted dark:hover:opacity-[0.8] sm:min-w-[235px]',
-							!date && 'text-muted-foreground'
+							"mr-px h-[32px] w-[200px] justify-start rounded-br-none rounded-tr-none border-r border-border! border-gray-100 p-2 text-left font-normal hover:bg-accent focus:bg-accent focus-visible:ring-1! focus-visible:ring-gray-400! dark:bg-muted dark:hover:opacity-[0.8] sm:min-w-[235px]",
+							!date && "text-muted-foreground",
 						)}
 					>
 						<Calendar className={`mr-2 hidden h-4 w-4 sm:inline-block`} />
 						{date?.from ? (
 							date.to ? (
 								<span className="overflow-hidden text-ellipsis whitespace-nowrap">
-									{format(date.from, 'LLL dd, y')} - {format(date.to, 'LLL dd, y')}
+									{format(date.from, "LLL dd, y")} - {format(date.to, "LLL dd, y")}
 								</span>
 							) : (
-								<span>{format(date.from, 'LLL dd, y')}</span>
+								<span>{format(date.from, "LLL dd, y")}</span>
 							)
 						) : (
 							<span>Pick a date</span>
@@ -85,11 +85,11 @@ function DatePickerSelect({ onChange, selectedValue }: { onChange: any; selected
 			value={selectedValue}
 			onValueChange={(selected) => {
 				switch (selected) {
-					case 'tdy': {
+					case "tdy": {
 						onChange({ selected, from: addDays(new Date(), 0), to: addDays(new Date(), 0) });
 						break;
 					}
-					case '7days': {
+					case "7days": {
 						onChange({
 							selected,
 							to: addDays(new Date(), 0),
@@ -97,7 +97,7 @@ function DatePickerSelect({ onChange, selectedValue }: { onChange: any; selected
 						});
 						break;
 					}
-					case '30days': {
+					case "30days": {
 						onChange({
 							selected,
 							from: subDays(new Date(), 30),
@@ -105,7 +105,7 @@ function DatePickerSelect({ onChange, selectedValue }: { onChange: any; selected
 						});
 						break;
 					}
-					case 'm': {
+					case "m": {
 						onChange({
 							selected,
 							from: startOfMonth(new Date()),
@@ -113,7 +113,7 @@ function DatePickerSelect({ onChange, selectedValue }: { onChange: any; selected
 						});
 						break;
 					}
-					case 'y': {
+					case "y": {
 						onChange({
 							selected,
 							from: startOfYear(new Date()),

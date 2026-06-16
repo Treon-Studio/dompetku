@@ -1,7 +1,7 @@
-import { eq, and, desc } from 'drizzle-orm';
-import type { DB } from '~/core/db.server';
-import { budgets } from '~/core/db/schema';
-import { BudgetSchema } from './schemas';
+import { and, desc, eq } from "drizzle-orm";
+import { budgets } from "~/core/db/schema";
+import type { DB } from "~/core/db.server";
+import { BudgetSchema } from "./schemas";
 
 export async function getBudgets(db: DB, userId: string, month: string) {
 	return await db
@@ -16,7 +16,7 @@ export async function createBudget(db: DB, userId: string, formData: FormData) {
 	const parsed = BudgetSchema.safeParse(data);
 
 	if (!parsed.success) {
-		return { success: false, error: parsed.error.issues[0]?.message || 'Validation error' };
+		return { success: false, error: parsed.error.issues[0]?.message || "Validation error" };
 	}
 
 	try {
@@ -28,12 +28,12 @@ export async function createBudget(db: DB, userId: string, formData: FormData) {
 				and(
 					eq(budgets.user_id, userId),
 					eq(budgets.category, parsed.data.category),
-					eq(budgets.month, parsed.data.month)
-				)
+					eq(budgets.month, parsed.data.month),
+				),
 			)
 			.limit(1);
 
-		let budget;
+		let budget: unknown;
 		if (existing) {
 			const [updated] = await db
 				.update(budgets)
@@ -65,11 +65,11 @@ export async function updateBudget(db: DB, userId: string, formData: FormData) {
 	const parsed = BudgetSchema.safeParse(data);
 
 	if (!parsed.success) {
-		return { success: false, error: parsed.error.issues[0]?.message || 'Validation error' };
+		return { success: false, error: parsed.error.issues[0]?.message || "Validation error" };
 	}
 
 	if (!parsed.data.id) {
-		return { success: false, error: 'ID is required for updating' };
+		return { success: false, error: "ID is required for updating" };
 	}
 
 	try {

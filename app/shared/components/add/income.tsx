@@ -1,46 +1,53 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, useRef, useState } from 'react';
-import debounce from 'debounce';
+import debounce from "debounce";
+import { useMemo } from "react";
+import { useUser } from "~/features/auth/components/auth-provider";
+import { addIncome, editIncome } from "~/features/income/api.client";
 
-import { addIncome, editIncome } from '~/features/income/api.client';
-import { useResourceForm } from '~/shared/hooks/use-resource-form';
-import { toast } from 'sonner';
+import AutoCompleteList from "~/shared/components/autocomplete-list";
+import CircleLoader from "~/shared/components/loader/circle";
+import Modal from "~/shared/components/modal";
+import { Button } from "~/shared/components/ui/button";
+import { Input } from "~/shared/components/ui/input";
+import { Label } from "~/shared/components/ui/label";
+import { Textarea } from "~/shared/components/ui/textarea";
+import { incomeCategory } from "~/shared/constants/categories";
+import { datePattern } from "~/shared/constants/date";
+import { useResourceForm } from "~/shared/hooks/use-resource-form";
+import { formatInputPrice, getCurrencySymbol, parseInputPrice } from "~/shared/lib/formatter";
 
-import AutoCompleteList from '~/shared/components/autocomplete-list';
-import { useUser } from '~/features/auth/components/auth-provider';
-import CircleLoader from '~/shared/components/loader/circle';
-import Modal from '~/shared/components/modal';
-import { Button } from '~/shared/components/ui/button';
-import { Input } from '~/shared/components/ui/input';
-import { Label } from '~/shared/components/ui/label';
-import { Textarea } from '~/shared/components/ui/textarea';
-
-import { formatInputPrice, getCurrencySymbol, parseInputPrice } from '~/shared/lib/formatter';
-
-import { incomeCategory } from '~/shared/constants/categories';
-import { datePattern } from '~/shared/constants/date';
+interface IncomeState {
+	category: string;
+	date: string;
+	name: string;
+	notes: string;
+	price: string;
+	id?: string | null;
+	autocomplete?: Record<string, unknown>[];
+}
 
 interface AddIncomeProps {
 	show: boolean;
-	selected: any;
+	selected: Partial<IncomeState> & { id?: string | null };
 	onHide: () => void;
 	mutate: () => void;
-	lookup: (value: any) => void;
+	lookup: (value: string) => Record<string, unknown>[];
 }
 
-const initialState = {
-	category: '',
-	date: '',
-	name: '',
-	notes: '',
-	price: '',
+const initialState: IncomeState = {
+	category: "",
+	date: "",
+	name: "",
+	notes: "",
+	price: "",
+	id: null,
 	autocomplete: [],
 };
 
 export default function AddIncome({ show, onHide, mutate, selected, lookup }: AddIncomeProps) {
 	const user = useUser();
-	const { state, setState, loading, errors, inputRef, onSubmit, todayDate, t } = useResourceForm({
+	const { state, setState, loading, errors, inputRef, onSubmit, todayDate, t } = useResourceForm<IncomeState>({
 		initialState,
 		selected,
 		onHide,
@@ -50,16 +57,16 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 
 	const onLookup = useMemo(() => {
 		const callbackHandler = (value: string) => {
-			setState((prev: any) => ({ ...prev, autocomplete: lookup(value) }));
+			setState((prev) => ({ ...prev, autocomplete: lookup(value) }));
 		};
 		return debounce(callbackHandler, 500);
-	}, [lookup]);
+	}, [lookup, setState]);
 
 	return (
 		<Modal
 			someRef={inputRef}
 			show={show}
-			title={selected.id ? t('income.editIncome') : t('income.addIncome')}
+			title={selected.id ? t("income.editIncome") : t("income.addIncome")}
 			onHide={onHide}
 		>
 			<div className="sm:flex sm:items-start max-sm:pb-6">
@@ -71,12 +78,12 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 					}}
 				>
 					<div className="relative">
-						<Label htmlFor="name" className={errors.name ? 'text-destructive' : ''}>
-							{t('income.source')}
+						<Label htmlFor="name" className={errors.name ? "text-destructive" : ""}>
+							{t("income.source")}
 						</Label>
 						<Input
 							id="name"
-							className={`mt-1.5 ${errors.name ? 'border-destructive focus-visible:ring-destructive' : ''}`}
+							className={`mt-1.5 ${errors.name ? "border-destructive focus-visible:ring-destructive" : ""}`}
 							placeholder="Salary"
 							maxLength={30}
 							required
@@ -89,7 +96,7 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 									setState({ ...state, name: value, autocomplete: [] });
 									if (value.length > 2) onLookup(value);
 								} else {
-									setState({ ...state, name: '', category: '', autocomplete: [] });
+									setState({ ...state, name: "", category: "", autocomplete: [] });
 								}
 							}}
 							value={state.name}
@@ -99,8 +106,8 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 							onHide={() => {
 								setState({ ...state, autocomplete: [] });
 							}}
-							data={state.autocomplete}
-							searchTerm={state.name.length > 2 ? state.name.toLowerCase() : ''}
+							data={state.autocomplete || []}
+							searchTerm={state.name.length > 2 ? state.name.toLowerCase() : ""}
 							onClick={({ name, category }) => {
 								setState({ ...state, name, category, autocomplete: [] });
 							}}
@@ -109,14 +116,14 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 					</div>
 					<div className="grid grid-cols-[32%_38%_30%] gap-1">
 						<div className="mr-3">
-							<Label htmlFor="amount" className={errors.price ? 'text-destructive' : ''}>
-								{t('income.amount')}
+							<Label htmlFor="amount" className={errors.price ? "text-destructive" : ""}>
+								{t("income.amount")}
 								<span className="ml-2 font-mono text-xs text-muted-foreground">
 									({getCurrencySymbol(user?.currency, user?.locale)})
 								</span>
 							</Label>
 							<Input
-								className={`mt-1.5 ${errors.price ? 'border-destructive focus-visible:ring-destructive' : ''}`}
+								className={`mt-1.5 ${errors.price ? "border-destructive focus-visible:ring-destructive" : ""}`}
 								id="amount"
 								type="text"
 								placeholder="199"
@@ -128,12 +135,12 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 							{errors.price && <p className="mt-1 text-xs text-destructive">{errors.price[0]}</p>}
 						</div>
 						<div className="mr-3">
-							<Label htmlFor="date" className={errors.date ? 'text-destructive' : ''}>
-								{t('income.date')}
+							<Label htmlFor="date" className={errors.date ? "text-destructive" : ""}>
+								{t("income.date")}
 							</Label>
 							<Input
 								className={`mt-1.5 appearance-none ${
-									errors.date ? 'border-destructive focus-visible:ring-destructive' : ''
+									errors.date ? "border-destructive focus-visible:ring-destructive" : ""
 								}`}
 								id="date"
 								type="date"
@@ -148,15 +155,15 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 							{errors.date && <p className="mt-1 text-xs text-destructive">{errors.date[0]}</p>}
 						</div>
 						<div className="mr-3">
-							<Label htmlFor="category" className={errors.category ? 'text-destructive' : ''}>
-								{t('income.category')}
+							<Label htmlFor="category" className={errors.category ? "text-destructive" : ""}>
+								{t("income.category")}
 							</Label>
 							<select
 								id="category"
 								className={`mt-1.5 flex h-9 max-sm:h-10 w-full rounded-md border bg-background px-3 py-1 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 ${
 									errors.category
-										? 'border-destructive focus-visible:ring-destructive'
-										: 'border-input focus-visible:ring-ring'
+										? "border-destructive focus-visible:ring-destructive"
+										: "border-input focus-visible:ring-ring"
 								}`}
 								onChange={(event) => {
 									setState({ ...state, category: event.target.value });
@@ -176,12 +183,12 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 						</div>
 					</div>
 					<div>
-						<Label className={`block ${errors.notes ? 'text-destructive' : ''}`}>
-							{t('income.notes')}{' '}
-							<span className="text-center text-sm text-muted-foreground">{t('common.optional')}</span>
+						<Label className={`block ${errors.notes ? "text-destructive" : ""}`}>
+							{t("income.notes")}{" "}
+							<span className="text-center text-sm text-muted-foreground">{t("common.optional")}</span>
 						</Label>
 						<Textarea
-							className={`mt-2 h-20 ${errors.notes ? 'border-destructive focus-visible:ring-destructive' : ''}`}
+							className={`mt-2 h-20 ${errors.notes ? "border-destructive focus-visible:ring-destructive" : ""}`}
 							onChange={(event) => setState({ ...state, notes: event.target.value })}
 							value={state.notes}
 							maxLength={60}
@@ -190,7 +197,7 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 					</div>
 
 					<Button disabled={loading} className="mt-1.5" type="submit">
-						{loading ? <CircleLoader /> : selected?.id ? t('common.update') : t('common.submit')}
+						{loading ? <CircleLoader /> : selected?.id ? t("common.update") : t("common.submit")}
 					</Button>
 				</form>
 			</div>

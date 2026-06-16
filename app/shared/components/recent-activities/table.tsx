@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
-import { useOverview } from '~/shared/components/context/overview-provider';
-import { DataTable } from '~/shared/components/recent-activities/data-table';
-import StateDisplay from '~/shared/components/state-display';
+import { useOverview } from "~/shared/components/context/overview-provider";
+import { DataTable } from "~/shared/components/recent-activities/data-table";
+import StateDisplay from "~/shared/components/state-display";
 
-import { extractRecentData } from '~/shared/lib/extractor';
+import { extractRecentData } from "~/shared/lib/extractor";
 
-import { columns } from './columns';
+import { columns } from "./columns";
 
 const initialData = {
-	no: '',
-	category: '',
-	amount: '',
-	name: '',
+	no: "",
+	category: "",
+	amount: "",
+	name: "",
 };
 
 export default function RecentActivitiesTable() {
@@ -22,7 +22,7 @@ export default function RecentActivitiesTable() {
 
 	const recentData = useMemo(
 		() => extractRecentData(data.expenses, data.subscriptions, data.investments, data.income),
-		[data]
+		[data],
 	);
 
 	if (loading) {

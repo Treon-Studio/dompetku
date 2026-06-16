@@ -1,18 +1,17 @@
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
-import { useLoaderData } from '@remix-run/react';
-
-import { DataContextProvider } from '~/shared/components/context/data-provider';
-import LayoutHeader from '~/shared/components/layout/header';
-import ExpensesSummary from '~/features/expenses/components/summary';
-import ExpenseTable from '~/features/expenses/components/table';
-import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
-import { I18nProvider } from '@i18n/provider';
+import { I18nProvider } from "@i18n/provider";
+import { getLocaleFromRequest, loadTranslations } from "@i18n/server";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
+import ExpensesSummary from "~/features/expenses/components/summary";
+import ExpenseTable from "~/features/expenses/components/table";
+import { DataContextProvider } from "~/shared/components/context/data-provider";
+import LayoutHeader from "~/shared/components/layout/header";
 
 export const meta: MetaFunction = () => {
 	return [
-		{ title: 'Dompetku - Expenses' },
-		{ name: 'description', content: 'Effortlessly Track and Manage Expenses.' },
+		{ title: "Dompetku - Expenses" },
+		{ name: "description", content: "Effortlessly Track and Manage Expenses." },
 	];
 };
 

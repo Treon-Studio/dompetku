@@ -1,14 +1,12 @@
-'use client';
+"use client";
 
-import { ColumnDef } from '@tanstack/react-table';
-import { Pen2, TrashBinMinimalistic } from '@solar-icons/react';
+import { Pen2, TrashBinMinimalistic } from "@solar-icons/react";
+import type { ColumnDef } from "@tanstack/react-table";
 
-import DataTableColumnHeader from '~/shared/components/table/data-table-column-header';
-import { Button } from '~/shared/components/ui/button';
-
-import { formatCurrency, formatDate } from '~/shared/lib/formatter';
-
-import { investmentCategory } from '~/shared/constants/categories';
+import DataTableColumnHeader from "~/shared/components/table/data-table-column-header";
+import { Button } from "~/shared/components/ui/button";
+import { investmentCategory } from "~/shared/constants/categories";
+import { formatCurrency, formatDate } from "~/shared/lib/formatter";
 
 export type Investments = {
 	name: string;
@@ -25,24 +23,24 @@ export type Investments = {
 
 export const columns: ColumnDef<Investments>[] = [
 	{
-		accessorKey: 'name',
+		accessorKey: "name",
 		header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
 		cell: (props) => {
 			const { row } = props;
-			const name = row.getValue<string>('name');
+			const name = row.getValue<string>("name");
 			return <div className="font-medium">{name}</div>;
 		},
 	},
 	{
-		accessorKey: 'units',
+		accessorKey: "units",
 		header: ({ column }) => <DataTableColumnHeader column={column} title="Units" />,
 		cell: ({ row }) => {
-			const units = parseFloat(row.getValue('units'));
+			const units = parseFloat(row.getValue("units"));
 			return <div className="tabular-nums">{units}</div>;
 		},
 	},
 	{
-		accessorKey: 'price',
+		accessorKey: "price",
 		header: ({ column }) => <DataTableColumnHeader column={column} title="Single Stock Price" />,
 		cell: (props) => {
 			const {
@@ -50,13 +48,13 @@ export const columns: ColumnDef<Investments>[] = [
 				table: { options },
 			} = props;
 			const user = options.meta?.user;
-			const price = parseFloat(row.getValue('price'));
+			const price = parseFloat(row.getValue("price"));
 			const formatted = formatCurrency({ value: price, currency: user?.currency, locale: user?.locale });
 			return <div className="font-medium tabular-nums">{formatted}</div>;
 		},
 	},
 	{
-		accessorKey: 'price',
+		accessorKey: "price",
 		header: ({ column }) => <DataTableColumnHeader column={column} title="Total Amount" />,
 		cell: (props) => {
 			const {
@@ -64,14 +62,14 @@ export const columns: ColumnDef<Investments>[] = [
 				table: { options },
 			} = props;
 			const user = options.meta?.user;
-			const price = parseFloat(row.getValue('price'));
-			const units = parseFloat(row.getValue('units'));
+			const price = parseFloat(row.getValue("price"));
+			const units = parseFloat(row.getValue("units"));
 			const formatted = formatCurrency({ value: units * price, currency: user?.currency, locale: user?.locale });
 			return <div className="font-medium tabular-nums">{formatted}</div>;
 		},
 	},
 	{
-		accessorKey: 'date',
+		accessorKey: "date",
 		header: ({ column }) => <DataTableColumnHeader column={column} title="Bought Date" />,
 		cell: (props) => {
 			const {
@@ -79,16 +77,16 @@ export const columns: ColumnDef<Investments>[] = [
 				table: { options },
 			} = props;
 			const user = options.meta?.user;
-			const date = row.getValue<string>('date');
+			const date = row.getValue<string>("date");
 			const formatted = formatDate({ date, locale: user?.locale });
 			return <div className="">{formatted}</div>;
 		},
 	},
 	{
-		accessorKey: 'category',
+		accessorKey: "category",
 		header: ({ column }) => <DataTableColumnHeader column={column} title="Category" />,
 		cell: ({ row }) => {
-			const category = row.getValue<string>('category');
+			const category = row.getValue<string>("category");
 			return <div className="">{investmentCategory[category]}</div>;
 		},
 		filterFn: (row, id, value) => {
@@ -96,9 +94,9 @@ export const columns: ColumnDef<Investments>[] = [
 		},
 	},
 
-	{ accessorKey: 'notes', header: 'Notes' },
+	{ accessorKey: "notes", header: "Notes" },
 	{
-		accessorKey: 'actions',
+		accessorKey: "actions",
 		cell: (props) => {
 			const {
 				row,
@@ -108,7 +106,7 @@ export const columns: ColumnDef<Investments>[] = [
 			} = props;
 			return (
 				<div className="flex">
-					<Button className="mr-1 rounded-lg p-0 hover:bg-transparent hover:opacity-70" variant={'ghost'}>
+					<Button className="mr-1 rounded-lg p-0 hover:bg-transparent hover:opacity-70" variant={"ghost"}>
 						<Pen2
 							className="h-4 w-4"
 							onClick={() => {
@@ -116,7 +114,7 @@ export const columns: ColumnDef<Investments>[] = [
 							}}
 						/>
 					</Button>
-					<Button className="ml-2 rounded-lg p-0 hover:bg-transparent hover:opacity-70" variant={'ghost'}>
+					<Button className="ml-2 rounded-lg p-0 hover:bg-transparent hover:opacity-70" variant={"ghost"}>
 						<TrashBinMinimalistic
 							className="h-4 w-4"
 							onClick={() => {

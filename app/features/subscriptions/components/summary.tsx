@@ -1,13 +1,12 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
+import { useMemo } from "react";
+import { useUser } from "~/features/auth/components/auth-provider";
+import SummaryCard from "~/shared/components/card/summary-card";
+import { useData } from "~/shared/components/context/data-provider";
+import CardLoader from "~/shared/components/loader/card";
 
-import SummaryCard from '~/shared/components/card/summary-card';
-import { useUser } from '~/features/auth/components/auth-provider';
-import { useData } from '~/shared/components/context/data-provider';
-import CardLoader from '~/shared/components/loader/card';
-
-import { formatCurrency } from '~/shared/lib/formatter';
+import { formatCurrency } from "~/shared/lib/formatter";
 
 export default function SubscriptionsSummary() {
 	const user = useUser();
@@ -15,14 +14,14 @@ export default function SubscriptionsSummary() {
 	const monthlyData = useMemo(
 		() =>
 			data.filter(
-				(datum: { active: boolean; paid: string; price: number }) => datum.active && datum.paid === 'monthly'
+				(datum: { active: boolean; paid: string; price: number }) => datum.active && datum.paid === "monthly",
 			),
-		[data]
+		[data],
 	);
 	const yearlyData = useMemo(
 		() =>
-			data.filter((datum: { active: boolean; paid: string; price: number }) => datum.active && datum.paid === 'yearly'),
-		[data]
+			data.filter((datum: { active: boolean; paid: string; price: number }) => datum.active && datum.paid === "yearly"),
+		[data],
 	);
 
 	return (

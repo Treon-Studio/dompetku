@@ -1,10 +1,10 @@
-import type { ActionFunctionArgs } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
-import { requireUser } from '~/features/auth/api.server';
-import { createDbClient } from '~/core/db.server';
-import { logger } from '~/core/logger.server';
-import { upgradeUserPlan } from '~/features/profile/api.server';
-import { getCloudflareEnv } from '~/env';
+import type { ActionFunctionArgs } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { createDbClient } from "~/core/db.server";
+import { logger } from "~/core/logger.server";
+import { getCloudflareEnv } from "~/env";
+import { requireUser } from "~/features/auth/api.server";
+import { upgradeUserPlan } from "~/features/profile/api.server";
 
 export async function action({ request, context }: ActionFunctionArgs) {
 	const db = createDbClient(getCloudflareEnv(context));
@@ -13,13 +13,13 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
 	try {
 		await upgradeUserPlan(user.id, body, db);
-		return json('Successful', { status: 200 });
+		return json("Successful", { status: 200 });
 	} catch (e: unknown) {
 		const error = e as Error;
-		if (error.message.startsWith('Invalid')) {
+		if (error.message.startsWith("Invalid")) {
 			return json({ message: error.message }, { status: 400 });
 		}
-		logger.error('Request failed', { error: String(error) });
-		return json({ message: 'Request failed' }, { status: 500 });
+		logger.error("Request failed", { error: String(error) });
+		return json({ message: "Request failed" }, { status: 500 });
 	}
 }

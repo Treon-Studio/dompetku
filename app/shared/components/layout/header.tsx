@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useSidebarOpen, useUiActions } from '~/shared/stores/ui/ui.store';
-import { Button } from '~/shared/components/ui/button';
-import { Separator } from '~/shared/components/ui/separator';
+import { Button } from "~/shared/components/ui/button";
+import { Separator } from "~/shared/components/ui/separator";
+import { useSidebarOpen, useUiActions } from "~/shared/stores/ui/ui.store";
 
-import DatePicker from '../datepicker';
+import DatePicker from "../datepicker";
 
 const MenuIcon = () => (
 	<svg
@@ -24,22 +24,22 @@ const MenuIcon = () => (
 );
 
 export default function LayoutHeader({ title, showDatePicker = false }: { title: string; showDatePicker?: boolean }) {
-	const show = useSidebarOpen();
+	const _show = useSidebarOpen();
 	const { toggleSidebar } = useUiActions();
 	return (
 		<>
 			<div
 				className={`flex justify-between p-3 pl-4 pr-4 text-gray-950 dark:text-gray-200 ${
-					showDatePicker ? 'flex-col sm:flex-row' : 'flex-row items-center'
+					showDatePicker ? "flex-col sm:flex-row" : "flex-row items-center"
 				}`}
 			>
 				<div className="flex">
-					<Button className="mr-2 -mt-px p-1 sm:hidden" onClick={toggleSidebar} variant={'ghost'}>
+					<Button className="mr-2 -mt-px p-1 sm:hidden" onClick={toggleSidebar} variant={"ghost"}>
 						<MenuIcon />
 					</Button>
 					<h2
 						className={`text-2xl font-extrabold capitalize leading-snug tracking-tight ${
-							showDatePicker ? 'mb-2 sm:mb-0' : ''
+							showDatePicker ? "mb-2 sm:mb-0" : ""
 						}`}
 					>
 						{title}

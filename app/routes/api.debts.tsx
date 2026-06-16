@@ -1,1 +1,1 @@
-export { debtsLoader as loader, debtsAction as action } from '~/features/debts/api.server';
+export { debtsAction as action, debtsLoader as loader } from "~/features/debts/api.server";

@@ -1,7 +1,7 @@
-import { Skeleton } from '~/shared/components/ui/skeleton';
+import { Skeleton } from "~/shared/components/ui/skeleton";
 
 export default function ChartLoader({ className, type }: { className?: string; type: string }) {
-	if (type === 'bar') {
+	if (type === "bar") {
 		return (
 			<div className={`relative mb-7 rounded-lg bg-background p-2 text-left ${className} `}>
 				<Skeleton className="float-right h-[20px] w-[40%] rounded-sm" />
@@ -10,14 +10,14 @@ export default function ChartLoader({ className, type }: { className?: string; t
 				<Skeleton className="mt-[20px] h-[200px] rounded-sm " />
 			</div>
 		);
-	} else if (type === 'donut') {
+	} else if (type === "donut") {
 		return (
 			<div className={`relative mb-7 rounded-lg bg-background p-2 text-left ${className} `}>
 				<Skeleton className="float-right mt-[-24px] h-[20px] w-[40%] rounded-sm" />
 				<Skeleton className="m-auto mt-[35px]! h-full max-h-[298px] w-full max-w-[310px] rounded-full" />
 			</div>
 		);
-	} else if (type === 'barlist') {
+	} else if (type === "barlist") {
 		return (
 			<div className={`relative mb-6 rounded-lg bg-background p-4 text-left ${className}`}>
 				<Skeleton className="mb-[10px] mt-[10px] h-[35px] w-full" />

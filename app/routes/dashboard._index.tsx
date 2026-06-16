@@ -1,18 +1,17 @@
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
-import { useLoaderData } from '@remix-run/react';
-
-import { OverviewContextProvider } from '~/shared/components/context/overview-provider';
-import LayoutHeader from '~/shared/components/layout/header';
-import Summary from '~/shared/components/dashboard/summary';
-import Charts from '~/shared/components/dashboard/charts';
-import GoalsKanban from '~/shared/components/kanban/goals-kanban';
-import AddData from '~/shared/components/dashboard/add-data';
-import { getLocaleFromRequest, loadTranslations } from '@i18n/server';
-import { I18nProvider } from '@i18n/provider';
+import { I18nProvider } from "@i18n/provider";
+import { getLocaleFromRequest, loadTranslations } from "@i18n/server";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
+import { OverviewContextProvider } from "~/shared/components/context/overview-provider";
+import AddData from "~/shared/components/dashboard/add-data";
+import Charts from "~/shared/components/dashboard/charts";
+import Summary from "~/shared/components/dashboard/summary";
+import GoalsKanban from "~/shared/components/kanban/goals-kanban";
+import LayoutHeader from "~/shared/components/layout/header";
 
 export const meta: MetaFunction = () => {
-	return [{ title: 'Dompetku - Overview' }];
+	return [{ title: "Dompetku - Overview" }];
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {

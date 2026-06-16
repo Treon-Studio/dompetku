@@ -1,13 +1,12 @@
-import type { LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
-import { eq, and, desc } from 'drizzle-orm';
-
-import { requireUser } from '~/features/auth/api.server';
-import { createDbClient } from '~/core/db.server';
-import { logger } from '~/core/logger.server';
-import { DebtSchema } from './schemas';
-import { friends, debts } from '~/core/db/schema';
-import { getCloudflareEnv } from '~/env';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { and, desc, eq } from "drizzle-orm";
+import { debts, friends } from "~/core/db/schema";
+import { createDbClient } from "~/core/db.server";
+import { logger } from "~/core/logger.server";
+import { getCloudflareEnv } from "~/env";
+import { requireUser } from "~/features/auth/api.server";
+import { DebtSchema } from "./schemas";
 
 export async function debtsLoader({ request, context }: LoaderFunctionArgs) {
 	const db = createDbClient(getCloudflareEnv(context));
@@ -27,7 +26,7 @@ export async function debtsLoader({ request, context }: LoaderFunctionArgs) {
 				.where(eq(debts.friend_id, friend.id))
 				.orderBy(desc(debts.date), desc(debts.status), desc(debts.created_at));
 			return { ...friend, debts: debtsList };
-		})
+		}),
 	);
 
 	return json(result);
@@ -45,11 +44,11 @@ export async function debtsAction({ request, context }: ActionFunctionArgs) {
 	const body = (await request.json()) as Record<string, unknown>;
 	const { id } = body;
 
-	if (request.method === 'POST') {
+	if (request.method === "POST") {
 		const result = DebtSchema.safeParse(body);
 		if (!result.success) {
-			console.error('POST Validation Error:', result.error);
-			return json({ message: result.error?.issues?.[0]?.message || 'Validation error' }, { status: 400 });
+			console.error("POST Validation Error:", result.error);
+			return json({ message: result.error?.issues?.[0]?.message || "Validation error" }, { status: 400 });
 		}
 
 		const { name, friend_name, type, amount, date, notes, linked_debt_id } = result.data;
@@ -65,9 +64,9 @@ export async function debtsAction({ request, context }: ActionFunctionArgs) {
 			if (!friend) {
 				const baseSlug = String(friend_name)
 					.toLowerCase()
-					.replace(/[^a-z0-9]+/g, '-')
-					.replace(/^-|-$/g, '');
-				const slug = `${baseSlug || 'teman'}-${generateRandomString(6)}`;
+					.replace(/[^a-z0-9]+/g, "-")
+					.replace(/^-|-$/g, "");
+				const slug = `${baseSlug || "teman"}-${generateRandomString(6)}`;
 				const [newFriend] = await db
 					.insert(friends)
 					.values({
@@ -88,7 +87,7 @@ export async function debtsAction({ request, context }: ActionFunctionArgs) {
 				user_id: user.id,
 				friend_id: friend.id,
 				nameHash: String(name).toLowerCase(),
-				status: linked_debt_id ? 'PAID' : 'UNPAID',
+				status: linked_debt_id ? "PAID" : "UNPAID",
 			});
 
 			if (linked_debt_id) {
@@ -101,21 +100,21 @@ export async function debtsAction({ request, context }: ActionFunctionArgs) {
 				if (oldDebt) {
 					await db
 						.update(debts)
-						.set({ status: 'PAID' })
+						.set({ status: "PAID" })
 						.where(and(eq(debts.id, String(linked_debt_id)), eq(debts.user_id, user.id)));
 
-					const oldSign = oldDebt.type === 'OWES_ME' ? 1 : -1;
-					const newSign = type === 'OWES_ME' ? 1 : -1;
+					const oldSign = oldDebt.type === "OWES_ME" ? 1 : -1;
+					const newSign = type === "OWES_ME" ? 1 : -1;
 					const oldAmount = parseFloat(oldDebt.amount);
 					const newAmount = parseFloat(String(amount));
 					const netBalance = oldSign * oldAmount + newSign * newAmount;
 
 					if (Math.abs(netBalance) > 0.01) {
-						const remainderType = netBalance > 0 ? 'OWES_ME' : 'I_OWE';
+						const remainderType = netBalance > 0 ? "OWES_ME" : "I_OWE";
 						const remainderAmount = Math.abs(netBalance);
 						const sisaName = `Sisa: ${oldDebt.name}`.slice(0, 60);
 						await db.insert(debts).values({
-							notes: 'Otomatis dibuat oleh sistem',
+							notes: "Otomatis dibuat oleh sistem",
 							name: sisaName,
 							type: remainderType,
 							amount: String(remainderAmount),
@@ -123,45 +122,45 @@ export async function debtsAction({ request, context }: ActionFunctionArgs) {
 							user_id: user.id,
 							friend_id: friend.id,
 							nameHash: sisaName.toLowerCase(),
-							status: 'UNPAID',
+							status: "UNPAID",
 						});
 					}
 				}
 			}
 
-			return json({ message: 'added' }, { status: 201 });
+			return json({ message: "added" }, { status: 201 });
 		} catch (error) {
-			logger.error('Request failed', { error: String(error) });
-			return json({ message: 'Request failed' }, { status: 500 });
+			logger.error("Request failed", { error: String(error) });
+			return json({ message: "Request failed" }, { status: 500 });
 		}
 	}
 
-	if (request.method === 'DELETE') {
+	if (request.method === "DELETE") {
 		try {
 			const [debt] = await db
 				.select()
 				.from(debts)
 				.where(and(eq(debts.id, String(id)), eq(debts.user_id, user.id)))
 				.limit(1);
-			if (!debt) return json({ message: 'Not found' }, { status: 404 });
+			if (!debt) return json({ message: "Not found" }, { status: 404 });
 
 			await db.delete(debts).where(and(eq(debts.id, String(id)), eq(debts.user_id, user.id)));
-			return json({ message: 'deleted' });
+			return json({ message: "deleted" });
 		} catch (error) {
-			logger.error('Delete failed', { error: String(error) });
-			return json({ message: 'Request failed' }, { status: 500 });
+			logger.error("Delete failed", { error: String(error) });
+			return json({ message: "Request failed" }, { status: 500 });
 		}
 	}
 
-	if (request.method === 'PUT') {
+	if (request.method === "PUT") {
 		const result = DebtSchema.partial().safeParse(body);
 		if (!result.success) {
-			console.error('PUT Validation Error:', result.error);
-			return json({ message: result.error?.issues?.[0]?.message || 'Validation error' }, { status: 400 });
+			console.error("PUT Validation Error:", result.error);
+			return json({ message: result.error?.issues?.[0]?.message || "Validation error" }, { status: 400 });
 		}
 
 		const { status, name, amount, date, notes } = result.data;
-		const updateData: any = {};
+		const updateData: Record<string, string | boolean> = {};
 		if (status) updateData.status = String(status);
 		if (name) updateData.name = String(name);
 		if (amount) updateData.amount = String(amount);
@@ -173,10 +172,10 @@ export async function debtsAction({ request, context }: ActionFunctionArgs) {
 				.update(debts)
 				.set(updateData)
 				.where(and(eq(debts.id, String(id)), eq(debts.user_id, user.id)));
-			return json({ message: 'updated' });
+			return json({ message: "updated" });
 		} catch (error) {
-			logger.error('Update failed', { error: String(error) });
-			return json({ message: 'Request failed' }, { status: 500 });
+			logger.error("Update failed", { error: String(error) });
+			return json({ message: "Request failed" }, { status: 500 });
 		}
 	}
 }
@@ -187,21 +186,21 @@ export async function friendsAction({ request, context }: ActionFunctionArgs) {
 	const body = (await request.json()) as Record<string, unknown>;
 	const { id, slug, is_public } = body;
 
-	if (request.method === 'PUT') {
-		if (!id) return json({ message: 'Missing friend ID' }, { status: 400 });
+	if (request.method === "PUT") {
+		if (!id) return json({ message: "Missing friend ID" }, { status: 400 });
 
-		const updateData: any = {};
+		const updateData: Record<string, string | boolean> = {};
 
 		if (slug !== undefined) {
 			const sanitizedSlug = String(slug)
 				.trim()
 				.toLowerCase()
-				.replace(/[^a-z0-9\-]/g, '');
-			if (!sanitizedSlug) return json({ message: 'Invalid slug format' }, { status: 400 });
+				.replace(/[^a-z0-9-]/g, "");
+			if (!sanitizedSlug) return json({ message: "Invalid slug format" }, { status: 400 });
 
 			const [existing] = await db.select().from(friends).where(eq(friends.slug, sanitizedSlug)).limit(1);
 			if (existing && existing.id !== id) {
-				return json({ message: 'Slug already taken' }, { status: 409 });
+				return json({ message: "Slug already taken" }, { status: 409 });
 			}
 			updateData.slug = sanitizedSlug;
 		}
@@ -213,12 +212,12 @@ export async function friendsAction({ request, context }: ActionFunctionArgs) {
 				.update(friends)
 				.set(updateData)
 				.where(and(eq(friends.id, String(id)), eq(friends.user_id, user.id)));
-			return json({ message: 'updated' });
+			return json({ message: "updated" });
 		} catch (error) {
-			logger.error('Friend update failed', { error: String(error) });
-			return json({ message: 'Request failed' }, { status: 500 });
+			logger.error("Friend update failed", { error: String(error) });
+			return json({ message: "Request failed" }, { status: 500 });
 		}
 	}
 
-	return json({ message: 'Method Not Allowed' }, { status: 405 });
+	return json({ message: "Method Not Allowed" }, { status: 405 });
 }
