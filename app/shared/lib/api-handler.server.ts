@@ -84,8 +84,8 @@ export async function handleActionRecords(
 	if (method === 'POST') {
 		const result = schema_.safeParse(body);
 		if (!result.success) {
-			const error = result.error.issues[0];
-			return json({ message: error.message }, { status: 400 });
+			const errors = result.error.flatten().fieldErrors;
+			return json({ message: 'Validation failed', errors }, { status: 400 });
 		}
 
 		const data = { user_id: user.id, ...(result.data as object) };
@@ -105,8 +105,8 @@ export async function handleActionRecords(
 
 		const result = schema_.safeParse(body);
 		if (!result.success) {
-			const error = result.error.issues[0];
-			return json({ message: error.message }, { status: 400 });
+			const errors = result.error.flatten().fieldErrors;
+			return json({ message: 'Validation failed', errors }, { status: 400 });
 		}
 
 		const [record] = await db.select().from(table).where(eq(table.id, id)).limit(1);

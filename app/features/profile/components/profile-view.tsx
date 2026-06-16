@@ -44,6 +44,8 @@ const CURRENCIES = [
 const LANGUAGES = [
 	{ value: 'en', label: 'English' },
 	{ value: 'id', label: 'Bahasa Indonesia' },
+	{ value: 'bjn', label: 'Bahasa Banjar' },
+	{ value: 'jv', label: 'Basa Jawa' },
 ];
 
 export default function ProfilePage() {

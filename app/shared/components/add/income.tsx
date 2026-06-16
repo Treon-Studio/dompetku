@@ -40,7 +40,7 @@ const initialState = {
 
 export default function AddIncome({ show, onHide, mutate, selected, lookup }: AddIncomeProps) {
 	const user = useUser();
-	const { state, setState, loading, inputRef, onSubmit, todayDate, t } = useResourceForm({
+	const { state, setState, loading, errors, inputRef, onSubmit, todayDate, t } = useResourceForm({
 		initialState,
 		selected,
 		onHide,
@@ -71,10 +71,12 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 					}}
 				>
 					<div className="relative">
-						<Label htmlFor="name">{t('income.source')}</Label>
+						<Label htmlFor="name" className={errors.name ? 'text-destructive' : ''}>
+							{t('income.source')}
+						</Label>
 						<Input
 							id="name"
-							className="mt-1.5"
+							className={`mt-1.5 ${errors.name ? 'border-destructive focus-visible:ring-destructive' : ''}`}
 							placeholder="Salary"
 							maxLength={30}
 							required
@@ -92,6 +94,7 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 							}}
 							value={state.name}
 						/>
+						{errors.name && <p className="mt-1 text-xs text-destructive">{errors.name[0]}</p>}
 						<AutoCompleteList
 							onHide={() => {
 								setState({ ...state, autocomplete: [] });
@@ -106,14 +109,14 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 					</div>
 					<div className="grid grid-cols-[32%_38%_30%] gap-1">
 						<div className="mr-3">
-							<Label htmlFor="amount">
+							<Label htmlFor="amount" className={errors.price ? 'text-destructive' : ''}>
 								{t('income.amount')}
 								<span className="ml-2 font-mono text-xs text-muted-foreground">
 									({getCurrencySymbol(user?.currency, user?.locale)})
 								</span>
 							</Label>
 							<Input
-								className="mt-1.5"
+								className={`mt-1.5 ${errors.price ? 'border-destructive focus-visible:ring-destructive' : ''}`}
 								id="amount"
 								type="text"
 								placeholder="199"
@@ -122,11 +125,16 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 								onChange={(event) => setState({ ...state, price: parseInputPrice(event.target.value) })}
 								value={formatInputPrice(state.price)}
 							/>
+							{errors.price && <p className="mt-1 text-xs text-destructive">{errors.price[0]}</p>}
 						</div>
 						<div className="mr-3">
-							<Label htmlFor="date">{t('income.date')}</Label>
+							<Label htmlFor="date" className={errors.date ? 'text-destructive' : ''}>
+								{t('income.date')}
+							</Label>
 							<Input
-								className="mt-1.5 appearance-none"
+								className={`mt-1.5 appearance-none ${
+									errors.date ? 'border-destructive focus-visible:ring-destructive' : ''
+								}`}
 								id="date"
 								type="date"
 								required
@@ -137,12 +145,19 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 								}}
 								value={state.date}
 							/>
+							{errors.date && <p className="mt-1 text-xs text-destructive">{errors.date[0]}</p>}
 						</div>
 						<div className="mr-3">
-							<Label htmlFor="category">{t('income.category')}</Label>
+							<Label htmlFor="category" className={errors.category ? 'text-destructive' : ''}>
+								{t('income.category')}
+							</Label>
 							<select
 								id="category"
-								className="mt-1.5 flex h-9 max-sm:h-10 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
+								className={`mt-1.5 flex h-9 max-sm:h-10 w-full rounded-md border bg-background px-3 py-1 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 ${
+									errors.category
+										? 'border-destructive focus-visible:ring-destructive'
+										: 'border-input focus-visible:ring-ring'
+								}`}
 								onChange={(event) => {
 									setState({ ...state, category: event.target.value });
 								}}
@@ -157,19 +172,21 @@ export default function AddIncome({ show, onHide, mutate, selected, lookup }: Ad
 									);
 								})}
 							</select>
+							{errors.category && <p className="mt-1 text-xs text-destructive">{errors.category[0]}</p>}
 						</div>
 					</div>
 					<div>
-						<Label className="block">
+						<Label className={`block ${errors.notes ? 'text-destructive' : ''}`}>
 							{t('income.notes')}{' '}
 							<span className="text-center text-sm text-muted-foreground">{t('common.optional')}</span>
 						</Label>
 						<Textarea
-							className="mt-2 h-20"
+							className={`mt-2 h-20 ${errors.notes ? 'border-destructive focus-visible:ring-destructive' : ''}`}
 							onChange={(event) => setState({ ...state, notes: event.target.value })}
 							value={state.notes}
 							maxLength={60}
 						/>
+						{errors.notes && <p className="mt-1 text-xs text-destructive">{errors.notes[0]}</p>}
 					</div>
 
 					<Button disabled={loading} className="mt-1.5" type="submit">

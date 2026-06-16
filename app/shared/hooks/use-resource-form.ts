@@ -22,6 +22,7 @@ export function useResourceForm({ initialState, selected, onHide, mutate, api }:
 	const todayDate = format(new Date(), dateFormat);
 	const [state, setState] = useState<any>({ ...initialState, date: todayDate });
 	const [loading, setLoading] = useState(false);
+	const [errors, setErrors] = useState<Record<string, string[]>>({});
 	const inputRef = useRef<any>(null);
 
 	useEffect(() => {
@@ -34,11 +35,13 @@ export function useResourceForm({ initialState, selected, onHide, mutate, api }:
 				? { ...initialState, ...selected, paid_via: selected.paid_via || initialState.paid_via }
 				: { ...initialState, date: todayDate }
 		);
-	}, [selected, todayDate]);
+		setErrors({});
+	}, [selected, todayDate, initialState]);
 
 	const onSubmit = async () => {
 		try {
 			setLoading(true);
+			setErrors({});
 			const isEditing = Boolean(selected?.id);
 			if (isEditing) {
 				await api.edit(state);
@@ -51,9 +54,14 @@ export function useResourceForm({ initialState, selected, onHide, mutate, api }:
 			if (mutate) mutate();
 			onHide();
 			setState({ ...initialState });
-		} catch (error) {
+		} catch (error: any) {
 			setLoading(false);
-			toast.error(messages.error);
+			if (error.data?.errors) {
+				setErrors(error.data.errors);
+				toast.error(error.message || messages.error);
+			} else {
+				toast.error(error.message || messages.error);
+			}
 		}
 	};
 
@@ -61,6 +69,8 @@ export function useResourceForm({ initialState, selected, onHide, mutate, api }:
 		state,
 		setState,
 		loading,
+		errors,
+		setErrors,
 		inputRef,
 		onSubmit,
 		todayDate,

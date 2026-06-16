@@ -41,7 +41,7 @@ const initialState = {
 
 export default function AddExpense({ show, onHide, mutate, selected, lookup }: AddExpenseProps) {
 	const user = useUser();
-	const { state, setState, loading, inputRef, onSubmit, todayDate, t } = useResourceForm({
+	const { state, setState, loading, errors, inputRef, onSubmit, todayDate, t } = useResourceForm({
 		initialState,
 		selected,
 		onHide,
@@ -73,9 +73,11 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 					}}
 				>
 					<div className="relative">
-						<Label htmlFor="name">{t('expenses.name')}</Label>
+						<Label htmlFor="name" className={errors.name ? 'text-destructive' : ''}>
+							{t('expenses.name')}
+						</Label>
 						<Input
-							className="mt-1.5"
+							className={`mt-1.5 ${errors.name ? 'border-destructive focus-visible:ring-destructive' : ''}`}
 							id="name"
 							placeholder="Swiggy - Biriyani"
 							maxLength={30}
@@ -94,6 +96,7 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 							}}
 							value={state.name}
 						/>
+						{errors.name && <p className="mt-1 text-xs text-destructive">{errors.name[0]}</p>}
 						<AutoCompleteList
 							onHide={() => {
 								setState({ ...state, autocomplete: [] });
@@ -108,14 +111,14 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 					</div>
 					<div className="grid grid-cols-[50%_50%] gap-3">
 						<div className="mr-3">
-							<Label htmlFor="price">
+							<Label htmlFor="price" className={errors.price ? 'text-destructive' : ''}>
 								{t('expenses.price')}
 								<span className="ml-2 font-mono text-xs text-muted-foreground">
 									({getCurrencySymbol(user?.currency, user?.locale)})
 								</span>
 							</Label>
 							<Input
-								className="mt-1.5"
+								className={`mt-1.5 ${errors.price ? 'border-destructive focus-visible:ring-destructive' : ''}`}
 								id="price"
 								type="text"
 								placeholder="199"
@@ -124,11 +127,16 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 								onChange={(event) => setState({ ...state, price: parseInputPrice(event.target.value) })}
 								value={formatInputPrice(state.price)}
 							/>
+							{errors.price && <p className="mt-1 text-xs text-destructive">{errors.price[0]}</p>}
 						</div>
 						<div className="mr-3">
-							<Label htmlFor="date">{t('expenses.spentDate')}</Label>
+							<Label htmlFor="date" className={errors.date ? 'text-destructive' : ''}>
+								{t('expenses.spentDate')}
+							</Label>
 							<Input
-								className="mt-1.5 appearance-none"
+								className={`mt-1.5 appearance-none ${
+									errors.date ? 'border-destructive focus-visible:ring-destructive' : ''
+								}`}
 								id="date"
 								type="date"
 								required
@@ -139,14 +147,21 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 								}}
 								value={state.date}
 							/>
+							{errors.date && <p className="mt-1 text-xs text-destructive">{errors.date[0]}</p>}
 						</div>
 					</div>
 					<div className="grid grid-cols-[50%_50%] gap-3">
 						<div className="mr-3">
-							<Label htmlFor="category">{t('expenses.category')}</Label>
+							<Label htmlFor="category" className={errors.category ? 'text-destructive' : ''}>
+								{t('expenses.category')}
+							</Label>
 							<select
 								id="category"
-								className="mt-1.5 flex h-9 max-sm:h-10 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
+								className={`mt-1.5 flex h-9 max-sm:h-10 w-full rounded-md border bg-background px-3 py-1 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 ${
+									errors.category
+										? 'border-destructive focus-visible:ring-destructive'
+										: 'border-input focus-visible:ring-ring'
+								}`}
 								onChange={(event) => {
 									setState({ ...state, category: event.target.value });
 								}}
@@ -170,12 +185,19 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 									{expensesCategory.other.name}
 								</option>
 							</select>
+							{errors.category && <p className="mt-1 text-xs text-destructive">{errors.category[0]}</p>}
 						</div>
 						<div className="mr-3">
-							<Label htmlFor="paid">{t('expenses.paidVia')}</Label>
+							<Label htmlFor="paid" className={errors.paid_via ? 'text-destructive' : ''}>
+								{t('expenses.paidVia')}
+							</Label>
 							<select
 								id="paid"
-								className="mt-1.5 flex h-9 max-sm:h-10 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
+								className={`mt-1.5 flex h-9 max-sm:h-10 w-full rounded-md border bg-background px-3 py-1 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 ${
+									errors.paid_via
+										? 'border-destructive focus-visible:ring-destructive'
+										: 'border-input focus-visible:ring-ring'
+								}`}
 								onChange={(event) => {
 									setState({ ...state, paid_via: event.target.value });
 								}}
@@ -190,19 +212,21 @@ export default function AddExpense({ show, onHide, mutate, selected, lookup }: A
 									);
 								})}
 							</select>
+							{errors.paid_via && <p className="mt-1 text-xs text-destructive">{errors.paid_via[0]}</p>}
 						</div>
 					</div>
 					<div>
-						<Label className="block">
+						<Label className={`block ${errors.notes ? 'text-destructive' : ''}`}>
 							{t('expenses.notes')}{' '}
 							<span className="text-center text-sm text-muted-foreground">{t('common.optional')}</span>
 						</Label>
 						<Textarea
-							className="mt-2 h-20"
+							className={`mt-2 h-20 ${errors.notes ? 'border-destructive focus-visible:ring-destructive' : ''}`}
 							onChange={(event) => setState({ ...state, notes: event.target.value })}
 							value={state.notes}
 							maxLength={60}
 						/>
+						{errors.notes && <p className="mt-1 text-xs text-destructive">{errors.notes[0]}</p>}
 					</div>
 
 					<Button disabled={loading} className="mt-1.5" type="submit">

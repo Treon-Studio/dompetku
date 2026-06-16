@@ -40,7 +40,7 @@ const initialState = {
 
 export default function AddInvestments({ show, onHide, mutate, selected, lookup }: AddInvestments) {
 	const user = useUser();
-	const { state, setState, loading, inputRef, onSubmit, todayDate, t } = useResourceForm({
+	const { state, setState, loading, errors, inputRef, onSubmit, todayDate, t } = useResourceForm({
 		initialState,
 		selected,
 		onHide,
@@ -71,9 +71,11 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 					}}
 				>
 					<div className="relative">
-						<Label htmlFor="name">{t('investments.title')}</Label>
+						<Label htmlFor="name" className={errors.name ? 'text-destructive' : ''}>
+							{t('investments.title')}
+						</Label>
 						<Input
-							className="mt-1.5"
+							className={`mt-1.5 ${errors.name ? 'border-destructive focus-visible:ring-destructive' : ''}`}
 							id="name"
 							placeholder="Name or $TSLA"
 							maxLength={30}
@@ -92,6 +94,7 @@ export default function AddInvestments({ show, onHide, mutate, selected, lookup 
 							}}
 							value={state.name}
 						/>
+						{errors.name && <p className="mt-1 text-xs text-destructive">{errors.name[0]}</p>}
 						<AutoCompleteList
 							onHide={() => {
 								setState({ ...state, autocomplete: [] });
