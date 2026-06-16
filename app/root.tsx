@@ -74,13 +74,16 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 export const meta: MetaFunction = () => [
 	{ title: 'Dompetku - Track your expenses with ease' },
 	{ name: 'description', content: 'Effortlessly Track and Manage Expenses.' },
+	{ name: 'theme-color', content: '#09090b' },
+	{ name: 'apple-mobile-web-app-capable', content: 'yes' },
+	{ name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
 ];
 
 export const links: LinksFunction = () => [
 	{ rel: 'preconnect', href: 'https://fonts.googleapis.com' },
 	{ rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' as const },
 	{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap' },
-	{ rel: 'manifest', href: '/manifest.json' },
+	{ rel: 'manifest', href: '/manifest.webmanifest' },
 	{ rel: 'icon', href: '/favicon.ico' },
 	{ rel: 'apple-touch-icon', href: '/icons/apple-icon.png' },
 ];

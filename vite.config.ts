@@ -1,5 +1,6 @@
 import { vitePlugin as remix, cloudflareDevProxyVitePlugin } from '@remix-run/dev';
 import { defineConfig } from 'vite';
+import { remixPWA } from '@remix-pwa/dev';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
@@ -24,6 +25,7 @@ export default defineConfig(async () => {
 					v3_throwAbortReason: true,
 				},
 			}),
+			remixPWA(),
 			tsconfigPaths(),
 		],
 		server: {
