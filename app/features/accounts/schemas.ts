@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { INPUT_MAX_LENGTH } from "~/shared/constants/validation";
 
 const QRIS_DATA_URL_REGEX = /^data:image\/(png|jpe?g|webp|gif);base64,/;
 
@@ -7,16 +8,16 @@ export const PaymentAccountSchema = z.object({
 	bank_name: z
 		.string()
 		.min(2, "Bank/E-Wallet name must be at least 2 characters")
-		.max(60, "Bank/E-Wallet name must be at most 60 characters"),
+		.max(INPUT_MAX_LENGTH, `Bank/E-Wallet name must be at most ${INPUT_MAX_LENGTH} characters`),
 	account_number: z
 		.string()
-		.min(2, "Account number is required")
+		.min(2, "Account number must be at least 2 characters")
 		.max(40, "Account number must be at most 40 characters")
 		.regex(/^[A-Za-z0-9\- ]+$/, "Only letters, digits, dashes and spaces are allowed"),
 	account_holder: z
 		.string()
 		.min(2, "Account holder name must be at least 2 characters")
-		.max(80, "Account holder name must be at most 80 characters"),
+		.max(INPUT_MAX_LENGTH, `Account holder name must be at most ${INPUT_MAX_LENGTH} characters`),
 	qris_image: z
 		.string()
 		.optional()
