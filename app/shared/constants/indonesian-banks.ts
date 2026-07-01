@@ -1,0 +1,46 @@
+export const groupedIndonesianBanks = {
+	bank: {
+		name: "Bank",
+		icon: "🏦",
+		list: {
+			bca: { name: "BCA" },
+			bri: { name: "BRI" },
+			bni: { name: "BNI" },
+			mandiri: { name: "Mandiri" },
+			bsi: { name: "BSI" },
+			cimb: { name: "CIMB Niaga" },
+			danamon: { name: "Danamon" },
+			permata: { name: "Permata" },
+			ocbc: { name: "OCBC" },
+			maybank: { name: "Maybank" },
+			panin: { name: "Panin" },
+			btn: { name: "BTN" },
+			bjb: { name: "Bank BJB" },
+		},
+	},
+	digital: {
+		name: "Bank Digital",
+		icon: "📱",
+		list: {
+			jenius: { name: "Jenius (BTPN)" },
+			jago: { name: "Bank Jago" },
+			blu: { name: "blu by BCA Digital" },
+			seabank: { name: "SeaBank" },
+			linebank: { name: "LINE Bank" },
+			worlio: { name: "Worli (Bank Saqu)" },
+			allo: { name: "Allo Bank" },
+		},
+	},
+	ewallet: {
+		name: "E-Wallet",
+		icon: "💳",
+		list: {
+			gopay: { name: "GoPay" },
+			ovo: { name: "OVO" },
+			dana: { name: "DANA" },
+			shopeepay: { name: "ShopeePay" },
+			linkaja: { name: "LinkAja" },
+			isaku: { name: "i.Saku" },
+		},
+	},
+};
