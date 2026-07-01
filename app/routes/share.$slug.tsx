@@ -2,9 +2,14 @@ import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import { desc, eq } from "drizzle-orm";
+import { useState } from "react";
+import { toast } from "sonner";
 import { debts, friends, payment_accounts, users } from "~/core/db/schema";
 import { createDbClient } from "~/core/db.server";
 import { getCloudflareEnv } from "~/env";
+import QrisDialog from "~/features/accounts/components/qris-dialog";
+import { Button } from "~/shared/components/ui/button";
+import { Toaster } from "~/shared/components/ui/sonner";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/shared/components/ui/table";
 
 const formatCurrency = (value: number) => {
@@ -75,6 +80,18 @@ export default function SharedDebtPage() {
 	const viewerOwesUser = netAmount > 0;
 	const userOwesViewer = netAmount < 0;
 
+	const viewerAccounts = (friend as any).payment_accounts ?? [];
+	const [openQrisId, setOpenQrisId] = useState<string | null>(null);
+
+	const copyToClipboard = async (value: string) => {
+		try {
+			await navigator.clipboard.writeText(value);
+			toast.success("Nomor disalin");
+		} catch (_err) {
+			toast.error("Gagal menyalin");
+		}
+	};
+
 	return (
 		<div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-24 md:pb-8 flex justify-center relative">
 			<div className="max-w-3xl w-full space-y-6 p-4 md:p-0 mt-4 md:mt-8">
@@ -98,17 +115,74 @@ export default function SharedDebtPage() {
 						{userOwesViewer && "Sisa uangmu yang dipinjam:"}
 					</h2>
 					{netAmount !== 0 && (
-						<p
-							className={`text-4xl font-bold ${viewerOwesUser ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`}
-						>
-							{formatCurrency(Math.abs(netAmount))}
-						</p>
-					)}
-				</div>
+					<p
+						className={`text-4xl font-bold ${viewerOwesUser ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`}
+					>
+						{formatCurrency(Math.abs(netAmount))}
+					</p>
+				)}
+			</div>
 
-				<div className="px-2 mb-2">
-					<span className="font-semibold text-gray-700 dark:text-gray-300 text-sm">Menunggu Pembayaran</span>
+			{viewerOwesUser && viewerAccounts.length > 0 && (
+				<div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 space-y-4">
+					<div className="flex items-center gap-2">
+						<span className="text-lg">💳</span>
+						<h2 className="font-semibold text-gray-900 dark:text-gray-100">Cara Pembayaran</h2>
+					</div>
+					<p className="text-sm text-gray-500 dark:text-gray-400">
+						Kirim pembayaran ke salah satu rekening berikut:
+					</p>
+					<div className="space-y-3">
+						{viewerAccounts.map((acc: any) => (
+							<div
+								key={acc.id}
+								className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/40"
+							>
+								<div className="min-w-0 flex-1">
+									<p className="font-medium text-gray-900 dark:text-gray-100">{acc.bank_name}</p>
+									<p className="text-xs text-gray-500 dark:text-gray-400">a.n. {acc.account_holder}</p>
+									<p className="font-mono text-sm mt-1 text-gray-700 dark:text-gray-300 break-all">
+										{acc.account_number}
+									</p>
+								</div>
+								<div className="flex gap-2 shrink-0">
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => copyToClipboard(acc.account_number)}
+									>
+										Salin
+									</Button>
+									{acc.qris_image && (
+										<>
+											<Button variant="outline" size="sm" onClick={() => setOpenQrisId(acc.id)}>
+												Lihat QRIS
+											</Button>
+											<QrisDialog
+												open={openQrisId === acc.id}
+												onOpenChange={(open) => setOpenQrisId(open ? acc.id : null)}
+												bankName={acc.bank_name}
+												accountHolder={acc.account_holder}
+												qrisImage={acc.qris_image}
+											/>
+										</>
+									)}
+								</div>
+							</div>
+						))}
+					</div>
 				</div>
+			)}
+
+			{viewerOwesUser && viewerAccounts.length === 0 && (
+				<p className="text-sm text-gray-500 dark:text-gray-400 text-center">
+					Pemilik belum menambahkan informasi rekening.
+				</p>
+			)}
+
+			<div className="px-2 mb-2">
+				<span className="font-semibold text-gray-700 dark:text-gray-300 text-sm">Menunggu Pembayaran</span>
+			</div>
 
 				<div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
 					<Table>
@@ -226,6 +300,7 @@ export default function SharedDebtPage() {
 					Install →
 				</a>
 			</div>
+			<Toaster position="top-right" />
 		</div>
 	);
 }
