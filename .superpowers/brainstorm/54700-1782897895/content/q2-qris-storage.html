@@ -1,0 +1,19 @@
+<h2>Bagaimana QRIS akan disimpan?</h2>
+<p class="subtitle">Karena kita menggunakan Turso / SQLite lokal, penyimpanan gambar QRIS memiliki beberapa pilihan.</p>
+
+<div class="options">
+  <div class="option" data-choice="text-url" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Menggunakan URL gambar eksternal</h3>
+      <p>User memasukkan URL gambar QRIS mereka (misal dari hosting eksternal seperti Imgur/PostImages).</p>
+    </div>
+  </div>
+  <div class="option" data-choice="base64" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Simpan sebagai Base64 di database (Recommended)</h3>
+      <p>User mengunggah file gambar langsung di aplikasi, lalu dikonversi dan disimpan sebagai string Base64 di kolom `qris_image` (Tipe data TEXT). Sangat praktis untuk ukuran QRIS yang kecil.</p>
+    </div>
+  </div>
+</div>

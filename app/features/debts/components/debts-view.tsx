@@ -123,7 +123,7 @@ export default function DebtsView() {
 		try {
 			await navigator.clipboard.writeText(shareUrl);
 			toast.success("Public link copied to clipboard!");
-		} catch (error) {
+		} catch (_error) {
 			toast.error("Failed to copy link");
 		}
 	};
