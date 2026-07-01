@@ -76,9 +76,7 @@ export async function updatePaymentAccount(db: DB, userId: string, formData: For
 
 export async function deletePaymentAccount(db: DB, userId: string, id: string) {
 	try {
-		await db
-			.delete(payment_accounts)
-			.where(and(eq(payment_accounts.id, id), eq(payment_accounts.user_id, userId)));
+		await db.delete(payment_accounts).where(and(eq(payment_accounts.id, id), eq(payment_accounts.user_id, userId)));
 		return { success: true };
 	} catch (e: unknown) {
 		const error = e as Error;

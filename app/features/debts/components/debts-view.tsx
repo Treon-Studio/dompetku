@@ -118,10 +118,14 @@ export default function DebtsView() {
 		}
 	};
 
-	const copyLink = (slug: string) => {
+	const copyLink = async (slug: string) => {
 		const shareUrl = `${window.location.origin}/share/${slug}`;
-		navigator.clipboard.writeText(shareUrl);
-		toast.success("Public link copied to clipboard!");
+		try {
+			await navigator.clipboard.writeText(shareUrl);
+			toast.success("Public link copied to clipboard!");
+		} catch (error) {
+			toast.error("Failed to copy link");
+		}
 	};
 
 	const handleUpdateSettings = async (e: React.FormEvent) => {

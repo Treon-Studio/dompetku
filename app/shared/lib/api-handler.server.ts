@@ -145,4 +145,3 @@ export async function handleActionRecords(
 export function handleZodError(error: z.ZodError) {
 	return json({ message: error.issues?.[0]?.message || "Validation error" }, { status: 400 });
 }
-

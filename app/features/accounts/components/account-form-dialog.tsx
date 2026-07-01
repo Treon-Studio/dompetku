@@ -44,7 +44,7 @@ export default function AccountFormDialog({ open, onOpenChange, editing, onSucce
 			setAccountHolder("");
 			setQrisImage(undefined);
 		}
-	}, [editing, open]);
+	}, [editing]);
 
 	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
