@@ -17,6 +17,7 @@ import {
 	SignoutIcon,
 	SubscriptionsIcon,
 	SupportIcon,
+	WalletIcon,
 } from "~/shared/components/icons";
 import { Separator } from "~/shared/components/ui/separator";
 import shortcuts from "~/shared/constants/shortcuts";
@@ -102,6 +103,13 @@ export default function Sidebar() {
 		{ key: "debts", name: "Hutang Piutang", href: "/dashboard/debts", Icon: DebtsIcon },
 		{ key: "budgets", name: "Budgets", href: "/dashboard/budgets", Icon: BudgetsIcon },
 		{ key: "goals", name: "Goals", href: "/dashboard/goals", Icon: GoalsIcon },
+		{
+			key: "accounts",
+			name: t("navigation.accounts"),
+			href: "/dashboard/accounts",
+			Icon: WalletIcon,
+			shortcut: shortcuts.menu.accounts?.shortcut,
+		},
 	];
 	useHotkeys(
 		menuShortcutList,

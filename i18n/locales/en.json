@@ -35,7 +35,8 @@
     "expenses": "Expenses",
     "income": "Income",
     "investments": "Investments",
-    "subscriptions": "Subscriptions"
+    "subscriptions": "Subscriptions",
+    "accounts": "Accounts"
   },
   "auth": {
     "identity": "Email or Phone",

@@ -35,7 +35,8 @@
     "expenses": "Kaluaran",
     "income": "Duit Masuk",
     "investments": "Investasi",
-    "subscriptions": "Langganan"
+    "subscriptions": "Langganan",
+    "accounts": "Akun"
   },
   "auth": {
     "identity": "Email atawa Nomor Tilpun",

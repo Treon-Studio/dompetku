@@ -35,7 +35,8 @@
     "expenses": "Metu Dhuwit",
     "income": "Dhuwit Mlebu",
     "investments": "Investasi",
-    "subscriptions": "Langganan"
+    "subscriptions": "Langganan",
+    "accounts": "Akun"
   },
   "auth": {
     "identity": "Email utawa Nomor Tilpun",
