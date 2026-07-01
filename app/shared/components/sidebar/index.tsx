@@ -108,7 +108,7 @@ export default function Sidebar() {
 			name: t("navigation.accounts"),
 			href: "/dashboard/accounts",
 			Icon: WalletIcon,
-			shortcut: shortcuts.menu.accounts?.shortcut,
+			shortcut: shortcuts.menu.accounts.shortcut,
 		},
 	];
 	useHotkeys(
@@ -121,6 +121,7 @@ export default function Sidebar() {
 			if (keys === shortcuts.menu.investments.shortcut) router("/dashboard/investments");
 			if (keys === shortcuts.menu.subscriptions.shortcut) router("/dashboard/subscriptions");
 			if (keys === shortcuts.menu.profile.shortcut) router("/dashboard/profile");
+			if (keys === shortcuts.menu.accounts.shortcut) router("/dashboard/accounts");
 		},
 		options,
 	);

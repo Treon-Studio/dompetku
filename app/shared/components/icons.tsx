@@ -1,13 +1,13 @@
 import {
 	BillList,
 	CalendarMinimalistic,
-	Card2,
 	ChatRoundDots,
 	GraphUp,
 	Logout,
 	Settings,
 	UserCircle,
 	UsersGroupTwoRounded,
+	Wallet,
 	WalletMoney,
 	Widget5,
 } from "@solar-icons/react";
@@ -26,4 +26,4 @@ export const ProfileIcon = ({ className }: { className?: string }) => <UserCircl
 export const DebtsIcon = ({ className }: { className?: string }) => <UsersGroupTwoRounded className={className} />;
 export const BudgetsIcon = ({ className }: { className?: string }) => <BillList className={className} />;
 export const GoalsIcon = ({ className }: { className?: string }) => <GraphUp className={className} />;
-export const WalletIcon = ({ className }: { className?: string }) => <Card2 className={className} />;
+export const WalletIcon = ({ className }: { className?: string }) => <Wallet className={className} />;

@@ -12,7 +12,7 @@ const shortcuts = {
 		overview: { shortcut: "o", text: "overview" },
 		subscriptions: { shortcut: "s", text: "subscriptions" },
 		profile: { shortcut: "p", text: "profile" },
-		accounts: { shortcut: "a", text: "accounts" },
+		accounts: { shortcut: "w", text: "accounts" },
 	},
 };
 
