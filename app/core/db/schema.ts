@@ -220,6 +220,22 @@ export const goals = sqliteTable("goals", {
 		.references(() => users.id, { onDelete: "cascade" }),
 });
 
+// ─── Payment Accounts ─────────────────────────────────────────────────────────
+export const payment_accounts = sqliteTable("payment_accounts", {
+	id: text("id")
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	bank_name: text("bank_name").notNull(),
+	account_number: text("account_number").notNull(),
+	account_holder: text("account_holder").notNull(),
+	qris_image: text("qris_image"),
+	user_id: text("user_id")
+		.notNull()
+		.references(() => users.id, { onDelete: "cascade" }),
+	created_at: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+	updated_at: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
 // ─── App Settings ─────────────────────────────────────────────────────────────
 export const app_settings = sqliteTable("app_settings", {
 	key: text("key").primaryKey(),
@@ -239,4 +255,5 @@ export type Friend = typeof friends.$inferSelect;
 export type Debt = typeof debts.$inferSelect;
 export type Budget = typeof budgets.$inferSelect;
 export type Goal = typeof goals.$inferSelect;
+export type PaymentAccount = typeof payment_accounts.$inferSelect;
 export type AppSetting = typeof app_settings.$inferSelect;
