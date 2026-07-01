@@ -38,6 +38,27 @@
     "subscriptions": "Subscriptions",
     "accounts": "Accounts"
   },
+  "accounts": {
+    "title": "Payment Accounts",
+    "addAccount": "Add Account",
+    "editAccount": "Edit Account",
+    "bankName": "Bank / E-Wallet",
+    "accountNumber": "Account Number / Phone",
+    "accountHolder": "Account Holder",
+    "qrisImage": "QRIS Image",
+    "qrisOptional": "(optional)",
+    "copySuccess": "Account number copied",
+    "copyError": "Failed to copy number",
+    "deleteSuccess": "Account deleted",
+    "deleteError": "Failed to delete account",
+    "saveSuccess": "Account saved",
+    "saveError": "Failed to save account",
+    "viewQris": "View QRIS",
+    "empty": {
+      "title": "No accounts yet",
+      "description": "Add an account so friends with outstanding debts know where to pay."
+    }
+  },
   "auth": {
     "identity": "Email or Phone",
     "email": "Email",

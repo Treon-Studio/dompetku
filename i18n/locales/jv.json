@@ -38,6 +38,27 @@
     "subscriptions": "Langganan",
     "accounts": "Akun"
   },
+  "accounts": {
+    "title": "Rekening Kula",
+    "addAccount": "Tambah Rekening",
+    "editAccount": "Sunting Rekening",
+    "bankName": "Bank / E-Wallet",
+    "accountNumber": "Nomor Rekening / HP",
+    "accountHolder": "Nama Pamilik",
+    "qrisImage": "Gambar QRIS",
+    "qrisOptional": "(opsional)",
+    "copySuccess": "Nomor rekening kasil disalin",
+    "copyError": "Gagal nyalin nomor",
+    "deleteSuccess": "Rekening kaapus",
+    "deleteError": "Gagal ngapus rekening",
+    "saveSuccess": "Rekening kasil disimpen",
+    "saveError": "Gagal nyimpen rekening",
+    "viewQris": "Delok QRIS",
+    "empty": {
+      "title": "Durung wonten rekening",
+      "description": "Tambah rekening supados kanca ingkang taksih gadhah utang mangertosa pundi kedah mbayar."
+    }
+  },
   "auth": {
     "identity": "Email utawa Nomor Tilpun",
     "email": "Email",

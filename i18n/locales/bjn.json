@@ -38,6 +38,27 @@
     "subscriptions": "Langganan",
     "accounts": "Akun"
   },
+  "accounts": {
+    "title": "Rekening Amun",
+    "addAccount": "Tambah Rekening",
+    "editAccount": "Sunting Rekening",
+    "bankName": "Bank / E-Wallet",
+    "accountNumber": "Nomor Rekening / HP",
+    "accountHolder": "Nama Pamilik",
+    "qrisImage": "Gambar QRIS",
+    "qrisOptional": "(opsional)",
+    "copySuccess": "Nomor rekening berhasil disalin",
+    "copyError": "Gagal menyalin nomor",
+    "deleteSuccess": "Rekening dihapus",
+    "deleteError": "Gagal menghapus rekening",
+    "saveSuccess": "Rekening berhasil disimpan",
+    "saveError": "Gagal menyimpan rekening",
+    "viewQris": "Lihat QRIS",
+    "empty": {
+      "title": "Belum ada rekening",
+      "description": "Tambahkan rekening supaya kawan yang masih punya utang tahu ke mana harus membayar."
+    }
+  },
   "auth": {
     "identity": "Email atawa Nomor Tilpun",
     "email": "Email",

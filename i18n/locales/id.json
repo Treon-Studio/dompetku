@@ -38,6 +38,27 @@
     "subscriptions": "Langganan",
     "accounts": "Akun"
   },
+  "accounts": {
+    "title": "Rekening Saya",
+    "addAccount": "Tambah Rekening",
+    "editAccount": "Edit Rekening",
+    "bankName": "Bank / E-Wallet",
+    "accountNumber": "Nomor Rekening / HP",
+    "accountHolder": "Nama Pemilik",
+    "qrisImage": "Gambar QRIS",
+    "qrisOptional": "(opsional)",
+    "copySuccess": "Nomor rekening disalin",
+    "copyError": "Gagal menyalin nomor",
+    "deleteSuccess": "Rekening dihapus",
+    "deleteError": "Gagal menghapus rekening",
+    "saveSuccess": "Rekening disimpan",
+    "saveError": "Gagal menyimpan rekening",
+    "viewQris": "Lihat QRIS",
+    "empty": {
+      "title": "Belum ada rekening",
+      "description": "Tambahkan rekening untuk ditampilkan ke teman yang masih berhutang."
+    }
+  },
   "auth": {
     "identity": "Email atau Nomor Telepon",
     "email": "Email",
