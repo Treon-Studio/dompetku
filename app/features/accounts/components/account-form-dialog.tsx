@@ -6,6 +6,16 @@ import { Button } from "~/shared/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "~/shared/components/ui/dialog";
 import { Input } from "~/shared/components/ui/input";
 import { Label } from "~/shared/components/ui/label";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "~/shared/components/ui/select";
+import { groupedIndonesianBanks } from "~/shared/constants/indonesian-banks";
 import type { PaymentAccount } from "~/core/db/schema";
 
 interface AccountFormDialogProps {
@@ -103,14 +113,25 @@ export default function AccountFormDialog({ open, onOpenChange, editing, onSucce
 				<form onSubmit={handleSubmit} className="space-y-4 mt-4">
 					<div className="space-y-2">
 						<Label htmlFor="bank_name">Bank / E-Wallet</Label>
-						<Input
-							id="bank_name"
-							required
-							maxLength={60}
-							value={bankName}
-							onChange={(e) => setBankName(e.target.value)}
-							placeholder="BCA, GoPay, OVO..."
-						/>
+						<Select value={bankName} onValueChange={setBankName}>
+							<SelectTrigger id="bank_name">
+								<SelectValue placeholder="Pilih bank atau e-wallet" />
+							</SelectTrigger>
+							<SelectContent>
+								{Object.entries(groupedIndonesianBanks).map(([groupKey, group]) => (
+									<SelectGroup key={groupKey}>
+										<SelectLabel>
+											{group.icon} {group.name}
+										</SelectLabel>
+										{Object.entries(group.list).map(([itemKey, item]) => (
+											<SelectItem key={itemKey} value={item.name}>
+												{item.name}
+											</SelectItem>
+										))}
+									</SelectGroup>
+								))}
+							</SelectContent>
+						</Select>
 					</div>
 
 					<div className="space-y-2">
