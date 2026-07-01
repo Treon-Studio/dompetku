@@ -2,7 +2,7 @@ import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import { desc, eq } from "drizzle-orm";
-import { debts, friends, users } from "~/core/db/schema";
+import { debts, friends, payment_accounts, users } from "~/core/db/schema";
 import { createDbClient } from "~/core/db.server";
 import { getCloudflareEnv } from "~/env";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/shared/components/ui/table";
@@ -39,12 +39,20 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 		.from(debts)
 		.where(eq(debts.friend_id, friendRecord.id))
 		.orderBy(desc(debts.date), desc(debts.created_at));
+	const ownerAccounts = friendRecord
+		? await db
+				.select()
+				.from(payment_accounts)
+				.where(eq(payment_accounts.user_id, friendRecord.user_id))
+				.orderBy(desc(payment_accounts.created_at))
+		: [];
 	const [userRecord] = await db.select().from(users).where(eq(users.id, friendRecord.user_id)).limit(1);
 
 	const friend = {
 		...friendRecord,
 		debts: friendDebts,
 		user: userRecord,
+		payment_accounts: ownerAccounts,
 	};
 
 	return json({ friend });
